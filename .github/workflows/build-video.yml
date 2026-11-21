@@ -19,7 +19,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 90
 
     steps:
       - name: Checkout repository
@@ -51,11 +51,9 @@ jobs:
         run: |
           npm run story -- "Misteri Rumah Kosong"
 
-      - name: Generate AI video test
-        env:
-          AGNES_API_KEY: ${{ secrets.AGNES_API_KEY }}
+      - name: Generate AI images
         run: |
-          node scripts/generate-video.js
+          node scripts/generate-images.js
 
       - name: Generate ArdiNeural voice
         run: |

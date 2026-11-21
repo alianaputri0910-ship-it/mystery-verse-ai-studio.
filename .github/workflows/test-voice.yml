@@ -20,15 +20,29 @@ jobs:
         with:
           python-version: "3.11"
 
+
       - name: Install ArboTTS
         run: |
           sudo apt-get update
           sudo apt-get install -y espeak-ng libsndfile1
           git clone https://github.com/ARBO-TEAM/arboTTS.git /tmp/arbotts
           cd /tmp/arbotts
+
+          python - <<'PY'
+          from pathlib import Path
+          p = Path("arbotts/__init__.py")
+          s = p.read_text()
+          s = s.replace(
+              "from arbotts.clone import AutoClone, StudioClone, rewrite_indonesian_phonetics\n",
+              ""
+          )
+          p.write_text(s)
+          PY
+
           pip install --no-deps -e .
           pip install onnxruntime numpy soundfile
           pip install espeakng-loader phonemizer
+
 
       - name: Generate Bimo voice
         run: |

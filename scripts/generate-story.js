@@ -1,3 +1,4 @@
+
 import fs from "node:fs";
 import path from "node:path";
 
@@ -11,7 +12,7 @@ const scenes = [
   },
   {
     beat: "MISTERI",
-    narration: "Warga sekitar mengaku sering mendengar suara langkah kaki dari lantai dua. Padahal bangunan itu sudah tidak memiliki tangga."
+    narration: "Warga sekitar mengaku sering mendengar langkah kaki dari lantai dua. Padahal rumah itu sudah tidak memiliki tangga."
   },
   {
     beat: "PETUNJUK",
@@ -48,7 +49,7 @@ const story = {
     beat: scene.beat,
     narration: scene.narration,
     visual_prompt:
-      `Ultra realistic cinematic Indonesian horror, ${topic}, scene ${index + 1}, vertical 9:16, dark atmosphere, realistic lighting, suspenseful found footage style, no text, no watermark.`,
+      `Ultra realistic cinematic horror documentary, ${topic}, scene ${index + 1}, vertical 9:16, extremely dark atmosphere, realistic lighting, eerie abandoned location, suspenseful found footage, detailed cinematic composition, no text, no watermark.`,
     sound: "Dark ambient drone, distant wind, subtle horror sound effects"
   }))
 };

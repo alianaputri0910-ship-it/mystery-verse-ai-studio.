@@ -1,0 +1,19 @@
+
+{
+  "provider": "arbotts",
+  "voice_id": "bimo",
+  "language": "id",
+  "voice_type": "preset",
+  "description": "Male deep baritone, mature and authoritative",
+  "style": {
+    "mood": "dark, mysterious, suspenseful",
+    "pace": "slow and deliberate",
+    "delivery": "deep horror documentary narration",
+    "clarity": "high"
+  },
+  "output": {
+    "format": "wav",
+    "sample_rate": 24000
+  },
+  "notes": "Use preset Bimo. No voice cloning."
+}

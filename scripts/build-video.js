@@ -5,14 +5,10 @@ import path from "node:path";
 const storyPath = "output/story.json";
 
 if (!fs.existsSync(storyPath)) {
-  console.error("Cerita belum tersedia.");
-  console.error("Buat cerita terlebih dahulu.");
-  process.exit(1);
+  throw new Error("Cerita belum tersedia. Jalankan npm run story.");
 }
 
-const story = JSON.parse(
-  fs.readFileSync(storyPath, "utf8")
-);
+const story = JSON.parse(fs.readFileSync(storyPath, "utf8"));
 
 function escapeHTML(value = "") {
   return String(value).replace(/[&<>"']/g, char => ({
@@ -24,120 +20,145 @@ function escapeHTML(value = "") {
   })[char]);
 }
 
-const scenesHTML = story.scenes.map(scene => `
-  <section class="scene">
-    <div class="scene-number">
-      SCENE ${scene.scene} | ${scene.start}s - ${scene.end}s
-    </div>
+const scenesHTML = story.scenes.map(scene => {
+  const number = String(scene.scene).padStart(2, "0");
+  const audioPath = `./output/audio/scene-${number}.mp3`;
 
-    <div class="visual">
-      <p>VISUAL PROMPT</p>
-      ${escapeHTML(scene.visual_prompt)}
-    </div>
+  if (!fs.existsSync(`output/audio/scene-${number}.mp3`)) {
+    throw new Error(`Audio adegan ${number} belum tersedia.`);
+  }
 
-    <div class="caption">
-      ${escapeHTML(scene.narration)}
-    </div>
+  return `
+    <section
+      class="scene clip"
+      id="scene-${number}"
+      data-start="${scene.start}"
+      data-duration="${scene.end - scene.start}"
+      data-track-index="0"
+    >
+      <div class="brand">MYSTERY VERSE</div>
+      <div class="number">
+        ${number} — ${escapeHTML(scene.beat)}
+      </div>
+      <div class="caption">
+        ${escapeHTML(scene.narration)}
+      </div>
+      <div class="footer">60 SECONDS OF MYSTERY</div>
+    </section>
 
-    <div class="sound">
-      ${escapeHTML(scene.sound)}
-    </div>
-  </section>
-`).join("\n");
+    <audio
+      id="voice-${number}"
+      src="${audioPath}"
+      data-start="${scene.start}"
+      data-track-index="1"
+    ></audio>
+  `;
+}).join("\n");
 
-const html = `
-<!DOCTYPE html>
+const html = `<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1">
-<title>MYSTERY VERSE - Storyboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MYSTERY VERSE</title>
 <style>
 * { box-sizing: border-box; }
 
-body {
+html, body {
   margin: 0;
-  background: #080808;
+  width: 100%;
+  height: 100%;
+  background: #050505;
   color: white;
   font-family: Arial, sans-serif;
 }
 
-header {
-  padding: 25px;
-  text-align: center;
-  color: #d5b4b4;
-  letter-spacing: 4px;
+#root {
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+  background: radial-gradient(
+    ellipse at center, #291010, #050505 75%
+  );
 }
 
 .scene {
-  width: min(100%, 480px);
-  min-height: 700px;
-  margin: 25px auto;
-  padding: 30px;
-  background:
-    radial-gradient(circle at center, #321313, #080808 75%);
-  border: 1px solid #492020;
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  padding: 100px;
+  text-align: center;
 }
 
-.scene-number {
-  color: #e34b4b;
-  letter-spacing: 2px;
+.brand {
+  color: #b99a9a;
+  font-size: 42px;
+  letter-spacing: 12px;
+  margin-bottom: 100px;
 }
 
-.visual, .sound {
-  color: #aaa;
-  font-size: 14px;
-  line-height: 1.7;
+.number {
+  color: #d13b3b;
+  font-size: 30px;
+  letter-spacing: 6px;
+  margin-bottom: 50px;
 }
 
 .caption {
-  font-size: 25px;
-  line-height: 1.5;
+  font-size: 64px;
+  line-height: 1.4;
   font-weight: bold;
-  text-shadow: 0 2px 8px black;
+  text-shadow: 0 5px 20px black;
 }
 
-footer {
-  text-align: center;
-  padding: 25px;
+.footer {
+  position: absolute;
+  bottom: 100px;
   color: #777;
+  font-size: 24px;
+  letter-spacing: 8px;
 }
 </style>
 </head>
 <body>
-<header>
-  <h1>MYSTERY VERSE</h1>
-  <p>${escapeHTML(story.topic)}</p>
-</header>
-
-${scenesHTML}
-
-<footer>
-  HORROR STORYBOARD PRODUCTION
-</footer>
+<div id="root"
+  data-composition-id="mystery-verse"
+  data-start="0"
+  data-duration="${story.format.duration_seconds}"
+  data-width="1080"
+  data-height="1920"
+  data-no-timeline>
+  ${scenesHTML}
+</div>
 </body>
-</html>
-`;
+</html>`;
 
 fs.mkdirSync("output", { recursive: true });
 
+fs.writeFileSync("index.html", html);
+
 fs.writeFileSync(
-  path.join("output", "storyboard.html"),
-  html
+  "output/storyboard.html",
+  `<!DOCTYPE html>
+  <html lang="id">
+  <head><meta charset="UTF-8"><title>MYSTERY VERSE Storyboard</title></head>
+  <body>${scenesHTML}</body>
+  </html>`
 );
 
 fs.writeFileSync(
-  path.join("output", "video-manifest.json"),
+  "output/video-manifest.json",
   JSON.stringify({
     channel: story.channel,
     format: story.format,
     scene_count: story.scenes.length,
+    voice: "id-ID-ArdiNeural",
     scenes: story.scenes
   }, null, 2)
 );
 
-console.log("Storyboard berhasil disiapkan!");
+console.log("Storyboard dan komposisi video berhasil dibuat!");

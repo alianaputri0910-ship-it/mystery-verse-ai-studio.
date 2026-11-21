@@ -22,27 +22,47 @@ function escapeHTML(value = "") {
 
 const scenesHTML = story.scenes.map(scene => {
   const number = String(scene.scene).padStart(2, "0");
+  const imagePath = `./output/images/scene-${number}.webp`;
   const audioPath = `./output/audio/scene-${number}.mp3`;
+
+  if (!fs.existsSync(imagePath)) {
+    throw new Error(`Gambar adegan ${number} belum tersedia.`);
+  }
 
   if (!fs.existsSync(`output/audio/scene-${number}.mp3`)) {
     throw new Error(`Audio adegan ${number} belum tersedia.`);
   }
 
   return `
+    <img
+      class="clip visual"
+      id="visual-${number}"
+      src="${imagePath}"
+      data-start="${scene.start}"
+      data-duration="${scene.end - scene.start}"
+      data-track-index="0"
+      alt="MYSTERY VERSE scene ${number}"
+    />
+
     <section
       class="scene clip"
       id="scene-${number}"
       data-start="${scene.start}"
       data-duration="${scene.end - scene.start}"
-      data-track-index="0"
+      data-track-index="1"
     >
+      <div class="shade"></div>
+
       <div class="brand">MYSTERY VERSE</div>
+
       <div class="number">
         ${number} — ${escapeHTML(scene.beat)}
       </div>
-      <div class="caption">
+
+      <div class="caption" id="caption-${number}">
         ${escapeHTML(scene.narration)}
       </div>
+
       <div class="footer">60 SECONDS OF MYSTERY</div>
     </section>
 
@@ -50,8 +70,48 @@ const scenesHTML = story.scenes.map(scene => {
       id="voice-${number}"
       src="${audioPath}"
       data-start="${scene.start}"
-      data-track-index="1"
+      data-duration="${scene.end - scene.start}"
+      data-track-index="2"
     ></audio>
+  `;
+}).join("\n");
+
+const animationScript = story.scenes.map(scene => {
+  const number = String(scene.scene).padStart(2, "0");
+  const direction = scene.scene % 2 === 0 ? -1 : 1;
+
+  return `
+    timeline.fromTo(
+      "#visual-${number}",
+      {
+        scale: 1.04,
+        x: ${direction * 8},
+        y: 0
+      },
+      {
+        scale: 1.18,
+        x: ${direction * -8},
+        y: -12,
+        duration: ${scene.end - scene.start},
+        ease: "none"
+      },
+      ${scene.start}
+    );
+
+    timeline.fromTo(
+      "#caption-${number}",
+      {
+        opacity: 0,
+        y: 35
+      },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power2.out"
+      },
+      ${scene.start + 0.3}
+    );
   `;
 }).join("\n");
 
@@ -61,13 +121,17 @@ const html = `<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MYSTERY VERSE</title>
+
 <style>
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 html, body {
   margin: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
   background: #050505;
   color: white;
   font-family: Arial, sans-serif;
@@ -78,9 +142,17 @@ html, body {
   width: 1080px;
   height: 1920px;
   overflow: hidden;
-  background: radial-gradient(
-    ellipse at center, #291010, #050505 75%
-  );
+  background: #050505;
+}
+
+.visual {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform-origin: center center;
 }
 
 .scene {
@@ -94,46 +166,82 @@ html, body {
   text-align: center;
 }
 
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.45),
+    rgba(0,0,0,0.12) 35%,
+    rgba(0,0,0,0.48) 65%,
+    rgba(0,0,0,0.85)
+  );
+}
+
+.brand, .number, .caption, .footer {
+  position: relative;
+  z-index: 2;
+}
+
 .brand {
-  color: #b99a9a;
+  color: #e0caca;
   font-size: 42px;
   letter-spacing: 12px;
   margin-bottom: 100px;
+  text-shadow: 0 4px 20px black;
 }
 
 .number {
-  color: #d13b3b;
+  color: #ff5555;
   font-size: 30px;
   letter-spacing: 6px;
   margin-bottom: 50px;
+  text-shadow: 0 4px 15px black;
 }
 
 .caption {
   font-size: 64px;
   line-height: 1.4;
   font-weight: bold;
-  text-shadow: 0 5px 20px black;
+  text-shadow: 0 5px 25px black;
 }
 
 .footer {
   position: absolute;
   bottom: 100px;
-  color: #777;
+  color: #ddd;
   font-size: 24px;
   letter-spacing: 8px;
+  text-shadow: 0 3px 15px black;
 }
 </style>
 </head>
+
 <body>
+
 <div id="root"
   data-composition-id="mystery-verse"
   data-start="0"
   data-duration="${story.format.duration_seconds}"
   data-width="1080"
-  data-height="1920"
-  data-no-timeline>
+  data-height="1920">
+
   ${scenesHTML}
+
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+
+<script>
+window.__timelines = window.__timelines || {};
+
+const timeline = gsap.timeline({ paused: true });
+
+${animationScript}
+
+window.__timelines["mystery-verse"] = timeline;
+</script>
+
 </body>
 </html>`;
 
@@ -142,23 +250,16 @@ fs.mkdirSync("output", { recursive: true });
 fs.writeFileSync("index.html", html);
 
 fs.writeFileSync(
-  "output/storyboard.html",
-  `<!DOCTYPE html>
-  <html lang="id">
-  <head><meta charset="UTF-8"><title>MYSTERY VERSE Storyboard</title></head>
-  <body>${scenesHTML}</body>
-  </html>`
-);
-
-fs.writeFileSync(
   "output/video-manifest.json",
   JSON.stringify({
     channel: story.channel,
     format: story.format,
     scene_count: story.scenes.length,
     voice: "id-ID-ArdiNeural",
+    visual_engine: "AI Horde",
+    animation_engine: "HyperFrames + GSAP",
     scenes: story.scenes
   }, null, 2)
 );
 
-console.log("Storyboard dan komposisi video berhasil dibuat!");
+console.log("MYSTERY VERSE visual composition berhasil dibuat!");

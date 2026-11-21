@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get project
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -29,26 +29,45 @@ jobs:
         with:
           node-version: 22
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
       - name: Install FFmpeg
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg
 
+      - name: Install Edge TTS
+        run: |
+          python -m pip install --upgrade edge-tts
+
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
 
       - name: Generate horror story
-        run: npm run story -- "Misteri Rumah Kosong"
+        run: |
+          npm run story -- "Misteri Rumah Kosong"
 
-      - name: Build storyboard
-        run: npm run build
+      - name: Generate ArdiNeural voice
+        run: |
+          npm run voice
+
+      - name: Build storyboard and composition
+        run: |
+          npm run build
 
       - name: Render video
-        run: npx --yes hyperframes render --output output/mystery-verse.mp4 --fps 30 --quality standard
+        run: |
+          npx --yes hyperframes render \
+            --output output/mystery-verse.mp4 \
+            --fps 30 \
+            --quality standard
 
-      - name: Upload video
+      - name: Upload video and audio
         uses: actions/upload-artifact@v4
         with:
-          name: mystery-verse-video
+          name: mystery-verse-production
           path: output/
           if-no-files-found: error

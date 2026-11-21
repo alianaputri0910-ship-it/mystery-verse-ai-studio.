@@ -4,15 +4,15 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "AI Horror Video Production Studio",
+  "description": "MYSTERY VERSE AI Horror Video Studio",
   "scripts": {
     "story": "node scripts/generate-story.js",
     "voice": "node scripts/generate-voice.js",
     "build": "node scripts/build-video.js",
-    "check": "node --check scripts/generate-story.js"
+    "preview": "npx hyperframes preview",
+    "render": "npx hyperframes render"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   }
 }
-

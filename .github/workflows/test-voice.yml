@@ -20,41 +20,27 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install ArboTTS
+      - name: Install Edge TTS
         run: |
-          sudo apt-get update
-          sudo apt-get install -y espeak-ng libsndfile1
-          git clone https://github.com/ARBO-TEAM/arboTTS.git /tmp/arbotts
-          cd /tmp/arbotts
-          python - <<'PY'
-          from pathlib import Path
-          p = Path("arbotts/__init__.py")
-          s = p.read_text()
-          s = s.replace(
-              "from arbotts.clone import AutoClone, StudioClone, rewrite_indonesian_phonetics\n",
-              ""
-          )
-          p.write_text(s)
-          PY
-          pip install --no-deps -e .
-          pip install onnxruntime numpy soundfile scipy librosa edge-tts huggingface-hub
-          pip install espeakng-loader phonemizer
+          pip install edge-tts
 
-      - name: Generate Voice Comparison
+      - name: Generate Clean Indonesian Voice
         run: |
           mkdir -p output
-          TEXT="Jujur, ada satu hal yang sampai sekarang masih bikin orang bertanya-tanya. Bagaimana mungkin dua orang bisa menghilang begitu saja, padahal sebelumnya mereka terlihat baik-baik saja? Dan yang lebih aneh, tidak ada satu pun orang yang tahu apa yang sebenarnya terjadi."
-          arbotts "$TEXT" -sp bimo -s 1.00 -l id -o output/bimo-test.wav
-          arbotts "$TEXT" -sp danu -s 1.00 -l id -o output/danu-test.wav
+          edge-tts \
+            --voice id-ID-ArdiNeural \
+            --rate +0% \
+            --volume +0% \
+            --text "Jujur, ada satu hal yang sampai sekarang masih menjadi misteri. Bagaimana mungkin dua orang menghilang begitu saja, tanpa meninggalkan satu pun petunjuk?" \
+            --write-media output/ardi-test.mp3
 
       - name: Verify Audio
         run: |
-          test -s output/bimo-test.wav
-          test -s output/danu-test.wav
-          file output/*.wav
+          test -s output/ardi-test.mp3
+          ls -lh output/ardi-test.mp3
 
       - name: Upload Voice Audio
         uses: actions/upload-artifact@v4
         with:
-          name: mystery-verse-voice-comparison
-          path: output/*.wav
+          name: mystery-verse-ardi-voice
+          path: output/ardi-test.mp3

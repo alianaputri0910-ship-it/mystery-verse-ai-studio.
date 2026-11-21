@@ -44,7 +44,15 @@ jobs:
           pip install espeakng-loader phonemizer
 
 
-      - name: Generate Bimo voice
+      
+      - name: Generate Voice Comparison
+        run: |
+          mkdir -p output
+
+          arbotts "Jujur, ada satu hal yang sampai sekarang masih bikin orang bertanya-tanya. Bagaimana mungkin dua orang bisa menghilang begitu saja, padahal sebelumnya mereka terlihat baik-baik saja? Dan yang lebih aneh, tidak ada satu pun orang yang tahu apa yang sebenarnya terjadi." -sp bimo -s 1.00 -l id -o output/bimo-test.wav
+
+          arbotts "Jujur, ada satu hal yang sampai sekarang masih bikin orang bertanya-tanya. Bagaimana mungkin dua orang bisa menghilang begitu saja, padahal sebelumnya mereka terlihat baik-baik saja? Dan yang lebih aneh, tidak ada satu pun orang yang tahu apa yang sebenarnya terjadi." -sp danu -s 1.00 -l id -o output/danu-test.wav
+
         run: |
           mkdir -p output
           arbotts "Jangan pernah merasa sendirian ketika malam tiba. Karena bisa jadi, ada sesuatu yang sedang memperhatikanmu." -sp bimo -s 1.00 -l id -o output/bimo-test.wav
@@ -53,8 +61,10 @@ jobs:
           test -s output/bimo-test.wav
           file output/bimo-test.wav
 
-      - name: Upload voice audio
+     
+      - name: Upload Voice Comparison
         uses: actions/upload-artifact@v4
         with:
-          name: mystery-verse-bimo-voice
-          path: output/bimo-test.wav
+          name: mystery-verse-voice-comparison
+          path: output/*.wav
+

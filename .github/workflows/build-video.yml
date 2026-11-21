@@ -63,6 +63,11 @@ jobs:
         run: |
           npm run build
 
+      -       - name: Validate HyperFrames composition
+        run: |
+          npx --yes hyperframes lint
+          npx --yes hyperframes check
+
       - name: Render video
         run: |
           npx --yes hyperframes render \

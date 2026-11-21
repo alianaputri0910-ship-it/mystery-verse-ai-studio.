@@ -40,7 +40,7 @@ jobs:
           PY
 
           pip install --no-deps -e .
-          pip install onnxruntime numpy soundfile
+          pip install onnxruntime numpy soundfile scipy librosa edge-tts huggingface-hub
           pip install espeakng-loader phonemizer
 
 

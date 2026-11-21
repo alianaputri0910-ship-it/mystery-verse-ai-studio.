@@ -23,27 +23,22 @@ jobs:
       - name: Install ArboTTS
         run: |
           sudo apt-get update
-          sudo apt-get install -y espeak-ng
+          sudo apt-get install -y espeak-ng libsndfile1
           git clone https://github.com/ARBO-TEAM/arboTTS.git /tmp/arbotts
-          pip install /tmp/arbotts
+          cd /tmp/arbotts
+          pip install --no-deps -e .
+          pip install onnxruntime numpy soundfile
           pip install espeakng-loader phonemizer
 
       - name: Generate Bimo voice
         run: |
           mkdir -p output
-          python - <<'PY'
-          from arbotts import ArboTTS
+          arbotts "Jangan pernah merasa sendirian ketika malam tiba. Karena bisa jadi, ada sesuatu yang sedang memperhatikanmu." -sp bimo -s 0.75 -l id -o output/bimo-test.wav
 
-          tts = ArboTTS(tier="standard")
-          tts.speak(
-              text="Jangan pernah merasa sendirian ketika malam tiba. Karena bisa jadi, ada sesuatu yang sedang memperhatikanmu.",
-              output_file="output/bimo-test.wav",
-              speaker="bimo",
-              lang="id",
-              speed=0.85,
-          )
-          print("VOICE GENERATED")
-          PY
+      - name: Verify audio
+        run: |
+          test -s output/bimo-test.wav
+          file output/bimo-test.wav
 
       - name: Upload voice audio
         uses: actions/upload-artifact@v4

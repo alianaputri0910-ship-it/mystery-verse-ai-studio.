@@ -1,0 +1,52 @@
+
+name: MYSTERY VERSE Voice Test
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/test-voice.yml"
+
+jobs:
+  generate-voice:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ArboTTS
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y espeak-ng
+          git clone https://github.com/ARBO-TEAM/arboTTS.git /tmp/arbotts
+          pip install /tmp/arbotts
+          pip install espeakng-loader phonemizer
+
+      - name: Generate Bimo voice
+        run: |
+          mkdir -p output
+          python - <<'PY'
+          from arbotts import ArboTTS
+
+          tts = ArboTTS(tier="standard")
+          tts.speak(
+              text="Jangan pernah merasa sendirian ketika malam tiba. Karena bisa jadi, ada sesuatu yang sedang memperhatikanmu.",
+              output_file="output/bimo-test.wav",
+              speaker="bimo",
+              lang="id",
+              speed=0.85,
+          )
+          print("VOICE GENERATED")
+          PY
+
+      - name: Upload voice audio
+        uses: actions/upload-artifact@v4
+        with:
+          name: mystery-verse-bimo-voice
+          path: output/bimo-test.wav

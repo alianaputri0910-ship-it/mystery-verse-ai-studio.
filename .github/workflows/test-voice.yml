@@ -47,8 +47,7 @@ jobs:
       - name: Generate Bimo voice
         run: |
           mkdir -p output
-          arbotts "Jangan pernah merasa sendirian ketika malam tiba. Karena bisa jadi, ada sesuatu yang sedang memperhatikanmu." -sp bimo -s 0.75 -l id -o output/bimo-test.wav
-
+          arbotts "Jangan pernah merasa sendirian ketika malam tiba. Karena bisa jadi, ada sesuatu yang sedang memperhatikanmu." -sp bimo -s 1.00 -l id -o output/bimo-test.wav
       - name: Verify audio
         run: |
           test -s output/bimo-test.wav

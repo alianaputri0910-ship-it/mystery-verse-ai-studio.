@@ -1,0 +1,54 @@
+
+name: MYSTERY VERSE Video Builder
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "index.html"
+      - "scripts/**"
+      - "config/**"
+      - "package.json"
+      - ".github/workflows/**"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get project
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Generate horror story
+        run: npm run story -- "Misteri Rumah Kosong"
+
+      - name: Build storyboard
+        run: npm run build
+
+      - name: Render video
+        run: npx --yes hyperframes render --output output/mystery-verse.mp4 --fps 30 --quality standard
+
+      - name: Upload video
+        uses: actions/upload-artifact@v4
+        with:
+          name: mystery-verse-video
+          path: output/
+          if-no-files-found: error

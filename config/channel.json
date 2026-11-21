@@ -1,0 +1,33 @@
+
+{
+  "channel_name": "MYSTERY VERSE",
+  "language": "id-ID",
+  "platform": "YouTube Shorts",
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16",
+    "default_duration_seconds": 60,
+    "scene_duration_seconds": 10
+  },
+  "narrator": {
+    "gender": "male",
+    "voice": "bimo",
+    "tone": "deep, dark, authoritative",
+    "style": "horror documentary"
+  },
+  "visual_style": {
+    "realism": "ultra realistic",
+    "lighting": "dark cinematic",
+    "camera": "found footage",
+    "atmosphere": "terrifying, mysterious, suspenseful"
+  },
+  "story_structure": [
+    "HOOK",
+    "MYSTERY",
+    "CLUE",
+    "THREAT",
+    "TWIST",
+    "CLIFFHANGER"
+  ]
+}

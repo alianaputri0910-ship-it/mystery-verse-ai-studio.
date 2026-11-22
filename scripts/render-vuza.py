@@ -27,6 +27,27 @@ def run(args):
 def duration(path):
     return float(run(["ffprobe","-v","error","-show_entries","format=duration","-of","default=noprint_wrappers=1:nokey=1",str(path)]))
 
+
+async def save_audio_with_word_boundaries(text, audio_path):
+    """Save Edge-TTS audio and its real word-boundary timestamps."""
+    communicator = Communicate(text, VOICE, rate="-8%", volume="+0%")
+    boundaries = []
+    with open(audio_path, "wb") as audio_file:
+        async for chunk in communicator.stream():
+            if chunk.get("type") == "audio":
+                audio_file.write(chunk.get("data", b""))
+            elif chunk.get("type") == "WordBoundary":
+                data = chunk.get("data", {})
+                word = str(data.get("text", "")).strip()
+                if word:
+                    boundaries.append({
+                        "text": word,
+                        "start": float(data.get("offset", 0)) / 10_000_000.0
+                    })
+    if not audio_path.exists() or audio_path.stat().st_size == 0:
+        raise RuntimeError("Edge-TTS tidak menghasilkan audio.")
+    return boundaries
+
 async def main():
     story = json.loads((OUT/"story.json").read_text(encoding="utf-8"))
     scenes = story.get("scenes", [])
@@ -46,7 +67,7 @@ async def main():
             raise RuntimeError(f"Gambar adegan {n} hilang.")
         audio = engine.temp_dir/f"speech_{i}.mp3"
         print(f"Membuat suara adegan {n}/{len(scenes)}...")
-        await Communicate(scene["narration"], VOICE, rate="-8%", volume="+0%").save(str(audio))
+        word_timings = await save_audio_with_word_boundaries(scene["narration"], audio)
         d = duration(audio)
         if d > target:
             speed = d/target
@@ -56,7 +77,11 @@ async def main():
             temp = audio.with_name(audio.stem+"-fit.mp3")
             run(["ffmpeg","-y","-i",str(audio),"-filter:a",f"atempo={speed:.5f}","-t",f"{target:.3f}","-c:a","libmp3lame","-q:a","3",str(temp)])
             temp.replace(audio)
+            word_timings = [{"text": w["text"], "start": w["start"] / speed} for w in word_timings]
             d = duration(audio)
+        if not word_timings:
+            tokens = scene["narration"].split()
+            word_timings = [{"text": token, "start": (d * i / max(1, len(tokens)))} for i, token in enumerate(tokens)]
         if d < target-0.03:
             temp = audio.with_name(audio.stem+"-pad.mp3")
             run(["ffmpeg","-y","-i",str(audio),"-af",f"apad=pad_dur={target-d:.3f}","-t",f"{target:.3f}","-c:a","libmp3lame","-q:a","3",str(temp)])
@@ -67,7 +92,7 @@ async def main():
         folder.mkdir(exist_ok=True)
         visual = folder/"visual.webp"
         shutil.copy2(image, visual)
-        script_data.append({"sentence":scene["narration"],"keyword":f"scene_{n:02d}","_files":[str(visual)]})
+        script_data.append({"sentence":scene["narration"],"keyword":f"scene_{n:02d}","_files":[str(visual)],"_word_timings":word_timings})
         print(f"Adegan {n}: {d+0.5:.2f} detik")
 
     if not MIN_SECONDS <= expected <= MAX_SECONDS:

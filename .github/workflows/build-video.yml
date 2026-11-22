@@ -7,7 +7,7 @@ on:
         description: "Topik cerita horor (kosongkan untuk topik default)"
         required: false
         type: string
-        default: "Tiga Penjaga Mercusuar Menghilang — Misteri Flannan Isles (1900)"
+        default: "Pembunuhan Keluarga Setagaya — Misteri yang Belum Terpecahkan (2000)"
   push:
     branches:
       - main

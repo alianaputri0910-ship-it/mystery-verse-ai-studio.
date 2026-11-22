@@ -18,7 +18,7 @@ from video_engine import VideoEngine, resolve_font_path
 OUT = ROOT / "output"
 VOICE = "id-ID-ArdiNeural"
 RATE = "-10%"
-MIN_SECONDS, MAX_SECONDS = 40.0, 60.0
+MIN_SECONDS, MAX_SECONDS = 40.0, 75.0
 
 def run(args):
     p = subprocess.run(args, capture_output=True, text=True)
@@ -120,7 +120,7 @@ async def main():
 
     intro_seconds = 3.5
     if not MIN_SECONDS <= total + intro_seconds <= MAX_SECONDS:
-        raise RuntimeError(f"Total narasi + opening {total + intro_seconds:.2f}s di luar batas 40–60 detik. Naskah perlu dipadatkan, bukan mempercepat suara.")
+        raise RuntimeError(f"Total narasi + opening {total + intro_seconds:.2f}s di luar batas 40–75 detik. Naskah perlu dipadatkan, bukan mempercepat suara.")
     settings = SimpleNamespace(ratio="9:16", vibe="general", filter="none",
                                subtitles=True, subtitle_style="mystery_gold",
                                emoji_subtitles=False, watermark=False, logo_path="")
@@ -176,7 +176,7 @@ async def main():
 
     actual = duration(final)
     if not MIN_SECONDS <= actual <= MAX_SECONDS:
-        raise RuntimeError(f"MP4 akhir berdurasi {actual:.2f}s, di luar batas 40–60.")
+        raise RuntimeError(f"MP4 akhir berdurasi {actual:.2f}s, di luar batas 40–75.")
     print(f"BERHASIL: {final} | {actual:.2f}s | 1080x1920 | 30 FPS | opening 3.5s + CTA tersinkron")
 
 if __name__ == "__main__":

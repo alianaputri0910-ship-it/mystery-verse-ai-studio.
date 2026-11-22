@@ -38,10 +38,12 @@ async def make_voice(text, audio_path):
             if chunk.get("type") == "audio":
                 f.write(chunk.get("data", b""))
             elif chunk.get("type") == "WordBoundary":
-                data = chunk.get("data", {})
-                word = str(data.get("text", "")).strip()
+                # edge-tts emits offset/text at the top level (some versions wrap them in data).
+                data = chunk.get("data") or chunk
+                word = str(data.get("text", chunk.get("text", ""))).strip()
+                offset = data.get("offset", chunk.get("offset", 0))
                 if word:
-                    boundaries.append({"text": word, "start": float(data.get("offset", 0)) / 10_000_000.0})
+                    boundaries.append({"text": word, "start": float(offset) / 10_000_000.0})
     if not audio_path.exists() or audio_path.stat().st_size < 1000:
         raise RuntimeError("Edge-TTS tidak menghasilkan audio yang valid.")
     return boundaries
@@ -116,7 +118,7 @@ async def main():
             "_files": [str(visual)],
             "_word_timings": words
         })
-        print(f"Adegan {i+1}: narasi {seconds:.2f} detik pada kecepatan tetap {RATE}.")
+        print(f"Adegan {i+1}: narasi {seconds:.2f} detik, {len(words)} penanda kata terbaca, kecepatan tetap {RATE}.")
 
     intro_seconds = 3.5
     if not MIN_SECONDS <= total + intro_seconds <= MAX_SECONDS:

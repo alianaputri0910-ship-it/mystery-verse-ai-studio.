@@ -9,19 +9,19 @@ const apiKey = process.env.POLLINATIONS_API_KEY;
 if (!fs.existsSync(storyPath)) throw new Error("output/story.json tidak ditemukan.");
 if (!apiKey) throw new Error("POLLINATIONS_API_KEY_MISSING: Tambahkan secret POLLINATIONS_API_KEY pada GitHub Settings > Secrets and variables > Actions.");
 const story = JSON.parse(fs.readFileSync(storyPath, "utf8"));
-if (!Array.isArray(story.scenes) || story.scenes.length !== 7) throw new Error("Proyek ini membutuhkan tepat 7 adegan.");
+if (!Array.isArray(story.scenes) || story.scenes.length !== 8) throw new Error("Proyek ini membutuhkan 8 adegan termasuk CTA penutup.");
 fs.mkdirSync(outputDir, { recursive: true });
 const model = process.env.POLLINATIONS_IMAGE_MODEL || "black-forest-labs/flux.1-schnell";
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-async function generate(scene, index) {
+async function generate(scene, index, customName = null) {
   const prompt = scene.visual_prompt + " Photorealistic cinematic historical documentary reconstruction, vertical portrait 9:16, highly detailed, natural lighting, no text, no watermark.";
   const url = "https://gen.pollinations.ai/image/" + encodeURIComponent(prompt) + "?model=" + encodeURIComponent(model) + "&width=768&height=1365&seed=" + (1900 + index);
-  const output = path.join(outputDir, `scene-${String(index + 1).padStart(2, "0")}.webp`);
+  const output = path.join(outputDir, customName || `scene-${String(index + 1).padStart(2, "0")}.webp`);
   let error;
   for (let attempt = 1; attempt <= 4; attempt++) {
     try {
-      console.log(`Membuat gambar ${index + 1}/7 (percobaan ${attempt}/4) dengan Pollinations ${model}...`);
+      console.log(`Membuat visual ${customName || `adegan ${index + 1}/8`} (percobaan ${attempt}/4) dengan Pollinations ${model}...`);
       const res = await fetch(url, { headers: { Authorization: `Bearer ${apiKey}`, Accept: "image/*" }, signal: AbortSignal.timeout(180000) });
       if (!res.ok) throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0, 500)}`);
       if (!(res.headers.get("content-type") || "").startsWith("image/")) throw new Error("Respons bukan file gambar.");
@@ -33,7 +33,7 @@ async function generate(scene, index) {
       fs.rmSync(temp,{force:true});
       if (ff.status !== 0) throw new Error(ff.stderr || "Konversi WebP gagal.");
       if (!fs.existsSync(output) || fs.statSync(output).size < 1000) throw new Error("Gambar hasil konversi kosong.");
-      console.log(`Gambar adegan ${index + 1} selesai.`);
+      console.log(`Visual ${customName || `adegan ${index + 1}`} selesai.`);
       return;
     } catch (e) {
       error = e;
@@ -41,7 +41,8 @@ async function generate(scene, index) {
       if (attempt < 4) await sleep(attempt * 8000);
     }
   }
-  throw new Error(`Gagal membuat adegan ${index + 1}: ${error?.message}`);
+  throw new Error(`Gagal membuat visual ${customName || `adegan ${index + 1}`}: ${error?.message}`);
 }
+await generate({visual_prompt: story.opening_visual_prompt}, -1, "opening.webp");
 for (let i=0; i<story.scenes.length; i++) await generate(story.scenes[i],i);
-console.log("Tujuh gambar AI berhasil dibuat.");
+console.log("Opening dan delapan visual adegan AI berhasil dibuat.");

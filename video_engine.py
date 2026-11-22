@@ -399,89 +399,100 @@ class VideoEngine:
 
             visual_clip = visual_clip.with_audio(audio_clip)
 
-            # Add Subtitles
+            # Add word-synchronized subtitles using Edge-TTS word boundaries.
             if settings and settings.subtitles:
                 try:
                     from PIL import Image, ImageDraw, ImageFont
                     import numpy as np
 
-                    # Check Duration
-                    if duration < 0.5: duration = 2 # fallback
-
+                    if duration < 0.5:
+                        duration = 2
                     style = settings.subtitle_style if settings else "default"
+                    word_timings = item.get("_word_timings", [])
 
-                    def make_text_image(txt, w, h, current_style="default"):
-                        img = Image.new('RGBA', (w, h), (0,0,0,0))
-                        draw = ImageDraw.Draw(img)
-
-                        font_size = 70 if current_style in ("bold_outline", "mystery_gold") else 100 if current_style == "high_retention" else 60
+                    if style == "mystery_gold" and word_timings:
+                        font_path = resolve_font_path()
                         try:
-                            font_path = resolve_font_path()
-                            font = ImageFont.truetype(font_path, font_size) if font_path else ImageFont.load_default()
-                        except:
+                            font = ImageFont.truetype(font_path, 66) if font_path else ImageFont.load_default()
+                        except Exception:
                             font = ImageFont.load_default()
 
-                        # Manual multiline
-                        lines = wrap_text_lines(txt, draw, font, w * 0.8)
+                        timed_clips = []
+                        clean_words = [
+                            {"text": str(w.get("text", "")).strip(),
+                             "start": max(0.0, float(w.get("start", 0.0)))}
+                            for w in word_timings if str(w.get("text", "")).strip()
+                        ]
+                        clean_words.sort(key=lambda w: w["start"])
 
-                        full_text = "\n".join(lines)
-                        left, top, right, bottom = draw.textbbox((0, 0), full_text, font=font)
-                        tw, th = right - left, bottom - top
+                        def make_kinetic_caption(words, active_index, width, height):
+                            img = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+                            draw = ImageDraw.Draw(img)
+                            group_start = (active_index // 3) * 3
+                            visible = words[group_start:active_index + 1]
+                            measurements = [draw.textbbox((0, 0), w["text"], font=font, stroke_width=2) for w in visible]
+                            widths = [box[2] - box[0] for box in measurements]
+                            gap = 22
+                            total_width = sum(widths) + gap * max(0, len(widths) - 1)
+                            x = max(36, (width - total_width) / 2)
+                            y = height - 285
+                            for local_i, word in enumerate(visible):
+                                color = "#F4C542" if group_start + local_i == active_index else "#FFF4D6"
+                                text = word["text"]
+                                draw.text((x + 3, y + 4), text, font=font, fill="#000000",
+                                          stroke_width=5, stroke_fill="#000000")
+                                draw.text((x, y), text, font=font, fill=color,
+                                          stroke_width=3, stroke_fill="#080808")
+                                x += widths[local_i] + gap
+                            return np.array(img)
 
-                        x = (w - tw) / 2
-                        y = (h - th) / 2 if current_style == "high_retention" else h - th - 200 # Center or Bottom
+                        for word_i, word in enumerate(clean_words):
+                            clip_start = min(max(0.0, word["start"]), max(0.0, duration - 0.04))
+                            next_start = clean_words[word_i + 1]["start"] if word_i + 1 < len(clean_words) else duration
+                            clip_end = min(duration, max(clip_start + 0.04, next_start))
+                            if clip_end <= clip_start:
+                                continue
+                            frame = make_kinetic_caption(clean_words, word_i, visual_clip.w, visual_clip.h)
+                            caption = ImageClip(frame).with_start(clip_start).with_duration(clip_end - clip_start).with_opacity(1.0)
+                            timed_clips.append(caption)
 
-                        if current_style == "yellow_box":
-                            padding = 20
-                            draw.rectangle([x - padding, y - padding, x + tw + padding, y + th + padding], fill="yellow")
-                            draw.text((x, y), full_text, font=font, fill="black", align="center")
-                        elif current_style == "bold_outline":
-                            stroke_width = 5
-                            draw.text((x, y), full_text, font=font, fill="white", stroke_width=stroke_width, stroke_fill="black", align="center")
-                        elif current_style == "mystery_gold":
-                            draw.text((x, y), full_text, font=font, fill="#D6A52B", stroke_width=4, stroke_fill="#080808", align="center")
-                        elif current_style == "minimal":
-                            draw.text((x, y), full_text, font=font, fill="white", align="center")
-                        elif current_style == "high_retention":
-                            # Big bold text with shadow and random colors (Yellow, Green, White)
-                            shadow_color = "black"
-                            for adj in range(-4, 5):
-                                for adj2 in range(-4, 5):
-                                    draw.text((x+adj, y+adj2), full_text, font=font, fill=shadow_color, align="center")
-
-                            color = random.choice(["#ffdd00", "#00ff00", "#ffffff"]) # Yellow, Green, White
-                            draw.text((x, y), full_text, font=font, fill=color, align="center")
-                        else: # Default
-                            shadow_color = "black"
-                            for adj in range(-2, 3):
-                                for adj2 in range(-2, 3):
-                                    draw.text((x+adj, y+adj2), full_text, font=font, fill=shadow_color, align="center")
-                            draw.text((x, y), full_text, font=font, fill="white", align="center")
-
-                        return np.array(img)
-
-                    if style == "high_retention":
-                        # Break sentence into 3-word chunks for punchy effect
-                        display_text = sentence
-                        if getattr(settings, 'emoji_subtitles', False):
-                            display_text = SubtitleHelper.insert_emojis(sentence)
-
-                        chunks = chunk_subtitle_text(display_text)
-                        chunk_duration = duration / len(chunks)
-
-                        subs_clips = []
-                        for idx, chunk in enumerate(chunks):
-                            t_img = make_text_image(chunk, visual_clip.w, visual_clip.h, style)
-                            t_clip = ImageClip(t_img).with_duration(chunk_duration).with_start(idx * chunk_duration)
-                            t_clip = t_clip.with_opacity(0.98)
-                            subs_clips.append(t_clip)
-
-                        visual_clip = CompositeVideoClip([visual_clip] + subs_clips)
+                        if timed_clips:
+                            visual_clip = CompositeVideoClip([visual_clip] + timed_clips)
                     else:
+                        def make_text_image(txt, w, h, current_style="default"):
+                            img = Image.new('RGBA', (w, h), (0,0,0,0))
+                            draw = ImageDraw.Draw(img)
+                            font_size = 70 if current_style in ("bold_outline", "mystery_gold") else 100 if current_style == "high_retention" else 60
+                            try:
+                                font_path = resolve_font_path()
+                                font = ImageFont.truetype(font_path, font_size) if font_path else ImageFont.load_default()
+                            except Exception:
+                                font = ImageFont.load_default()
+                            lines = wrap_text_lines(txt, draw, font, w * 0.8)
+                            full_text = "\n".join(lines)
+                            left, top, right, bottom = draw.textbbox((0, 0), full_text, font=font)
+                            tw, th = right - left, bottom - top
+                            x = (w - tw) / 2
+                            y = (h - th) / 2 if current_style == "high_retention" else h - th - 200
+                            if current_style == "yellow_box":
+                                padding = 20
+                                draw.rectangle([x-padding, y-padding, x+tw+padding, y+th+padding], fill="yellow")
+                                draw.text((x, y), full_text, font=font, fill="black", align="center")
+                            elif current_style in ("bold_outline", "mystery_gold"):
+                                fill = "#D6A52B" if current_style == "mystery_gold" else "white"
+                                draw.text((x, y), full_text, font=font, fill=fill, stroke_width=4, stroke_fill="#080808", align="center")
+                            elif current_style == "minimal":
+                                draw.text((x, y), full_text, font=font, fill="white", align="center")
+                            else:
+                                for adj in range(-2, 3):
+                                    for adj2 in range(-2, 3):
+                                        draw.text((x+adj, y+adj2), full_text, font=font, fill="black", align="center")
+                                draw.text((x, y), full_text, font=font, fill="white", align="center")
+                            return np.array(img)
+
                         display_text = sentence
                         if getattr(settings, 'emoji_subtitles', False):
                             display_text = SubtitleHelper.insert_emojis(sentence)
-
                         txt_img = make_text_image(display_text, visual_clip.w, visual_clip.h, style)
                         txt_clip = ImageClip(txt_img).with_duration(duration)
                         visual_clip = CompositeVideoClip([visual_clip, txt_clip])

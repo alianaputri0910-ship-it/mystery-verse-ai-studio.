@@ -17,7 +17,7 @@ from video_engine import VideoEngine, resolve_font_path
 
 OUT = ROOT / "output"
 VOICE = "id-ID-ArdiNeural"
-RATE = "-22%"
+RATE = "-10%"
 MIN_SECONDS, MAX_SECONDS = 40.0, 60.0
 
 def run(args):

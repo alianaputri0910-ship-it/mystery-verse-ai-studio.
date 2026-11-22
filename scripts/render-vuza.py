@@ -87,8 +87,8 @@ def make_ambience(path, seconds):
 async def main():
     story = json.loads((OUT / "story.json").read_text(encoding="utf-8"))
     scenes = story.get("scenes", [])
-    if len(scenes) != 7:
-        raise RuntimeError("Naskah harus berisi tepat 7 adegan.")
+    if len(scenes) != 8:
+        raise RuntimeError("Naskah harus berisi 8 adegan termasuk ajakan penonton.")
     images = OUT / "images"
     if not images.exists():
         raise RuntimeError("Folder gambar AI tidak ditemukan.")
@@ -118,8 +118,9 @@ async def main():
         })
         print(f"Adegan {i+1}: narasi {seconds:.2f} detik pada kecepatan tetap {RATE}.")
 
-    if not MIN_SECONDS <= total <= MAX_SECONDS:
-        raise RuntimeError(f"Total narasi {total:.2f}s di luar batas 40–60 detik. Naskah perlu disesuaikan, bukan mempercepat suara.")
+    intro_seconds = 3.5
+    if not MIN_SECONDS <= total + intro_seconds <= MAX_SECONDS:
+        raise RuntimeError(f"Total narasi + opening {total + intro_seconds:.2f}s di luar batas 40–60 detik. Naskah perlu dipadatkan, bukan mempercepat suara.")
     settings = SimpleNamespace(ratio="9:16", vibe="general", filter="none",
                                subtitles=True, subtitle_style="mystery_gold",
                                emoji_subtitles=False, watermark=False, logo_path="")
@@ -147,10 +148,36 @@ async def main():
          "-filter_complex", "[1:a]volume=0.28[sfx];[0:a][sfx]amix=inputs=2:duration=first:dropout_transition=0:normalize=0[a]",
          "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", str(mixed)])
     mixed.replace(final)
+    # Create a short branded animated opening from the generated mystery corridor visual.
+    opening_image = images / "opening.webp"
+    if not opening_image.exists() or opening_image.stat().st_size < 1000:
+        raise RuntimeError("Visual opening tidak ditemukan.")
+    opening = OUT / "mystery-verse-opening.mp4"
+    joined = OUT / "mystery-verse-with-opening.mp4"
+    font = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+    run(["ffmpeg", "-y", "-loop", "1", "-framerate", "30", "-i", str(opening_image),
+         "-f", "lavfi", "-i", "sine=frequency=48:sample_rate=48000:duration=3.5",
+         "-t", "3.5", "-vf",
+         "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,"
+         "zoompan=z='min(zoom+0.0012,1.06)':d=105:s=1080x1920:fps=30,"
+         f"drawtext=fontfile={font}:text='MYSTERY VERSE':fontcolor=0xD6A52B:fontsize=68:"
+         "borderw=3:bordercolor=black@0.75:x=(w-text_w)/2:y=h*0.70,"
+         "fade=t=in:st=0:d=0.4,fade=t=out:st=3.0:d=0.5,format=yuv420p",
+         "-af", "volume=0.10,afade=t=in:st=0:d=0.3,afade=t=out:st=3.0:d=0.5",
+         "-c:v", "libx264", "-preset", "veryfast", "-crf", "19",
+         "-pix_fmt", "yuv420p", "-r", "30", "-c:a", "aac", "-b:a", "128k",
+         "-ar", "48000", "-ac", "2", str(opening)])
+    run(["ffmpeg", "-y", "-i", str(opening), "-i", str(final),
+         "-filter_complex", "[0:v][0:a][1:v][1:a]concat=n=2:v=1:a=1[v][a]",
+         "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-preset", "veryfast",
+         "-crf", "19", "-pix_fmt", "yuv420p", "-r", "30",
+         "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", str(joined)])
+    joined.replace(final)
+
     actual = duration(final)
     if not MIN_SECONDS <= actual <= MAX_SECONDS:
         raise RuntimeError(f"MP4 akhir berdurasi {actual:.2f}s, di luar batas 40–60.")
-    print(f"BERHASIL: {final} | {actual:.2f}s | 1080x1920 | 30 FPS")
+    print(f"BERHASIL: {final} | {actual:.2f}s | 1080x1920 | 30 FPS | opening 3.5s + CTA tersinkron")
 
 if __name__ == "__main__":
     asyncio.run(main())

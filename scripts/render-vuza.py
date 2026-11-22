@@ -181,24 +181,8 @@ async def main():
     for i, scene in enumerate(scenes):
         n = int(scene["scene"])
         slot = float(scene["end"]) - float(scene["start"])
-        target = slot - 0.12
-        image = OUT/"images"/f"scene-{n:02d}.webp"
-        if not image.is_file() or image.stat().st_size == 0:
-            raise RuntimeError(f"Gambar adegan {n} hilang.")
-        audio = engine.temp_dir/f"speech_{i}.mp3"
-        print(f"Membuat suara adegan {n}/{len(scenes)}...")
-        word_timings = await save_audio_with_word_boundaries(scene["narration"], audio)
+        # Keep the chosen slow narration speed; never time-compress speech to fit a scene.
         d = duration(audio)
-        if d > target:
-            speed = d/target
-            if speed > 1.60:
-                raise RuntimeError(f"Narasi adegan {n} terlalu panjang ({d:.2f}s); batas percepatan aman 1.60x.")
-            print(f"Menyesuaikan tempo narasi adegan {n} menjadi {speed:.2f}x agar pas dengan durasi adegan.")
-            temp = audio.with_name(audio.stem+"-fit.mp3")
-            run(["ffmpeg","-y","-i",str(audio),"-filter:a",f"atempo={speed:.5f}","-t",f"{target:.3f}","-c:a","libmp3lame","-q:a","3",str(temp)])
-            temp.replace(audio)
-            word_timings = [{"text": w["text"], "start": w["start"] / speed} for w in word_timings]
-            d = duration(audio)
         if not word_timings:
             tokens = scene["narration"].split()
             word_timings = [{"text": token, "start": (d * i / max(1, len(tokens)))} for i, token in enumerate(tokens)]

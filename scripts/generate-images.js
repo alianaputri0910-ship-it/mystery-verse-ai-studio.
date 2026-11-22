@@ -25,13 +25,14 @@ const aiZip = fs.existsSync(aiAssetsDir)
 
 if (aiZip) {
   const extractDir = path.join(aiAssetsDir, "_extracted");
+  fs.rmSync(extractDir, { recursive: true, force: true });
   fs.mkdirSync(extractDir, { recursive: true });
   const unzip = spawnSync("unzip", ["-o", path.join(aiAssetsDir, aiZip), "-d", extractDir], { encoding: "utf8" });
   if (unzip.status !== 0) throw new Error("Gagal mengekstrak ZIP gambar: " + (unzip.stderr || ""));
   const listing = spawnSync("find", [extractDir, "-type", "f"], { encoding: "utf8" });
   if (listing.status !== 0) throw new Error("Tidak dapat membaca isi ZIP: " + (listing.stderr || ""));
-  const ordered = listing.stdout.split(/\\r?\\n/)
-    .filter(file => file && /\\.(jpe?g|png|webp)$/i.test(file))
+  const ordered = listing.stdout.split(/\r?\n/)
+    .filter(file => file && /\.(jpe?g|png|webp)$/i.test(file))
     .sort();
   if (ordered.length < 6) throw new Error("ZIP gambar harus berisi minimal 6 gambar. Ditemukan: " + ordered.length);
   for (let i = 0; i < 6; i++) {

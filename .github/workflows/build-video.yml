@@ -76,6 +76,19 @@ jobs:
         run: |
           python scripts/render-vuza.py
 
+      - name: Re-encode MP4 for Android compatibility
+        run: |
+          test -s output/mystery-verse.mp4
+          ffmpeg -y -i output/mystery-verse.mp4 \
+            -map 0:v:0 -map 0:a:0? \
+            -c:v libx264 -preset medium -crf 20 \
+            -pix_fmt yuv420p -profile:v high -level:v 4.1 -r 30 \
+            -c:a aac -b:a 192k -ac 2 \
+            -movflags +faststart output/mystery-verse-android.mp4
+          mv output/mystery-verse-android.mp4 output/mystery-verse.mp4
+          ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt,codec_name,width,height -of default=noprint_wrappers=1 output/mystery-verse.mp4
+          ffmpeg -v error -i output/mystery-verse.mp4 -f null -
+
       - name: Upload video and production files
         uses: actions/upload-artifact@v4
         with:

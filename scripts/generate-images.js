@@ -82,7 +82,6 @@ async function generate(scene) {
       nsfw: false,
       censor_nsfw: true,
       trusted_workers: false,
-      slow_workers: true
     })
   });
 
@@ -114,12 +113,15 @@ async function generate(scene) {
   const rawPath = path.join(outputDir, `scene-${number}-source.png`);
   const imageValue = generation.img;
 
-  if (/^https?:\\/\\//i.test(imageValue)) {
+  if (imageValue.startsWith("https://") || imageValue.startsWith("http://")) {
     const response = await fetch(imageValue);
     if (!response.ok) throw new Error("Gagal mengunduh gambar adegan " + number + ".");
     fs.writeFileSync(rawPath, Buffer.from(await response.arrayBuffer()));
   } else {
-    const encoded = imageValue.replace(/^data:image\\/[^;]+;base64,/, "");
+    const comma = imageValue.indexOf(",");
+    const encoded = imageValue.startsWith("data:image/") && comma >= 0
+      ? imageValue.slice(comma + 1)
+      : imageValue;
     fs.writeFileSync(rawPath, Buffer.from(encoded, "base64"));
   }
 

@@ -16,7 +16,7 @@ if (!Array.isArray(story.scenes) || story.scenes.length !== 7) {
 
 fs.mkdirSync(outputDir, { recursive: true });
 const aiZip = fs.existsSync(aiAssetsDir)
-  ? fs.readdirSync(aiAssetsDir).find(name => name.toLowerCase().endsWith(".zip"))
+  ? fs.readdirSync(aiAssetsDir).find(name => name.toLowerCase() === "perchance-scenes.zip")
   : null;
 
 if (!aiZip) {
@@ -25,7 +25,7 @@ if (!aiZip) {
     "Perchance.org tidak menyediakan API publik resmi untuk membuat gambar langsung dari GitHub Actions. " +
     "Otomatisasi melalui endpoint tidak resmi memerlukan otomasi browser dan verifikasi anti-bot; " +
     "workflow tidak akan mencoba melewati verifikasi tersebut. " +
-    "Masukkan 7 gambar Perchance ke ZIP assets/ai-images/perchance-scenes.zip untuk melanjutkan render."
+    "Arsip lama mystery-verse-ai-visuals.zip berisi hanya 6 gambar dan tidak akan digunakan. Untuk render berbasis Perchance, diperlukan arsip assets/ai-images/perchance-scenes.zip berisi tepat 7 gambar."
   );
 }
 

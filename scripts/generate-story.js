@@ -9,49 +9,49 @@ const scenes = [
     beat: "HOOK",
     start: 0,
     end: 8,
-    narration: "Di Atlantik Utara, tiga penjaga mercusuar menghilang tanpa jejak.",
+    narration: "Di tengah Atlantik Utara, mercusuar berdiri di pulau terpencil. Lalu, tiga penjaganya menghilang tanpa jejak.",
     visual_prompt: "A remote stone lighthouse on the Flannan Isles, Scotland, in December 1900, surrounded by a violent North Atlantic storm, jagged black rocks, huge waves, dense sea fog, cinematic historical mystery documentary, vertical 9:16, no text."
   },
   {
     beat: "TIGA PENJAGA",
     start: 8,
     end: 16,
-    narration: "Mereka James Ducat, Thomas Marshall, dan Donald McArthur. Ketiganya bertugas di Flannan Isles, Skotlandia.",
+    narration: "Mereka James Ducat, Thomas Marshall, dan Donald McArthur. Ketiganya menjaga mercusuar Flannan Isles, di lepas pantai Skotlandia.",
     visual_prompt: "Three lighthouse keepers in historically accurate 1900 Scottish maritime work clothes near an isolated lighthouse, cold overcast weather, documentary historical reconstruction, photorealistic, vertical 9:16, no text."
   },
   {
     beat: "KAPAL BANTUAN",
     start: 16,
     end: 24,
-    narration: "Pada 26 Desember 1900, kapal Hesperus tiba. Mercusuar sunyi; ketiga penjaga lenyap.",
+    narration: "Pada 26 Desember 1900, kapal bantuan Hesperus akhirnya tiba. Namun, tak seorang pun menyambut mereka di mercusuar.",
     visual_prompt: "A small early 1900s relief vessel approaching the remote Flannan Isles lighthouse through rough North Atlantic seas and fog, dark lighthouse windows, cinematic historical reconstruction, vertical 9:16, no text."
   },
   {
     beat: "PINTU YANG TERBUKA",
     start: 24,
     end: 32,
-    narration: "Ruangan diperiksa. Barang-barang tertinggal, tetapi ketiga penjaga tak terlihat.",
+    narration: "Pintu dan ruangan diperiksa. Perlengkapan masih tertinggal, tetapi tiga penjaga itu tak ditemukan di mana pun.",
     visual_prompt: "Interior of an isolated Scottish lighthouse in 1900, empty keeper quarters, abandoned table and chair, dim natural light through small windows, eerie silence, historically grounded cinematic documentary, vertical 9:16, no text."
   },
   {
     beat: "JEJAK MISTERIUS",
     start: 32,
     end: 40,
-    narration: "Di dermaga, pagar dan perlengkapan rusak dihantam cuaca buruk serta ombak.",
+    narration: "Di area pendaratan, pagar kayu rusak dan perlengkapan berserakan. Badai serta ombak besar pernah menghantam tempat itu.",
     visual_prompt: "Exposed landing area beneath the Flannan Isles lighthouse in 1900, jagged wet black rocks, damaged wooden railings, twisted ropes and storm-battered equipment, huge waves and sea spray, realistic storm damage, vertical 9:16, no text."
   },
   {
     beat: "LAUT MENELAN MEREKA",
     start: 40,
     end: 50,
-    narration: "Diduga ombak besar menyeret mereka ke laut. Namun, bukti pasti tidak pernah ditemukan.",
+    narration: "Salah satu dugaan menyebut ombak besar menyeret mereka ke laut. Tetapi, tidak ada bukti yang memastikan bagaimana mereka hilang.",
     visual_prompt: "A towering North Atlantic wave crashing against the steep black rocks below the Flannan Isles lighthouse, a historical visual reconstruction of a possible accident, no people visible, dramatic but realistic, vertical 9:16, no text."
   },
   {
     beat: "MISTERI YANG TERSISA",
     start: 50,
     end: 60,
-    narration: "Lebih dari seabad berlalu, nasib tiga penjaga itu tetap menjadi misteri.",
+    narration: "Catatan terakhir dan kondisi mercusuar menyisakan banyak pertanyaan. Lebih dari seabad kemudian, nasib mereka tetap misterius.",
     visual_prompt: "A lone Flannan Isles stone lighthouse at night in 1900, its beam sweeping across a dark restless sea, thick fog and distant waves, lonely mysterious atmosphere, cinematic photorealistic historical documentary, vertical 9:16, no text."
   }
 ];

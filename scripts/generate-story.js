@@ -42,7 +42,7 @@ const scenes = [
   },
   {
     beat: "AJAKAN MYSTERY VERSE",
-    narration: "Suka misteri nyata? Like dan subscribe MYSTERY VERSE. Punya kisah? Tulis di komentar!",
+    narration: "Ikuti MYSTERY VERSE. Like, subscribe, dan tulis pendapatmu!",
     visual_prompt: "Cinematic dark mystery documentary closing scene, elegant black evidence wall with subtle gold light, a vintage typewriter and pinned blank case photographs, dramatic shadows, refined gold typography reading LIKE • SUBSCRIBE • KOMENTAR and MYSTERY VERSE, tasteful premium Netflix documentary visual, no people, vertical 9:16."
   }
 ];

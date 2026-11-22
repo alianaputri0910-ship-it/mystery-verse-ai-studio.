@@ -11,8 +11,8 @@ if (!fs.existsSync(storyPath)) {
 }
 
 const story = JSON.parse(fs.readFileSync(storyPath, "utf8"));
-if (!Array.isArray(story.scenes) || story.scenes.length !== 6) {
-  throw new Error("MYSTERY VERSE membutuhkan tepat 6 adegan.");
+if (!Array.isArray(story.scenes) || story.scenes.length !== 7) {
+  throw new Error("MYSTERY VERSE Flannan Isles membutuhkan tepat 7 adegan.");
 }
 
 fs.mkdirSync(outputDir, { recursive: true });
@@ -34,13 +34,13 @@ if (aiZip) {
   const ordered = listing.stdout.split(/\r?\n/)
     .filter(file => file && /\.(jpe?g|png|webp)$/i.test(file))
     .sort();
-  if (ordered.length < 6) throw new Error("ZIP gambar harus berisi minimal 6 gambar. Ditemukan: " + ordered.length);
-  for (let i = 0; i < 6; i++) {
+  if (ordered.length < 6) throw new Error("ZIP gambar harus berisi minimal 7 gambar. Ditemukan: " + ordered.length);
+  for (let i = 0; i < 7; i++) {
     const outputPath = path.join(outputDir, `scene-${String(i + 1).padStart(2, "0")}.webp`);
     toWebp(ordered[i], outputPath);
     console.log("Memakai visual ChatGPT untuk adegan " + String(i + 1).padStart(2, "0"));
   }
-  console.log("Enam visual ChatGPT berhasil disiapkan dari ZIP.");
+  console.log("Tujuh visual berhasil disiapkan dari ZIP.");
   process.exit(0);
 }
 
@@ -48,12 +48,13 @@ if (aiZip) {
 // Foto dicari per adegan dari Wikimedia Commons. Ini bukan gambar AI,
 // tetapi sumber publik yang tidak memerlukan API key atau kredit.
 const sceneSearches = [
-  ["abandoned house exterior", "old abandoned house"],
-  ["abandoned house interior staircase", "dark abandoned corridor"],
-  ["child silhouette window night", "security camera house window"],
-  ["creepy child silhouette window", "dark window silhouette"],
-  ["man silhouette dark room window", "man reflection window night"],
-  ["dark empty hallway doorway", "old house dark door"],
+  ["Flannan Isles lighthouse Scotland", "Flannan Isles lighthouse"],
+  ["Scottish lighthouse keepers 1900", "lighthouse keeper Scotland historical"],
+  ["Hesperus ship lighthouse Flannan Isles", "historic lighthouse supply ship Scotland"],
+  ["Flannan Isles lighthouse interior", "historic lighthouse interior Scotland"],
+  ["Flannan Isles lighthouse landing rocks", "Flannan Isles rocks landing"],
+  ["North Atlantic storm giant wave rocky coast Scotland", "storm waves rocky Scottish coast"],
+  ["Flannan Isles lighthouse night fog", "Flannan Isles lighthouse fog"]
 ];
 
 function toWebp(inputPath, outputPath) {
@@ -198,4 +199,4 @@ for (let index = 0; index < story.scenes.length; index++) {
   await generate(story.scenes[index], index);
 }
 
-console.log("Semua 6 visual MYSTERY VERSE siap digunakan.");
+console.log("Semua 7 visual Flannan Isles siap digunakan (foto Wikimedia Commons, bukan AI).");

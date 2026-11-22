@@ -54,12 +54,7 @@ const scenesHTML = story.scenes.map(scene => {
       <div class="shade"></div>
 
       <div class="brand">MYSTERY VERSE</div>
-
-      <div class="number">
-        ${number} — ${escapeHTML(scene.beat)}
-      </div>
-
-      <div class="caption" id="caption-${number}">
+<div class="caption" id="caption-${number}">
         ${escapeHTML(scene.narration)}
       </div>
 
@@ -195,26 +190,21 @@ html, body {
   text-shadow: 0 3px 16px rgba(0,0,0,0.95);
 }
 
-.number {
-  position: absolute;
-  top: 205px;
-  left: 70px;
-  right: 70px;
-  color: #ff7777;
-  font-size: 25px;
-  letter-spacing: 5px;
-  text-shadow: 0 3px 14px rgba(0,0,0,0.98);
-}
-
 .caption {
-  max-width: 900px;
-  padding: 26px 30px;
+  position: absolute;
+  left: 76px;
+  right: 76px;
+  bottom: 190px;
+  max-width: 928px;
+  padding: 24px 30px;
   border-radius: 18px;
-  background: rgba(0,0,0,0.24);
-  font-size: 56px;
-  line-height: 1.32;
+  background: rgba(0,0,0,0.76);
+  border: 1px solid rgba(194, 145, 35, 0.38);
+  color: #D6A52B;
+  font-size: 50px;
+  line-height: 1.3;
   font-weight: 700;
-  text-shadow: 0 3px 18px rgba(0,0,0,1);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.95);
 }
 
 .footer {

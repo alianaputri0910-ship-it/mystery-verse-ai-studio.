@@ -7,7 +7,7 @@ on:
         description: "Topik cerita horor (kosongkan untuk topik default)"
         required: false
         type: string
-        default: "Misteri Rumah Kosong"
+        default: "Tiga Penjaga Mercusuar Menghilang — Misteri Flannan Isles (1900)"
   push:
     branches:
       - main
@@ -61,7 +61,7 @@ jobs:
           TOPIC: ${{ inputs.topic }}
         run: |
           if [ -z "$TOPIC" ]; then
-            TOPIC="Misteri Rumah Kosong"
+            TOPIC="Tiga Penjaga Mercusuar Menghilang — Misteri Flannan Isles (1900)"
           fi
           npm run story -- "$TOPIC"
 

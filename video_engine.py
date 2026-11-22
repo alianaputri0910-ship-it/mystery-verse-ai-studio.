@@ -278,7 +278,7 @@ class VideoEngine:
 
             # Create Audio Clip
             audio_clip = AudioFileClip(audio_path)
-            duration = audio_clip.duration + 0.5 # Add padding
+            duration = audio_clip.duration + 0.15 # Short natural scene tail; avoid long silent gaps
 
             # Use the exact scene assets collected by the pipeline; no cross-scene fallback.
             media_folder = None

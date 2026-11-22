@@ -1,8 +1,13 @@
-
 name: MYSTERY VERSE Video Builder
 
 on:
   workflow_dispatch:
+    inputs:
+      topic:
+        description: "Topik cerita horor (kosongkan untuk topik default)"
+        required: false
+        type: string
+        default: "Misteri Rumah Kosong"
   push:
     branches:
       - main
@@ -15,6 +20,10 @@ on:
 
 permissions:
   contents: read
+
+concurrency:
+  group: mystery-verse-video
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -48,8 +57,13 @@ jobs:
         uses: browser-actions/setup-chrome@v1
 
       - name: Generate horror story
+        env:
+          TOPIC: ${{ inputs.topic }}
         run: |
-          npm run story -- "Misteri Rumah Kosong"
+          if [ -z "$TOPIC" ]; then
+            TOPIC="Misteri Rumah Kosong"
+          fi
+          npm run story -- "$TOPIC"
 
       - name: Generate AI images
         run: |
@@ -63,7 +77,7 @@ jobs:
         run: |
           npm run build
 
-      -       - name: Validate HyperFrames composition
+      - name: Validate HyperFrames composition
         run: |
           npx --yes hyperframes lint
           npx --yes hyperframes check
@@ -75,7 +89,12 @@ jobs:
             --fps 30 \
             --quality standard
 
-      - name: Upload video and audio
+      - name: Verify rendered video
+        run: |
+          test -s output/mystery-verse.mp4
+          ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 output/mystery-verse.mp4
+
+      - name: Upload video and production files
         uses: actions/upload-artifact@v4
         with:
           name: mystery-verse-production

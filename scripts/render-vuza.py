@@ -2,13 +2,18 @@ import asyncio
 import json
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 from types import SimpleNamespace
 
+ROOT = Path(__file__).resolve().parents[1]
+# Saat skrip dijalankan sebagai `python scripts/render-vuza.py`, Python
+# menambahkan folder scripts ke sys.path, bukan root repository.
+# Tambahkan root secara eksplisit agar video_engine.py dapat diimpor.
+sys.path.insert(0, str(ROOT))
+
 from edge_tts import Communicate
 from video_engine import VideoEngine
-
-ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "output"
 VOICE = "id-ID-ArdiNeural"
 MIN_SECONDS, MAX_SECONDS = 40.0, 60.0

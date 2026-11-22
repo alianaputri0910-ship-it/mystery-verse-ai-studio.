@@ -171,10 +171,10 @@ html, body {
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(0,0,0,0.45),
-    rgba(0,0,0,0.12) 35%,
-    rgba(0,0,0,0.48) 65%,
-    rgba(0,0,0,0.85)
+    rgba(0,0,0,0.18),
+    rgba(0,0,0,0.02) 32%,
+    rgba(0,0,0,0.12) 62%,
+    rgba(0,0,0,0.58)
   );
 }
 
@@ -184,35 +184,46 @@ html, body {
 }
 
 .brand {
-  color: #e0caca;
-  font-size: 42px;
-  letter-spacing: 12px;
-  margin-bottom: 100px;
-  text-shadow: 0 4px 20px black;
+  position: absolute;
+  top: 92px;
+  left: 0;
+  right: 0;
+  color: rgba(245, 232, 232, 0.82);
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: 9px;
+  text-shadow: 0 3px 16px rgba(0,0,0,0.95);
 }
 
 .number {
-  color: #ff5555;
-  font-size: 30px;
-  letter-spacing: 6px;
-  margin-bottom: 50px;
-  text-shadow: 0 4px 15px black;
+  position: absolute;
+  top: 205px;
+  left: 70px;
+  right: 70px;
+  color: #ff7777;
+  font-size: 25px;
+  letter-spacing: 5px;
+  text-shadow: 0 3px 14px rgba(0,0,0,0.98);
 }
 
 .caption {
-  font-size: 64px;
-  line-height: 1.4;
-  font-weight: bold;
-  text-shadow: 0 5px 25px black;
+  max-width: 900px;
+  padding: 26px 30px;
+  border-radius: 18px;
+  background: rgba(0,0,0,0.24);
+  font-size: 56px;
+  line-height: 1.32;
+  font-weight: 700;
+  text-shadow: 0 3px 18px rgba(0,0,0,1);
 }
 
 .footer {
   position: absolute;
-  bottom: 100px;
-  color: #ddd;
-  font-size: 24px;
-  letter-spacing: 8px;
-  text-shadow: 0 3px 15px black;
+  bottom: 88px;
+  color: rgba(238,238,238,0.78);
+  font-size: 20px;
+  letter-spacing: 6px;
+  text-shadow: 0 3px 14px rgba(0,0,0,0.95);
 }
 </style>
 </head>

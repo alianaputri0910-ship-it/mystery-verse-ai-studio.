@@ -50,8 +50,9 @@ async def main():
         d = duration(audio)
         if d > target:
             speed = d/target
-            if speed > 1.25:
-                raise RuntimeError(f"Narasi adegan {n} terlalu panjang ({d:.2f}s); perlu dipendekkan.")
+            if speed > 1.60:
+                raise RuntimeError(f"Narasi adegan {n} terlalu panjang ({d:.2f}s); batas percepatan aman 1.60x.")
+            print(f"Menyesuaikan tempo narasi adegan {n} menjadi {speed:.2f}x agar pas dengan durasi adegan.")
             temp = audio.with_name(audio.stem+"-fit.mp3")
             run(["ffmpeg","-y","-i",str(audio),"-filter:a",f"atempo={speed:.5f}","-t",f"{target:.3f}","-c:a","libmp3lame","-q:a","3",str(temp)])
             temp.replace(audio)

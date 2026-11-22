@@ -49,9 +49,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ffmpeg
 
-      - name: Install Edge TTS
+      - name: Install VUZA video engine dependencies
         run: |
-          python -m pip install --upgrade edge-tts
+          python -m pip install --upgrade edge-tts 'moviepy>=2.0.0' 'Pillow>=10.0.0' 'numpy>=1.24.0'
 
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
@@ -72,30 +72,9 @@ jobs:
         run: |
           node scripts/generate-images.js
 
-      - name: Generate ArdiNeural voice
+      - name: Render with VUZA engine (40-60 second Shorts)
         run: |
-          npm run voice
-
-      - name: Build storyboard and composition
-        run: |
-          npm run build
-
-      - name: Validate HyperFrames composition
-        run: |
-          npx --yes hyperframes lint
-          npx --yes hyperframes check
-
-      - name: Render video
-        run: |
-          npx --yes hyperframes render \
-            --output output/mystery-verse.mp4 \
-            --fps 30 \
-            --quality standard
-
-      - name: Verify rendered video
-        run: |
-          test -s output/mystery-verse.mp4
-          ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 output/mystery-verse.mp4
+          python scripts/render-vuza.py
 
       - name: Upload video and production files
         uses: actions/upload-artifact@v4

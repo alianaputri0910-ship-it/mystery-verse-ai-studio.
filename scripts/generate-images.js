@@ -60,7 +60,7 @@ function toWebp(inputPath, outputPath) {
   const result = spawnSync("ffmpeg", [
     "-y", "-hide_banner", "-loglevel", "error",
     "-i", inputPath,
-    "-vf", "scale=768:1365:force_original_aspect_ratio=increase,crop=768:1365",
+    "-vf", "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,eq=brightness=0.08:contrast=1.06:saturation=0.96,unsharp=5:5:0.35:3:3:0.0",
     "-frames:v", "1", "-quality", "88", outputPath
   ], { encoding: "utf8" });
 

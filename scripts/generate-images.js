@@ -17,6 +17,32 @@ if (!Array.isArray(story.scenes) || story.scenes.length !== 6) {
 
 fs.mkdirSync(outputDir, { recursive: true });
 
+// Prioritaskan visual buatan ChatGPT yang diunggah sebagai ZIP ke assets/ai-images.
+const aiAssetsDir = "assets/ai-images";
+const aiZip = fs.existsSync(aiAssetsDir)
+  ? fs.readdirSync(aiAssetsDir).find(name => name.toLowerCase().endsWith(".zip"))
+  : null;
+
+if (aiZip) {
+  const extractDir = path.join(aiAssetsDir, "_extracted");
+  fs.mkdirSync(extractDir, { recursive: true });
+  const unzip = spawnSync("unzip", ["-o", path.join(aiAssetsDir, aiZip), "-d", extractDir], { encoding: "utf8" });
+  if (unzip.status !== 0) throw new Error("Gagal mengekstrak ZIP gambar: " + (unzip.stderr || ""));
+  const files = fs.readdirSync(extractDir, { recursive: true })
+    .filter(file => /\\.(jpe?g|png|webp)$/i.test(String(file)))
+    .map(file => path.join(extractDir, String(file)));
+  const ordered = files.sort();
+  if (ordered.length < 6) throw new Error("ZIP gambar harus berisi minimal 6 gambar. Ditemukan: " + ordered.length);
+  for (let i = 0; i < 6; i++) {
+    const outputPath = path.join(outputDir, `scene-${String(i + 1).padStart(2, "0")}.webp`);
+    toWebp(ordered[i], outputPath);
+    console.log("Memakai visual ChatGPT untuk adegan " + String(i + 1).padStart(2, "0"));
+  }
+  console.log("Enam visual ChatGPT berhasil disiapkan dari ZIP.");
+  process.exit(0);
+}
+
+
 // Foto dicari per adegan dari Wikimedia Commons. Ini bukan gambar AI,
 // tetapi sumber publik yang tidak memerlukan API key atau kredit.
 const sceneSearches = [

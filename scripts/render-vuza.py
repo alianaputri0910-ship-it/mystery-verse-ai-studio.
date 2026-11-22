@@ -18,6 +18,7 @@ from edge_tts import Communicate
 from video_engine import VideoEngine, resolve_font_path
 OUT = ROOT / "output"
 VOICE = "id-ID-ArdiNeural"
+NARRATION_RATE = "-18%"
 MIN_SECONDS, MAX_SECONDS = 40.0, 60.0
 
 def run(args):
@@ -149,7 +150,7 @@ def create_channel_brand(path):
 
 async def save_audio_with_word_boundaries(text, audio_path):
     """Save Edge-TTS audio and its real word-boundary timestamps."""
-    communicator = Communicate(text, VOICE, rate="-8%", volume="+0%")
+    communicator = Communicate(text, VOICE, rate=NARRATION_RATE, volume="+0%")
     boundaries = []
     with open(audio_path, "wb") as audio_file:
         async for chunk in communicator.stream():
@@ -180,7 +181,7 @@ async def main():
     for i, scene in enumerate(scenes):
         n = int(scene["scene"])
         slot = float(scene["end"]) - float(scene["start"])
-        target = slot - 0.5
+        target = slot - 0.12
         image = OUT/"images"/f"scene-{n:02d}.webp"
         if not image.is_file() or image.stat().st_size == 0:
             raise RuntimeError(f"Gambar adegan {n} hilang.")

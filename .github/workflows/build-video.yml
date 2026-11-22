@@ -65,7 +65,10 @@ jobs:
           fi
           npm run story -- "$TOPIC"
 
-      - name: Generate AI images
+      - name: Generate AI images with Pollinations API
+        env:
+          POLLINATIONS_API_KEY: ${{ secrets.POLLINATIONS_API_KEY }}
+          POLLINATIONS_IMAGE_MODEL: black-forest-labs/flux.1-schnell
         run: |
           node scripts/generate-images.js
 

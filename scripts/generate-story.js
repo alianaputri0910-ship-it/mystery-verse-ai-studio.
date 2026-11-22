@@ -2,86 +2,68 @@ import fs from "node:fs";
 import path from "node:path";
 
 const topic = process.argv.slice(2).join(" ") ||
-  "Tiga Penjaga Mercusuar Menghilang — Misteri Flannan Isles (1900)";
+  "Pembunuhan Keluarga Setagaya — Misteri yang Belum Terpecahkan (2000)";
 
 const scenes = [
   {
-    beat: "HOOK",
-    start: 0,
-    end: 8,
-    narration: "Di Atlantik Utara, tiga penjaga mercusuar Flannan Isles menghilang tanpa jejak.",
-    visual_prompt: "A remote stone lighthouse on the Flannan Isles, Scotland, in December 1900, surrounded by a violent North Atlantic storm, jagged black rocks, huge waves, dense sea fog, cinematic historical mystery documentary, vertical 9:16, no text."
+    beat: "MALAM TERAKHIR",
+    narration: "Tokyo, 30 Desember 2000. Sebuah keluarga menghabiskan malam terakhir mereka di rumah.",
+    visual_prompt: "Respectful cinematic historical reconstruction of a quiet residential street in Setagaya, Tokyo, winter night December 2000, modest Japanese family home beside a dark neighborhood park, subtle warm window light, empty street, documentary realism, no people visible, no text, vertical 9:16."
   },
   {
-    beat: "TIGA PENJAGA",
-    start: 8,
-    end: 16,
-    narration: "James Ducat, Thomas Marshall, dan Donald McArthur menjaga mercusuar terpencil Skotlandia.",
-    visual_prompt: "Three lighthouse keepers in historically accurate 1900 Scottish maritime work clothes near an isolated lighthouse, cold overcast weather, documentary historical reconstruction, photorealistic, vertical 9:16, no text."
+    beat: "EMPAT KORBAN",
+    narration: "Mikio Miyazawa, istrinya Yasuko, dan dua anak mereka tinggal di sana.",
+    visual_prompt: "A respectful symbolic reconstruction of a Japanese family home interior in Tokyo around 2000, four empty dining place settings, warm domestic light, ordinary family photographs softly out of focus, no identifiable real people, no violence, photorealistic documentary, vertical 9:16."
   },
   {
-    beat: "KAPAL BANTUAN",
-    start: 16,
-    end: 24,
-    narration: "Pada 26 Desember 1900, kapal Hesperus tiba. Tak ada penjaga menyambut.",
-    visual_prompt: "A small early 1900s relief vessel approaching the remote Flannan Isles lighthouse through rough North Atlantic seas and fog, dark lighthouse windows, cinematic historical reconstruction, vertical 9:16, no text."
+    beat: "PAGI YANG MENGERIKAN",
+    narration: "Pagi berikutnya, keluarga itu ditemukan tewas. Kasusnya mengguncang Jepang.",
+    visual_prompt: "Quiet Japanese suburban home exterior in Setagaya on a cold winter morning in 2000, police tape at a respectful distance, investigators as indistinct silhouettes, overcast natural light, no bodies, no blood, no graphic content, cinematic true crime documentary, vertical 9:16."
   },
   {
-    beat: "PINTU YANG TERBUKA",
-    start: 24,
-    end: 32,
-    narration: "Pintu diperiksa. Perlengkapan tertinggal, tetapi ketiga penjaga tak ditemukan.",
-    visual_prompt: "Interior of an isolated Scottish lighthouse in 1900, empty keeper quarters, abandoned table and chair, dim natural light through small windows, eerie silence, historically grounded cinematic documentary, vertical 9:16, no text."
+    beat: "PELAKU TERTINGGAL",
+    narration: "Namun, pelaku meninggalkan banyak petunjuk di dalam rumah.",
+    visual_prompt: "Careful forensic investigation reconstruction inside a Japanese home circa 2000, gloved investigator hands examining ordinary clothing and small evidence markers on a table, no gore, no readable labels, restrained documentary lighting, photorealistic, vertical 9:16."
   },
   {
-    beat: "JEJAK MISTERIUS",
-    start: 32,
-    end: 40,
-    narration: "Di dermaga, pagar rusak dan perlengkapan berserakan diterjang badai.",
-    visual_prompt: "Exposed landing area beneath the Flannan Isles lighthouse in 1900, jagged wet black rocks, damaged wooden railings, twisted ropes and storm-battered equipment, huge waves and sea spray, realistic storm damage, vertical 9:16, no text."
+    beat: "JEJAK YANG GANJIL",
+    narration: "Jejak sidik jari, pakaian, dan bukti biologis ditemukan di lokasi.",
+    visual_prompt: "Close-up forensic evidence still life in a Japanese investigation room, fingerprint powder and evidence bags containing folded clothing, case photographs blurred and unreadable, cool cinematic lighting, realistic 2000-era details, no graphic imagery, vertical 9:16."
   },
   {
-    beat: "LAUT MENELAN MEREKA",
-    start: 40,
-    end: 50,
-    narration: "Ombak besar diduga menyeret mereka ke laut. Namun, tak ada bukti pasti.",
-    visual_prompt: "A towering North Atlantic wave crashing against the steep black rocks below the Flannan Isles lighthouse, a historical visual reconstruction of a possible accident, no people visible, dramatic but realistic, vertical 9:16, no text."
+    beat: "TETAP TAK TERUNGKAP",
+    narration: "Bahkan, penyelidik meyakini pelaku sempat berada di rumah setelah pembunuhan.",
+    visual_prompt: "Empty kitchen in a quiet Japanese suburban house at night, untouched cup and computer monitor glowing faintly, long shadows, unsettling but realistic atmosphere, no person visible, historical 2000 setting, cinematic true crime documentary, vertical 9:16."
   },
   {
-    beat: "MISTERI YANG TERSISA",
-    start: 50,
-    end: 60,
-    narration: "Lebih dari seabad berlalu. Nasib tiga penjaga itu tetap menjadi misteri.",
-    visual_prompt: "A lone Flannan Isles stone lighthouse at night in 1900, its beam sweeping across a dark restless sea, thick fog and distant waves, lonely mysterious atmosphere, cinematic photorealistic historical documentary, vertical 9:16, no text."
+    beat: "MISTERI 25 TAHUN",
+    narration: "Lebih dari dua puluh lima tahun berlalu. Identitas pembunuhnya masih menjadi misteri.",
+    visual_prompt: "Present-day exterior of a quiet residential area beside Soshigaya Park in Setagaya Tokyo at dusk, lone streetlight, winter trees, solemn respectful atmosphere, cinematic documentary realism, no people, no text, vertical 9:16."
   }
 ];
 
 const story = {
   channel: "MYSTERY VERSE",
   topic,
-  language: "id-ID",
-  format: {
-    width: 1080,
-    height: 1920,
-    aspect_ratio: "9:16",
-    duration_seconds: 60,
-    fps: 30
+  title: "EMPAT ORANG TEWAS, PEMBUNUHNYA HILANG — MISTERI SETAGAYA (2000)",
+  youtube: {
+    title: "EMPAT ORANG TEWAS, PEMBUNUHNYA HILANG… MISTERI SETAGAYA 2000",
+    description: "Pada malam 30 Desember 2000, keluarga Miyazawa menjadi korban pembunuhan di rumah mereka di Setagaya, Tokyo. Banyak petunjuk ditemukan, tetapi pelakunya belum tertangkap. Kisah nyata yang masih menyisakan pertanyaan.\n\nMYSTERY VERSE — kisah nyata, misteri, dan kejadian yang belum terpecahkan.\n\nCatatan: Video ini merupakan rekonstruksi dokumenter berdasarkan informasi publik. Tidak menampilkan detail grafis dan menghormati para korban.",
+    hashtags: ["#Setagaya", "#MisteriNyata", "#TrueCrime", "#MisteriJepang", "#MysteryVerse", "#YouTubeShorts"],
+    tags: ["Setagaya family murder", "misteri Setagaya", "pembunuhan Jepang 2000", "kasus belum terpecahkan", "true crime Indonesia", "misteri nyata"]
   },
+  language: "id-ID",
+  format: { width: 1080, height: 1920, aspect_ratio: "9:16", duration_seconds: 60, fps: 30 },
   scenes: scenes.map((scene, index) => ({
     scene: index + 1,
-    start: scene.start,
-    end: scene.end,
     beat: scene.beat,
     narration: scene.narration,
     visual_prompt: scene.visual_prompt,
-    sound: "Dark ambient ocean drone, cold wind, distant storm waves, subtle cinematic impact sounds"
+    sound: "Low restrained dark ambient drone, subtle winter wind, soft cinematic transition impact"
   }))
 };
 
 fs.mkdirSync("output", { recursive: true });
-fs.writeFileSync(
-  path.join("output", "story.json"),
-  JSON.stringify(story, null, 2)
-);
-
-console.log("MYSTERY VERSE: naskah Flannan Isles 7 adegan berhasil dibuat.");
+fs.writeFileSync(path.join("output", "story.json"), JSON.stringify(story, null, 2));
+fs.writeFileSync(path.join("output", "youtube-metadata.json"), JSON.stringify(story.youtube, null, 2));
+console.log("MYSTERY VERSE: Setagaya 7 adegan, judul, deskripsi, hashtag, dan metadata siap.");

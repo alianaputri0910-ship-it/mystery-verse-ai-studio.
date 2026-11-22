@@ -47,7 +47,7 @@ for (const scene of story.scenes) {
 
   run("edge-tts", [
     "--voice", voice,
-    "--rate", "+0%",
+    "--rate", "-15%",
     "--volume", "+0%",
     "--text", scene.narration,
     "--write-media", outputPath

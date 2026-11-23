@@ -82,5 +82,12 @@
       "MYSTERY VERSE",
       "YouTube Shorts"
     ]
+  },
+  "production": {
+    "status": "approved",
+    "max_duration_seconds": 90,
+    "format": "9:16",
+    "fps": 30,
+    "voice_style": "POV first-person storytelling; expressive scene-specific pacing"
   }
 }

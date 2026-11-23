@@ -54,13 +54,13 @@ jobs:
           npm run story -- jabang-mayit-001
           node -e "const s=require('./output/story.json'); if(s.slug!=='jabang-mayit-001'||s.scenes.length!==8) process.exit(1); console.log('Validated:',s.title,'scenes:',s.scenes.length)"
 
-      - name: Generate nine brand-new AI visuals
+      - name: Generate eight brand-new AI story visuals
         env:
           POLLINATIONS_API_KEY: ${{ secrets.POLLINATIONS_API_KEY }}
           POLLINATIONS_IMAGE_MODEL: black-forest-labs/flux.1-schnell
         run: node scripts/generate-images.js
 
-      - name: Render bespoke vertical thriller short
+      - name: Render vertical thriller short with no opening and a dedicated CTA outro
         run: python scripts/render-jabang-short.py
 
       - name: Encode and validate final MP4

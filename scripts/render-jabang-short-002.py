@@ -30,8 +30,8 @@ def duration(path):
     return float(run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
                       "-of", "default=noprint_wrappers=1:nokey=1", str(path)]))
 
-async def make_voice(text, audio_path, rate=RATE):
-    communicator = Communicate(text, VOICE, rate=rate, volume="+0%", boundary="WordBoundary")
+async def make_voice(text, audio_path, rate=RATE, pitch="+0Hz", volume="+0%"):
+    communicator = Communicate(text, VOICE, rate=rate, pitch=pitch, volume=volume, boundary="WordBoundary")
     boundaries = []
     with open(audio_path, "wb") as f:
         async for chunk in communicator.stream():
@@ -48,6 +48,34 @@ async def make_voice(text, audio_path, rate=RATE):
         raise RuntimeError("Edge-TTS tidak menghasilkan audio yang valid.")
     if not boundaries:
         raise RuntimeError("Edge-TTS tidak mengirim WordBoundary; render dihentikan agar subtitle per kata tidak berubah menjadi satu blok.")
+    return boundaries
+
+async def make_scene_voice(scene, audio_path, temp_dir):
+    """Synthesize scene-specific acting; optional voice_parts allow emotional changes inside one scene."""
+    parts = scene.get("voice_parts") or [{
+        "text": scene["narration"],
+        "rate": scene.get("rate", RATE),
+        "pitch": scene.get("pitch", "+0Hz"),
+        "volume": scene.get("volume", "+0%")
+    }]
+    if len(parts) == 1:
+        part = parts[0]
+        return await make_voice(part["text"], audio_path, part.get("rate", RATE),
+                                part.get("pitch", "+0Hz"), part.get("volume", "+0%"))
+    concat_file = temp_dir / f"{audio_path.stem}-parts.txt"
+    boundaries = []
+    offset = 0.0
+    paths = []
+    for index, part in enumerate(parts):
+        part_path = temp_dir / f"{audio_path.stem}-part-{index}.mp3"
+        words = await make_voice(part["text"], part_path, part.get("rate", RATE),
+                                 part.get("pitch", "+0Hz"), part.get("volume", "+0%"))
+        paths.append(part_path)
+        boundaries.extend({"text": word["text"], "start": offset + word["start"]} for word in words)
+        offset += duration(part_path)
+    concat_file.write_text("".join(f"file '{p.as_posix()}'\n" for p in paths), encoding="utf-8")
+    run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_file),
+         "-c:a", "libmp3lame", "-q:a", "2", str(audio_path)])
     return boundaries
 
 def create_short_thumbnail(background_path, output_path):
@@ -257,7 +285,7 @@ async def main():
 
     for i, scene in enumerate(scenes):
         audio = engine.temp_dir / f"speech_{i}.mp3"
-        words = await make_voice(scene["narration"], audio, scene.get("rate", RATE))
+        words = await make_scene_voice(scene, audio, engine.temp_dir)
         seconds = duration(audio)
         if seconds < 2:
             raise RuntimeError(f"Narasi adegan {i+1} terlalu pendek ({seconds:.2f}s).")
@@ -280,7 +308,7 @@ async def main():
     # Concise CTA leaves room for the recurring 2.4-second opening title card.
     outro_text = "Mau tahu lanjutannya? Subscribe, like, dan tulis teori lo di komentar!"
     outro_audio = engine.temp_dir / "speech_8.mp3"
-    outro_words = await make_voice(outro_text, outro_audio)
+    outro_words = await make_voice(outro_text, outro_audio, rate="-8%", pitch="+0Hz", volume="+0%")
     outro_seconds = duration(outro_audio)
     outro_image = OUT / "vuza_media" / "scene_09"
     outro_image.mkdir(parents=True, exist_ok=True)

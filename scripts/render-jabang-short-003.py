@@ -18,7 +18,7 @@ from video_engine import VideoEngine, resolve_font_path
 OUT = ROOT / "output"
 VOICE = "id-ID-ArdiNeural"
 RATE = "-7%"
-MIN_SECONDS, MAX_SECONDS = 40.0, 119.0
+MIN_SECONDS, MAX_SECONDS = 40.0, 179.0
 
 def run(args):
     p = subprocess.run(args, capture_output=True, text=True)
@@ -322,7 +322,7 @@ async def main():
     })
     total += outro_seconds + 0.15
     if not MIN_SECONDS <= total <= MAX_SECONDS:
-        raise RuntimeError(f"Total cerita + outro {total:.2f}s di luar batas 40–119 detik. Padatkan naskah; jangan mempercepat suara.")
+        raise RuntimeError(f"Total cerita + outro {total:.2f}s di luar batas 40–179 detik. Padatkan naskah; jangan mempercepat suara.")
     print(f"Outro CTA: {outro_seconds:.2f} detik, {len(outro_words)} penanda kata, kecepatan tetap {RATE}.")
     settings = SimpleNamespace(ratio="9:16", vibe="general", filter="none",
                                subtitles=True, subtitle_style="mystery_gold",
@@ -375,7 +375,7 @@ async def main():
 
     actual = duration(final)
     if not MIN_SECONDS <= actual <= MAX_SECONDS:
-        raise RuntimeError(f"MP4 akhir berdurasi {actual:.2f}s, di luar batas 40–119 detik termasuk intro.")
+        raise RuntimeError(f"MP4 akhir berdurasi {actual:.2f}s, di luar batas 40–179 detik termasuk intro.")
     probe = json.loads(run(["ffprobe","-v","error","-show_streams","-show_format","-of","json",str(final)]))
     video_stream = next((x for x in probe.get("streams",[]) if x.get("codec_type")=="video"),None)
     audio_stream = next((x for x in probe.get("streams",[]) if x.get("codec_type")=="audio"),None)

@@ -19,20 +19,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
-      - name: Checkout the successful Shorts revision
+      - name: Checkout current production code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_sha || 'main' }}
-      - name: Confirm the checked-out revision matches the successful Shorts run
+          ref: main
+      - name: Confirm successful Shorts revision is included in current main
         if: github.event_name == 'workflow_run'
         env:
           SHORTS_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
-          CHECKED_OUT_SHA="$(git rev-parse HEAD)"
+          git fetch origin main
+          CURRENT_MAIN="$(git rev-parse origin/main)"
           echo "Shorts revision: $SHORTS_SHA"
-          echo "Checked out:     $CHECKED_OUT_SHA"
-          test "$SHORTS_SHA" = "$CHECKED_OUT_SHA" || {
-            echo "Checkout does not match the successful Shorts build."
+          echo "Current main:    $CURRENT_MAIN"
+          git merge-base --is-ancestor "$SHORTS_SHA" "$CURRENT_MAIN" || {
+            echo "Successful Shorts revision is not included in current main."
             exit 1
           }
       - name: Setup Python

@@ -106,7 +106,7 @@ def create_short_thumbnail(background_path, output_path):
     image.convert("RGB").save(output_path, quality=92, optimize=True)
     print("Poster Shorts Kampung Jabang Mayit berhasil dibuat.")
 
-def create_intro_card(output_path):
+def create_intro_card(output_path, episode_number, episode_title):
     """Create a distressed horror-film title card with blood-red glitch accents."""
     image = Image.new("RGB", (1080, 1920), (1, 1, 3))
     draw = ImageDraw.Draw(image)
@@ -161,16 +161,16 @@ def create_intro_card(output_path):
 
     # Episode and subtitle are clearly legible but still ominous.
     ep_font = f(39)
-    centered_distressed("EPISODE 001", 1010, ep_font, (178, 145, 125), False)
+    centered_distressed(f"EPISODE {episode_number}", 1010, ep_font, (178, 145, 125), False)
     draw.rectangle((250, 1080, 830, 1084), fill=(116, 12, 20))
-    centered_distressed("PETAKA SELAMAT DATANG", 1125, f(43), (196, 25, 34))
+    centered_distressed(episode_title.upper(), 1125, f(43), (196, 25, 34))
 
     # A few vertical blood-like streaks under the subtitle.
     for x, length in [(318, 30), (447, 17), (716, 26), (804, 14)]:
         draw.line((x, 1182, x-2, 1182+length), fill=(96, 7, 14), width=2)
 
     image.save(output_path, quality=95)
-    print("Title card horor distressed + blood-red glitch Episode 001 berhasil dibuat.")
+    print(f"Title card horor distressed + blood-red glitch Episode {episode_number} berhasil dibuat.")
 
 def create_outro_card(background_path, output_path):
     """Create a bespoke end card; Shorts begin directly with the story, no opening."""
@@ -277,8 +277,8 @@ async def main():
         })
         print(f"Adegan {i+1}: narasi {seconds:.2f} detik, {len(words)} penanda kata terbaca, kecepatan tetap {RATE}.")
 
-    # Dedicated outro: Episode 002 tetap tanpa opening; invite viewers to subscribe, like, and comment.
-    outro_text = "Kalau lo mau tahu kelanjutannya, subscribe, pencet like, dan komen: menurut lo, apa yang bakal terjadi sama Arya?"
+    # Concise CTA leaves room for the recurring 2.4-second opening title card.
+    outro_text = "Mau tahu lanjutannya? Subscribe, like, dan tulis teori lo di komentar!"
     outro_audio = engine.temp_dir / "speech_8.mp3"
     outro_words = await make_voice(outro_text, outro_audio)
     outro_seconds = duration(outro_audio)
@@ -324,10 +324,30 @@ async def main():
          "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", str(mixed)])
     mixed.replace(final)
 
-    # Prepend a 2.4-second black glitch title card; this counts toward the 75s limit.
+    # Every episode begins with the same 2.4-second black glitch title card as Episode 001.
+    title_text = str(story.get("title", ""))
+    episode_number = str(story.get("slug", "jabang-mayit-002")).rsplit("-", 1)[-1].zfill(3)
+    episode_title = title_text.split("—", 1)[-1].strip() if "—" in title_text else "PENUMPANG YANG ANEH"
+    intro_image = OUT / f"episode-{episode_number}-glitch-title.png"
+    intro_video = OUT / f"episode-{episode_number}-glitch-title.mp4"
+    joined = OUT / f"episode-{episode_number}-with-title.mp4"
+    create_intro_card(intro_image, episode_number, episode_title)
+    run(["ffmpeg", "-y", "-loop", "1", "-i", str(intro_image),
+         "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=48000",
+         "-t", "2.4", "-vf", "scale=1080:1920,noise=alls=16:allf=t+u,format=yuv420p",
+         "-r", "30", "-c:v", "libx264", "-preset", "veryfast", "-crf", "19",
+         "-c:a", "aac", "-b:a", "192k", "-shortest", str(intro_video)])
+    run(["ffmpeg", "-y", "-i", str(intro_video), "-i", str(final),
+         "-filter_complex",
+         "[0:v]setsar=1[v0];[1:v]setsar=1[v1];[0:a]aresample=48000[a0];[1:a]aresample=48000[a1];[v0][a0][v1][a1]concat=n=2:v=1:a=1[v][a]",
+         "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-preset", "veryfast",
+         "-crf", "19", "-pix_fmt", "yuv420p", "-r", "30",
+         "-c:a", "aac", "-b:a", "192k", str(joined)])
+    joined.replace(final)
+
     actual = duration(final)
     if not MIN_SECONDS <= actual <= MAX_SECONDS:
-        raise RuntimeError(f"MP4 akhir berdurasi {actual:.2f}s, di luar batas 40–90.")
+        raise RuntimeError(f"MP4 akhir berdurasi {actual:.2f}s, di luar batas 40–90 detik termasuk intro.")
     probe = json.loads(run(["ffprobe","-v","error","-show_streams","-show_format","-of","json",str(final)]))
     video_stream = next((x for x in probe.get("streams",[]) if x.get("codec_type")=="video"),None)
     audio_stream = next((x for x in probe.get("streams",[]) if x.get("codec_type")=="audio"),None)
@@ -336,7 +356,7 @@ async def main():
     if not audio_stream:
         raise RuntimeError("Validasi audio gagal: MP4 tidak memiliki audio.")
     create_short_thumbnail(images/"scene-08.webp", OUT/"thumbnail.jpg")
-    print(f"BERHASIL: {final} | {actual:.2f}s | 1080x1920 | 30 FPS | tanpa opening + outro CTA tersinkron | {len(script_data)} adegan dengan subtitle per kata")
+    print(f"BERHASIL: {final} | {actual:.2f}s | 1080x1920 | 30 FPS | intro glitch 2.4s + outro CTA tersinkron | {len(script_data)} adegan dengan subtitle per kata")
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -107,10 +107,10 @@ def create_short_thumbnail(background_path, output_path):
     print("Poster Shorts Kampung Jabang Mayit berhasil dibuat.")
 
 def create_intro_card(output_path):
-    """Create a short black glitch title card for Episode 001."""
-    image = Image.new("RGB", (1080, 1920), (2, 2, 4))
+    """Create a distressed horror-film title card with blood-red glitch accents."""
+    image = Image.new("RGB", (1080, 1920), (1, 1, 3))
     draw = ImageDraw.Draw(image)
-    font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+    font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf"
     if not Path(font_path).exists():
         font_path = resolve_font_path()
     def f(size):
@@ -118,33 +118,59 @@ def create_intro_card(output_path):
             return ImageFont.truetype(font_path, size) if font_path else ImageFont.load_default()
         except Exception:
             return ImageFont.load_default()
-    # Thin scanlines and a few displaced digital-noise bands.
-    for y in range(0, 1920, 8):
-        draw.line((0, y, 1080, y), fill=(8, 8, 11), width=1)
-    for y, h in [(610, 7), (688, 3), (1110, 9), (1288, 4)]:
-        draw.rectangle((0, y, 1080, y+h), fill=(35, 35, 42))
-    # Subtle red/cyan channel offsets create a glitch impression.
-    title = "KAMPUNG JABANG MAYIT"
-    tf = f(64)
-    bbox = draw.textbbox((0, 0), title, font=tf, stroke_width=1)
-    x = (1080 - (bbox[2] - bbox[0])) // 2
-    y = 720
-    draw.text((x-5, y+2), title, font=tf, fill=(95, 18, 24), stroke_width=1, stroke_fill=(95,18,24))
-    draw.text((x+5, y-2), title, font=tf, fill=(20, 70, 78), stroke_width=1, stroke_fill=(20,70,78))
-    draw.text((x, y), title, font=tf, fill=(242, 237, 229), stroke_width=2, stroke_fill=(0,0,0))
-    ep = "EPISODE 001"
-    ef = f(42)
-    eb = draw.textbbox((0, 0), ep, font=ef)
-    draw.text(((1080-(eb[2]-eb[0]))//2, 850), ep, font=ef, fill=(210, 170, 102))
-    subtitle = "PETAKA SELAMAT DATANG"
-    sf = f(48)
-    sb = draw.textbbox((0, 0), subtitle, font=sf)
-    sx = (1080-(sb[2]-sb[0]))//2
-    draw.text((sx-3, 980), subtitle, font=sf, fill=(105, 18, 24))
-    draw.text((sx+3, 980), subtitle, font=sf, fill=(238, 231, 220))
-    draw.rectangle((180, 1080, 900, 1084), fill=(160, 38, 38))
+
+    # Dark scanlines, interference bands and sparse red static.
+    for y in range(0, 1920, 6):
+        draw.line((0, y, 1080, y), fill=(5, 5, 8), width=1)
+    for y, h in [(585, 5), (664, 3), (1120, 8), (1285, 4)]:
+        draw.rectangle((0, y, 1080, y+h), fill=(28, 7, 10))
+    rng = np.random.default_rng(19)
+    for _ in range(130):
+        x = int(rng.integers(0, 1080))
+        y = int(rng.integers(500, 1370))
+        w = int(rng.integers(2, 23))
+        color = (int(rng.integers(55, 125)), 5, 9)
+        draw.rectangle((x, y, min(1080, x+w), y+2), fill=color)
+
+    def centered_distressed(label, y, font, color, red_shadow=True):
+        box = draw.textbbox((0, 0), label, font=font, stroke_width=2)
+        x = (1080 - (box[2] - box[0])) // 2
+        if red_shadow:
+            draw.text((x-7, y+3), label, font=font, fill=(105, 5, 13),
+                      stroke_width=3, stroke_fill=(105, 5, 13))
+            draw.text((x+5, y-2), label, font=font, fill=(28, 44, 48),
+                      stroke_width=1, stroke_fill=(28, 44, 48))
+        draw.text((x, y), label, font=font, fill=color,
+                  stroke_width=3, stroke_fill=(12, 9, 10))
+        # Fine scratches cut across the lettering for a worn horror-poster feel.
+        width = box[2] - box[0]
+        for i in range(11):
+            sx = x + int((i + 1) * width / 13)
+            sy = y + int(rng.integers(8, max(9, box[3] - box[1] - 8)))
+            draw.line((sx, sy, sx + int(rng.integers(4, 15)), sy + int(rng.integers(8, 24))),
+                      fill=(65, 48, 47), width=1)
+
+    # Small series label.
+    label_font = f(30)
+    centered_distressed("MYSTERY VERSE PRESENTS", 575, label_font, (156, 130, 119), False)
+
+    # Main title: narrow, weathered, bone-white with blood-red offset.
+    title_font = f(78)
+    centered_distressed("KAMPUNG", 720, title_font, (218, 211, 198))
+    centered_distressed("JABANG MAYIT", 825, f(82), (232, 224, 210))
+
+    # Episode and subtitle are clearly legible but still ominous.
+    ep_font = f(39)
+    centered_distressed("EPISODE 001", 1010, ep_font, (178, 145, 125), False)
+    draw.rectangle((250, 1080, 830, 1084), fill=(116, 12, 20))
+    centered_distressed("PETAKA SELAMAT DATANG", 1125, f(43), (196, 25, 34))
+
+    # A few vertical blood-like streaks under the subtitle.
+    for x, length in [(318, 30), (447, 17), (716, 26), (804, 14)]:
+        draw.line((x, 1182, x-2, 1182+length), fill=(96, 7, 14), width=2)
+
     image.save(output_path, quality=95)
-    print("Title card glitch Episode 001 berhasil dibuat.")
+    print("Title card horor distressed + blood-red glitch Episode 001 berhasil dibuat.")
 
 def create_outro_card(background_path, output_path):
     """Create a bespoke end card; Shorts begin directly with the story, no opening."""

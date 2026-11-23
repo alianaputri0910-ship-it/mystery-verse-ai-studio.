@@ -40,6 +40,8 @@ async def make_voice_and_word_captions(text, audio_path, srt_path):
                 if word: boundaries.append((offset,word))
     if not audio_path.exists() or audio_path.stat().st_size<1000:
         raise RuntimeError("Edge-TTS tidak menghasilkan audio valid.")
+    if not boundaries:
+        raise RuntimeError("Edge-TTS tidak mengirim WordBoundary; subtitle per kata tidak dapat dibuat.")
     cues=[]
     for i,(start,word) in enumerate(boundaries):
         end=boundaries[i+1][0] if i+1<len(boundaries) else start+0.45
@@ -51,7 +53,14 @@ async def main():
     data=json.loads((ROOT/"episodes/trunyan/longform.json").read_text(encoding="utf-8"))
     chapters=data.get("chapters",[])
     if len(chapters)<6: raise RuntimeError("Minimal enam bab untuk video panjang.")
+    for i,chapter in enumerate(chapters,1):
+        if not chapter.get("title","").strip() or not chapter.get("narration","").strip():
+            raise RuntimeError(f"Bab {i} kehilangan judul atau narasi.")
     OUT.mkdir(parents=True,exist_ok=True)
+    metadata={"title":data.get("title",""),"description":data.get("description",""),
+              "tags":["Desa Trunyan","Mepasah","Taru Menyan","Bali Aga","MYSTERY VERSE"],
+              "hashtags":["#DesaTrunyan","#Mepasah","#BaliAga","#MisteriNusantara","#MysteryVerse"]}
+    (OUT/"youtube-metadata.json").write_text(json.dumps(metadata,ensure_ascii=False,indent=2),encoding="utf-8")
     parts=[]
     for i,chapter in enumerate(chapters,1):
         audio=OUT/f"chapter-{i:02d}.mp3"
@@ -101,7 +110,16 @@ async def main():
     final=ROOT/"output"/"mystery-verse-trunyan-longform.mp4"
     final.parent.mkdir(parents=True,exist_ok=True)
     run(["ffmpeg","-y","-i",str(intro),"-c","copy",str(final)])
-    print(f"BERHASIL: {final} | {duration(final)/60:.1f} menit | 1920x1080 | 30 FPS | {VOICE} {RATE}")
+    actual=duration(final)
+    probe=json.loads(run(["ffprobe","-v","error","-show_streams","-show_format","-of","json",str(final)]))
+    video=next((x for x in probe.get("streams",[]) if x.get("codec_type")=="video"),None)
+    audio_stream=next((x for x in probe.get("streams",[]) if x.get("codec_type")=="audio"),None)
+    if not video or (video.get("width"),video.get("height"))!=(1920,1080):
+        raise RuntimeError("Validasi resolusi long-form gagal: harus 1920x1080.")
+    if not audio_stream: raise RuntimeError("Validasi audio long-form gagal.")
+    if actual<180: raise RuntimeError(f"Video panjang terlalu pendek ({actual/60:.1f} menit); cek narasi.")
+    run(["ffmpeg","-v","error","-i",str(final),"-f","null","-"])
+    print(f"BERHASIL: {final} | {actual/60:.1f} menit | 1920x1080 | 30 FPS | {VOICE} {RATE} | subtitle per kata")
 
 if __name__=="__main__":
     asyncio.run(main())

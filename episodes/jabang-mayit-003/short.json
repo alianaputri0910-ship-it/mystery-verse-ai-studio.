@@ -310,7 +310,7 @@
     ]
   },
   "production": {
-    "status": "approved",
+    "status": "approved_for_render",
     "max_duration_seconds": 119,
     "format": "9:16",
     "fps": 30,
@@ -319,6 +319,7 @@
     "character_consistency": "Strict character lock: Arya is always male and never pregnant; Nita Talia is always female and the only pregnant character. Maintain same facial features, hairstyle and clothing.",
     "opening": "2.4-second recurring black glitch title card matching Episode 001 and Episode 002.",
     "voice_direction": "Acting, not flat reading. Use scene-specific rate, pitch, volume and pauses. Panic on waking; unsettled suspicion in quiet scenes; Nita's quoted lines are gently voiced with a subtle higher pitch; final question is a close, low, unsettling whisper. No echo, reverb, doubled voice, or forced speed-up. Keep all speech intelligible and natural.",
-    "audio": "Natural speech pacing, restrained low bus ambience, dynamic pauses and scene-matched tension. Dialogue must remain clearly above ambience."
+    "audio": "Natural speech pacing, restrained low bus ambience, dynamic pauses and scene-matched tension. Dialogue must remain clearly above ambience.",
+    "render_trigger_note": "Trigger build after workflow registration."
   }
 }

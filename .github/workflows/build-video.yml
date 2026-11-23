@@ -4,19 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       topic:
-        description: "Topik cerita horor (kosongkan untuk topik default)"
+        description: "Topik episode (saat ini hanya naskah Setagaya yang tersedia)"
         required: false
         type: string
         default: "Pembunuhan Keluarga Setagaya — Misteri yang Belum Terpecahkan (2000)"
-  push:
-    branches:
-      - main
-    paths:
-      - "index.html"
-      - "scripts/**"
-      - "config/**"
-      - "package.json"
-      - ".github/workflows/**"
 
 permissions:
   contents: read
@@ -56,14 +47,11 @@ jobs:
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
 
-      - name: Generate horror story
+      - name: Validate and generate episode
         env:
           TOPIC: ${{ inputs.topic }}
         run: |
-          if [ -z "$TOPIC" ]; then
-            TOPIC="Tiga Penjaga Mercusuar Menghilang — Misteri Flannan Isles (1900)"
-          fi
-          npm run story -- "$TOPIC"
+          npm run story -- "${TOPIC}"
 
       - name: Generate AI images with Pollinations API
         env:
@@ -72,7 +60,7 @@ jobs:
         run: |
           node scripts/generate-images.js
 
-      - name: Render with VUZA engine (40-60 second Shorts)
+      - name: Render with VUZA engine (40-75 second Shorts)
         run: |
           python scripts/render-vuza.py
 

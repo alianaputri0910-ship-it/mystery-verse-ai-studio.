@@ -1,0 +1,51 @@
+name: MYSTERY VERSE Long-form Builder
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mystery-verse-longform
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+      - name: Install voice dependencies
+        run: python -m pip install --upgrade edge-tts
+      - name: Generate widescreen episode visuals
+        env:
+          POLLINATIONS_API_KEY: ${{ secrets.POLLINATIONS_API_KEY }}
+          POLLINATIONS_IMAGE_MODEL: black-forest-labs/flux.1-schnell
+        run: node scripts/generate-longform-images.js
+      - name: Render long-form documentary
+        run: python scripts/render-longform.py
+      - name: Validate final MP4
+        run: |
+          test -s output/mystery-verse-trunyan-longform.mp4
+          ffprobe -v error -show_entries stream=codec_name,width,height,pix_fmt -show_entries format=duration -of default=noprint_wrappers=1 output/mystery-verse-trunyan-longform.mp4
+          ffmpeg -v error -i output/mystery-verse-trunyan-longform.mp4 -f null -
+      - name: Upload long-form production files
+        uses: actions/upload-artifact@v4
+        with:
+          name: mystery-verse-trunyan-longform
+          path: output/
+          if-no-files-found: error

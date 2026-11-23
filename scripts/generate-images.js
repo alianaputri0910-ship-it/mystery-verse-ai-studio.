@@ -9,7 +9,7 @@ const apiKey = process.env.POLLINATIONS_API_KEY;
 if (!fs.existsSync(storyPath)) throw new Error("output/story.json tidak ditemukan.");
 if (!apiKey) throw new Error("POLLINATIONS_API_KEY_MISSING: Tambahkan secret POLLINATIONS_API_KEY pada GitHub Settings > Secrets and variables > Actions.");
 const story = JSON.parse(fs.readFileSync(storyPath, "utf8"));
-if (!Array.isArray(story.scenes) || story.scenes.length !== 8) throw new Error("Proyek ini membutuhkan 8 adegan termasuk CTA penutup.");
+if (!Array.isArray(story.scenes) || story.scenes.length !== 8) throw new Error("Proyek ini membutuhkan 8 adegan cerita.");
 fs.mkdirSync(outputDir, { recursive: true });
 const model = process.env.POLLINATIONS_IMAGE_MODEL || "black-forest-labs/flux.1-schnell";
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -43,6 +43,5 @@ async function generate(scene, index, customName = null) {
   }
   throw new Error(`Gagal membuat visual ${customName || `adegan ${index + 1}`}: ${error?.message}`);
 }
-await generate({visual_prompt: story.opening_visual_prompt}, -1, "opening.webp");
 for (let i=0; i<story.scenes.length; i++) await generate(story.scenes[i],i);
-console.log("Opening dan delapan visual adegan AI berhasil dibuat.");
+console.log("Delapan visual cerita AI berhasil dibuat; outro CTA dirender terpisah tanpa opening.");

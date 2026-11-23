@@ -3,11 +3,11 @@ name: MYSTERY VERSE Video Builder
 on:
   workflow_dispatch:
     inputs:
-      topic:
-        description: "Topik episode (saat ini hanya naskah Setagaya yang tersedia)"
-        required: false
+      episode_slug:
+        description: "Slug episode yang sudah memiliki naskah riset (contoh: trunyan)"
+        required: true
         type: string
-        default: "Pembunuhan Keluarga Setagaya — Misteri yang Belum Terpecahkan (2000)"
+        default: "trunyan"
 
 permissions:
   contents: read
@@ -47,11 +47,9 @@ jobs:
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
 
-      - name: Validate and generate episode
-        env:
-          TOPIC: ${{ inputs.topic }}
+      - name: Validate and load episode
         run: |
-          npm run story -- "${TOPIC}"
+          npm run story -- "${{ inputs.episode_slug }}"
 
       - name: Generate AI images with Pollinations API
         env:
@@ -77,9 +75,9 @@ jobs:
           ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt,codec_name,width,height -of default=noprint_wrappers=1 output/mystery-verse.mp4
           ffmpeg -v error -i output/mystery-verse.mp4 -f null -
 
-      - name: Upload video and production files
+      - name: Upload Shorts production files
         uses: actions/upload-artifact@v4
         with:
-          name: mystery-verse-production
+          name: mystery-verse-trunyan-shorts
           path: output/
           if-no-files-found: error

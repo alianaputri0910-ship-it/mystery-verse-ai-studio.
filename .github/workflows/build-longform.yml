@@ -19,21 +19,20 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
-      - name: Checkout current main
+      - name: Checkout the successful Shorts revision
         uses: actions/checkout@v4
         with:
-          ref: main
-      - name: Confirm Shorts succeeded on the current main revision
+          ref: ${{ github.event.workflow_run.head_sha || 'main' }}
+      - name: Confirm the checked-out revision matches the successful Shorts run
         if: github.event_name == 'workflow_run'
         env:
           SHORTS_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
-          git fetch origin main
-          CURRENT_MAIN="$(git rev-parse origin/main)"
+          CHECKED_OUT_SHA="$(git rev-parse HEAD)"
           echo "Shorts revision: $SHORTS_SHA"
-          echo "Current main:    $CURRENT_MAIN"
-          test "$SHORTS_SHA" = "$CURRENT_MAIN" || {
-            echo "Shorts run is stale; refusing to start long-form."
+          echo "Checked out:     $CHECKED_OUT_SHA"
+          test "$SHORTS_SHA" = "$CHECKED_OUT_SHA" || {
+            echo "Checkout does not match the successful Shorts build."
             exit 1
           }
       - name: Setup Python

@@ -27,7 +27,7 @@ def srt_time(seconds):
     return f"{h:02d}:{m:02d}:{s:02d},{ms:03d}"
 
 async def make_voice_and_word_captions(text, audio_path, srt_path):
-    communicator=Communicate(text,VOICE,rate=RATE,volume="+0%")
+    communicator=Communicate(text,VOICE,rate=RATE,volume="+0%",boundary="WordBoundary")
     boundaries=[]
     with open(audio_path,"wb") as audio_file:
         async for chunk in communicator.stream():

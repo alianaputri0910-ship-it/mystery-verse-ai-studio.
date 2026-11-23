@@ -106,6 +106,46 @@ def create_short_thumbnail(background_path, output_path):
     image.convert("RGB").save(output_path, quality=92, optimize=True)
     print("Poster Shorts Kampung Jabang Mayit berhasil dibuat.")
 
+def create_intro_card(output_path):
+    """Create a short black glitch title card for Episode 001."""
+    image = Image.new("RGB", (1080, 1920), (2, 2, 4))
+    draw = ImageDraw.Draw(image)
+    font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+    if not Path(font_path).exists():
+        font_path = resolve_font_path()
+    def f(size):
+        try:
+            return ImageFont.truetype(font_path, size) if font_path else ImageFont.load_default()
+        except Exception:
+            return ImageFont.load_default()
+    # Thin scanlines and a few displaced digital-noise bands.
+    for y in range(0, 1920, 8):
+        draw.line((0, y, 1080, y), fill=(8, 8, 11), width=1)
+    for y, h in [(610, 7), (688, 3), (1110, 9), (1288, 4)]:
+        draw.rectangle((0, y, 1080, y+h), fill=(35, 35, 42))
+    # Subtle red/cyan channel offsets create a glitch impression.
+    title = "KAMPUNG JABANG MAYIT"
+    tf = f(64)
+    bbox = draw.textbbox((0, 0), title, font=tf, stroke_width=1)
+    x = (1080 - (bbox[2] - bbox[0])) // 2
+    y = 720
+    draw.text((x-5, y+2), title, font=tf, fill=(95, 18, 24), stroke_width=1, stroke_fill=(95,18,24))
+    draw.text((x+5, y-2), title, font=tf, fill=(20, 70, 78), stroke_width=1, stroke_fill=(20,70,78))
+    draw.text((x, y), title, font=tf, fill=(242, 237, 229), stroke_width=2, stroke_fill=(0,0,0))
+    ep = "EPISODE 001"
+    ef = f(42)
+    eb = draw.textbbox((0, 0), ep, font=ef)
+    draw.text(((1080-(eb[2]-eb[0]))//2, 850), ep, font=ef, fill=(210, 170, 102))
+    subtitle = "PETAKA SELAMAT DATANG"
+    sf = f(48)
+    sb = draw.textbbox((0, 0), subtitle, font=sf)
+    sx = (1080-(sb[2]-sb[0]))//2
+    draw.text((sx-3, 980), subtitle, font=sf, fill=(105, 18, 24))
+    draw.text((sx+3, 980), subtitle, font=sf, fill=(238, 231, 220))
+    draw.rectangle((180, 1080, 900, 1084), fill=(160, 38, 38))
+    image.save(output_path, quality=95)
+    print("Title card glitch Episode 001 berhasil dibuat.")
+
 def create_outro_card(background_path, output_path):
     """Create a bespoke end card; Shorts begin directly with the story, no opening."""
     source = Image.open(background_path).convert("RGB")
@@ -257,6 +297,25 @@ async def main():
          "-filter_complex", "[1:a]volume=0.28[sfx];[0:a][sfx]amix=inputs=2:duration=first:dropout_transition=0:normalize=0[a]",
          "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", str(mixed)])
     mixed.replace(final)
+
+    # Prepend a 2.4-second black glitch title card; this counts toward the 75s limit.
+    intro_image = OUT / "episode-001-glitch-title.png"
+    intro_video = OUT / "episode-001-glitch-title.mp4"
+    joined = OUT / "episode-001-with-title.mp4"
+    create_intro_card(intro_image)
+    run(["ffmpeg", "-y", "-loop", "1", "-i", str(intro_image),
+         "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=48000",
+         "-t", "2.4", "-vf",
+         "scale=1080:1920,noise=alls=16:allf=t+u,drawbox=x=0:y='mod(t*713\\,1920)':w=1080:h=5:color=white@0.30:t=fill,format=yuv420p",
+         "-r", "30", "-c:v", "libx264", "-preset", "veryfast", "-crf", "19",
+         "-c:a", "aac", "-b:a", "192k", "-shortest", str(intro_video)])
+    run(["ffmpeg", "-y", "-i", str(intro_video), "-i", str(final),
+         "-filter_complex",
+         "[0:v]setsar=1[v0];[1:v]setsar=1[v1];[0:a]aresample=48000[a0];[1:a]aresample=48000[a1];[v0][a0][v1][a1]concat=n=2:v=1:a=1[v][a]",
+         "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-preset", "veryfast",
+         "-crf", "19", "-pix_fmt", "yuv420p", "-r", "30",
+         "-c:a", "aac", "-b:a", "192k", str(joined)])
+    joined.replace(final)
 
     actual = duration(final)
     if not MIN_SECONDS <= actual <= MAX_SECONDS:

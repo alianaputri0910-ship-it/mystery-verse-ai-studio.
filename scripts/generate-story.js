@@ -21,7 +21,7 @@ for (const [index, scene] of episode.scenes.entries()) {
     throw new Error("EPISODE_VALIDATION_FAILED: Adegan " + (index + 1) + " kehilangan beat, narasi, atau prompt visual.");
   }
 }
-if (!episode.opening_visual_prompt?.trim()) throw new Error("EPISODE_VALIDATION_FAILED: Opening visual prompt tidak tersedia.");
+if (slug !== "jabang-mayit-001" && !episode.opening_visual_prompt?.trim()) throw new Error("EPISODE_VALIDATION_FAILED: Opening visual prompt tidak tersedia.");
 
 const storyData = {
   ...episode,

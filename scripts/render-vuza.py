@@ -31,7 +31,7 @@ def duration(path):
                       "-of", "default=noprint_wrappers=1:nokey=1", str(path)]))
 
 async def make_voice(text, audio_path):
-    communicator = Communicate(text, VOICE, rate=RATE, volume="+0%")
+    communicator = Communicate(text, VOICE, rate=RATE, volume="+0%", boundary="WordBoundary")
     boundaries = []
     with open(audio_path, "wb") as f:
         async for chunk in communicator.stream():

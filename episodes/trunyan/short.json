@@ -1,0 +1,87 @@
+{
+  "channel": "MYSTERY VERSE",
+  "slug": "trunyan",
+  "topic": "Misteri Desa Trunyan — Tradisi Pemakaman Mepasah",
+  "title": "DESA DI BALI INI TAK MENGUBURKAN JENAZAH? MISTERI TRUNYAN",
+  "youtube": {
+    "title": "DESA DI BALI INI TAK MENGUBURKAN JENAZAH? MISTERI TRUNYAN",
+    "description": "Di tepi Danau Batur, Desa Trunyan mempertahankan tradisi mepasah. Jenazah tertentu tidak dikremasi atau dikubur, tetapi diletakkan di area khusus di bawah pohon Taru Menyan. Tradisi ini memiliki aturan adat dan makna budaya yang tidak bisa disederhanakan sebagai kisah horor.\\n\\nVideo ini merupakan rekonstruksi visual dan dokumenter budaya berdasarkan sumber publik. Legenda dan kepercayaan masyarakat dibedakan dari fakta yang terdokumentasi.\\n\\nSumber:\\n- Indonesia Travel: https://www.indonesia.travel/id/id/travel-ideas/adventure/kenali-keunikan-yang-tersembunyi-di-desa-trunyan-kintamani\\n- Rosyida dkk. (2025), Tradisi Pemakaman Mepasah Desa Terunyan Dalam Kajian Historis: https://doi.org/10.33059/jsnbl.v12i2.12011\\n- Jero dkk. (2025), Corpse exposure and cosmological ecology: https://doi.org/10.61511/lad.v3i1.2025.1952\\n\\nMYSTERY VERSE — kisah, tradisi, dan misteri Nusantara.",
+    "hashtags": [
+      "#DesaTrunyan",
+      "#Mepasah",
+      "#BaliAga",
+      "#MisteriNusantara",
+      "#MysteryVerse",
+      "#Shorts"
+    ],
+    "tags": [
+      "Desa Trunyan",
+      "tradisi mepasah",
+      "Taru Menyan",
+      "Bali Aga",
+      "Danau Batur",
+      "misteri Bali",
+      "budaya Bali",
+      "MYSTERY VERSE"
+    ]
+  },
+  "language": "id-ID",
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16",
+    "duration_target_seconds": 65,
+    "fps": 30
+  },
+  "opening_visual_prompt": "Cinematic aerial establishing shot of Lake Batur in Kintamani Bali at blue hour, mist drifting over calm water, dark volcanic ridges, a small traditional lakeside village in the distance, respectful premium documentary photography, mysterious but not supernatural, vertical 9:16, no text.",
+  "scenes": [
+    {
+      "scene": 1,
+      "beat": "DESA DI TEPI DANAU",
+      "narration": "Di Bali, ada desa yang punya tradisi pemakaman beda banget. Namanya Desa Trunyan, di tepi Danau Batur.",
+      "visual_prompt": "Cinematic vertical documentary view of Trunyan village on the eastern shore of Lake Batur, Kintamani Bali, morning mist, traditional village and volcanic lake, photorealistic, respectful, no text."
+    },
+    {
+      "scene": 2,
+      "beat": "TRADISI MEPASAH",
+      "narration": "Di sini, jenazah tertentu nggak dibakar dan nggak dikubur. Tradisi ini dikenal sebagai mepasah.",
+      "visual_prompt": "Respectful non-graphic cultural documentary reconstruction of a traditional Trunyan cemetery clearing, bamboo protective structures beneath a large tree, no bodies visible, soft natural light, vertical 9:16."
+    },
+    {
+      "scene": 3,
+      "beat": "BUKAN SEMUA JENAZAH",
+      "narration": "Tapi jangan salah paham. Nggak semua orang dimakamkan dengan cara ini. Ada aturan adat yang menentukan.",
+      "visual_prompt": "Cinematic close-up of traditional Balinese bamboo woven structures and ceremonial textiles in a quiet outdoor setting, cultural documentary, no people identifiable, vertical 9:16."
+    },
+    {
+      "scene": 4,
+      "beat": "TIGA AREA PEMAKAMAN",
+      "narration": "Trunyan punya tiga area pemakaman: Sema Wayah, Sema Nguda, dan Sema Bantas. Masing-masing punya fungsi berbeda.",
+      "visual_prompt": "Wide documentary establishing shot of a forested cemetery landscape near Lake Batur, three subtle paths leading through trees, no signage, no graves close-up, vertical 9:16."
+    },
+    {
+      "scene": 5,
+      "beat": "POHON TARU MENYAN",
+      "narration": "Yang paling dikenal adalah pohon Taru Menyan. Warga setempat meyakini aromanya membantu menetralisir bau jenazah.",
+      "visual_prompt": "Majestic old sacred tree in Trunyan Bali cemetery, broad roots and dense canopy, shafts of natural light, respectful cultural documentary, no supernatural effects, vertical 9:16."
+    },
+    {
+      "scene": 6,
+      "beat": "LEGENDA DAN KEPERCAYAAN",
+      "narration": "Ada legenda tentang aroma harum pohon ini. Tapi cerita legenda dan fakta sejarah harus tetap dibedakan.",
+      "visual_prompt": "Atmospheric artistic reconstruction of ancient Bali folklore, distant silhouette of a traveler near a fragrant sacred tree by Lake Batur, subtle painterly realism, clearly illustrative, vertical 9:16."
+    },
+    {
+      "scene": 7,
+      "beat": "TRADISI YANG DIJAGA",
+      "narration": "Buat masyarakat Bali Aga, mepasah bukan tontonan horor. Ini bagian dari adat, identitas, dan penghormatan pada leluhur.",
+      "visual_prompt": "Respectful documentary portrait from behind of local Balinese village elders walking along a lakeside path, traditional attire, no identifiable faces, warm morning light, vertical 9:16."
+    },
+    {
+      "scene": 8,
+      "beat": "PENUTUP MYSTERY VERSE",
+      "narration": "Jadi, misteri Trunyan bukan cuma soal cara pemakamannya. Tapi tentang tradisi yang tetap hidup. Follow MYSTERY VERSE buat kisah berikutnya.",
+      "visual_prompt": "Cinematic twilight view of Lake Batur and Trunyan village, mountain silhouette, subtle gold light, premium mystery documentary closing frame, elegant dark maroon and gold mood, vertical 9:16."
+    }
+  ]
+}

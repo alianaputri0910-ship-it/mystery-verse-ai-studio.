@@ -46,6 +46,8 @@ async def make_voice(text, audio_path):
                     boundaries.append({"text": word, "start": float(offset) / 10_000_000.0})
     if not audio_path.exists() or audio_path.stat().st_size < 1000:
         raise RuntimeError("Edge-TTS tidak menghasilkan audio yang valid.")
+    if not boundaries:
+        raise RuntimeError("Edge-TTS tidak mengirim WordBoundary; render dihentikan agar subtitle per kata tidak berubah menjadi satu blok.")
     return boundaries
 
 def make_brand(path):
@@ -179,7 +181,17 @@ async def main():
     actual = duration(final)
     if not MIN_SECONDS <= actual <= MAX_SECONDS:
         raise RuntimeError(f"MP4 akhir berdurasi {actual:.2f}s, di luar batas 40–75.")
-    print(f"BERHASIL: {final} | {actual:.2f}s | 1080x1920 | 30 FPS | opening 3.5s + CTA tersinkron")
+    probe = json.loads(run(["ffprobe","-v","error","-show_streams","-show_format","-of","json",str(final)]))
+    video_stream = next((x for x in probe.get("streams",[]) if x.get("codec_type")=="video"),None)
+    audio_stream = next((x for x in probe.get("streams",[]) if x.get("codec_type")=="audio"),None)
+    if not video_stream or (video_stream.get("width"),video_stream.get("height")) != (1080,1920):
+        raise RuntimeError("Validasi resolusi gagal: hasil harus 1080x1920.")
+    if not audio_stream:
+        raise RuntimeError("Validasi audio gagal: MP4 tidak memiliki audio.")
+    thumbnail = engine.generate_thumbnail(str(final), story.get("youtube",{}).get("title","MYSTERY VERSE"))
+    if thumbnail:
+        shutil.copy2(thumbnail, OUT/"thumbnail.jpg")
+    print(f"BERHASIL: {final} | {actual:.2f}s | 1080x1920 | 30 FPS | opening 3.5s + CTA tersinkron | {len(script_data)} adegan dengan subtitle per kata")
 
 if __name__ == "__main__":
     asyncio.run(main())

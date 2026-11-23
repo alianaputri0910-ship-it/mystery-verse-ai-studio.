@@ -60,7 +60,7 @@ jobs:
           POLLINATIONS_IMAGE_MODEL: black-forest-labs/flux.1-schnell
         run: node scripts/generate-images.js
 
-      - name: Render vertical thriller short with no opening and a dedicated CTA outro
+      - name: Render vertical thriller short with a 2.4s black glitch title card and dedicated CTA outro
         run: python scripts/render-jabang-short.py
 
       - name: Encode and validate final MP4

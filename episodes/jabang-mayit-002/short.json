@@ -1,0 +1,86 @@
+{
+  "channel": "MYSTERY VERSE",
+  "slug": "jabang-mayit-002",
+  "topic": "Kampung Jabang Mayit — Episode 002: Penumpang yang Aneh",
+  "title": "KAMPUNG JABANG MAYIT #002 — PENUMPANG YANG ANEH",
+  "language": "id-ID",
+  "opening_visual_prompt": "No opening card. Begin directly with the bus departing the terminal.",
+  "scenes": [
+    {
+      "scene": 1,
+      "beat": "BUS MENINGGALKAN TERMINAL",
+      "narration": "Bus yang gue tumpangi akhirnya mulai meninggalkan terminal. Gue masih kepikiran omongan Gama tadi.",
+      "rate": "-10%",
+      "visual_prompt": "Same recurring main character Arya from Episode 001: 22-year-old Indonesian man, medium tan skin, oval face, short slightly messy black hair, dark brown eyes, clean-shaven, wearing the same dark charcoal jacket over a black shirt. He sits alone by the window of an old Indonesian intercity bus as it pulls away from a terminal at dusk, looking thoughtful and uneasy, cinematic photorealism, vertical 9:16, natural face, no text."
+    },
+    {
+      "scene": 2,
+      "beat": "PERINGATAN GAMA",
+      "narration": "Katanya, desa yang bakal gue datengin itu punya sejarah kelam soal aborsi. Jujur, gue makin penasaran. Sebenarnya ada apa sih sama desa itu?",
+      "rate": "-12%",
+      "visual_prompt": "Same Arya character continuity: young Indonesian man age 22, medium tan skin, oval face, short slightly messy black hair, dark brown eyes, clean-shaven, same charcoal jacket and black shirt. Close-up profile by the bus window, passing rural Indonesian landscape reflected in glass, his expression troubled and curious, moody overcast daylight, cinematic photorealistic thriller, vertical 9:16, no text."
+    },
+    {
+      "scene": 3,
+      "beat": "PENUMPANG BARU",
+      "narration": "Hampir dua jam perjalanan, bus berhenti lagi di sebuah terminal. Nggak lama, seorang perempuan naik dan minta duduk di sebelah jendela.",
+      "rate": "-10%",
+      "visual_prompt": "Interior of a modest Indonesian intercity bus stopped at a small rural terminal. Same Arya, 22-year-old Indonesian man with medium tan skin, oval face, short slightly messy black hair, dark brown eyes, clean-shaven, wearing same charcoal jacket and black shirt, sits by the window. A young Indonesian woman is stepping aboard in the aisle, cinematic photorealism, vertical 9:16, no text."
+    },
+    {
+      "scene": 4,
+      "beat": "NITA TALIA",
+      "narration": "Karena tempat gue dekat jendela, gue langsung geser buat ngasih dia jalan. Perempuan itu kelihatan seumuran gue. Dan dari perutnya, jelas banget kalau dia lagi hamil.",
+      "rate": "-10%",
+      "visual_prompt": "Same Arya character: 22-year-old Indonesian man, medium tan skin, oval face, short slightly messy black hair, dark brown eyes, clean-shaven, same charcoal jacket and black shirt, moving aside in a bus seat. Nita Talia: Indonesian woman about 22 years old, light-medium warm brown skin, soft oval face, long straight black hair, dark brown eyes, visibly pregnant, wearing a muted dusty-rose blouse and a simple dark cardigan. She sits beside Arya by the window. Keep both character designs consistent in every scene, cinematic photorealism, vertical 9:16, no text."
+    },
+    {
+      "scene": 5,
+      "beat": "KENALAN DI DALAM BUS",
+      "narration": "Awalnya kami cuma ngobrol biasa. Namanya Nita Talia. Tapi ada satu hal yang bikin gue mulai curiga.",
+      "rate": "-11%",
+      "visual_prompt": "Same Arya and Nita character designs from previous scene, seated side by side on an Indonesian bus. Arya is a 22-year-old Indonesian man with medium tan skin, oval face, short slightly messy black hair, dark brown eyes, clean-shaven, same charcoal jacket and black shirt. Nita is a 22-year-old visibly pregnant Indonesian woman with warm light-medium brown skin, soft oval face, long straight black hair, dark brown eyes, dusty-rose blouse and dark cardigan. They exchange polite conversation, but Nita's expression is subtly guarded, cinematic photorealism, vertical 9:16, no text."
+    },
+    {
+      "scene": 6,
+      "beat": "NITA MENGETIK SESUATU",
+      "narration": "Begitu gue ngenalin diri sebagai Arya, Nita langsung sibuk ngetik sesuatu di handphone-nya. Bahkan, dia beberapa kali ngelirik ke arah gue. Gue sempat mikir, jangan-jangan ada yang aneh sama nama gue. Sampai akhirnya, gue ketiduran.",
+      "rate": "-10%",
+      "visual_prompt": "Same Arya and Nita designs, maintain exact facial features, hair, age and clothing. On the bus, Nita Talia, visibly pregnant, in dusty-rose blouse and dark cardigan, secretly types on her phone while glancing sideways at Arya. Arya, same young Indonesian man with short messy black hair and charcoal jacket, notices her suspicious behavior before slowly falling asleep against the window. Cinematic close shot, photorealistic, vertical 9:16, no text."
+    },
+    {
+      "scene": 7,
+      "beat": "MIMPI BURUK",
+      "narration": "Tiba-tiba... Gue dibangunin sama suara Nita yang teriak minta tolong. Pas gue buka mata, wajahnya pucat. Dia kesakitan sambil megangin perutnya. Dan yang bikin gue hampir nggak percaya... Ada darah di mana-mana.",
+      "rate": "-7%",
+      "visual_prompt": "Nightmare sequence inside the same bus, surreal but photorealistic. Same Arya character jolts awake, visibly terrified, wearing same charcoal jacket and black shirt. Nita Talia retains exact same face, long straight black hair, dusty-rose blouse and dark cardigan, visibly pregnant and pale, clutching her abdomen in distress. Ominous red emergency-like lighting, restrained non-graphic horror, no explicit gore, cinematic thriller, vertical 9:16, no text."
+    },
+    {
+      "scene": 8,
+      "beat": "BISIKAN NITA",
+      "narration": "Gue coba minta bantuan penumpang lain, tapi anehnya, nggak ada satu pun yang peduli. Nita lalu narik tangan gue ke arah perutnya. Terus dia berbisik... Ini... lihat. Gue langsung teriak... NITA! JANGAN!",
+      "rate": "-6%",
+      "visual_prompt": "Same nightmare bus scene, consistent Arya and Nita faces and clothes. Arya, same 22-year-old Indonesian man in charcoal jacket and black shirt, is frozen in terror as Nita Talia, same visibly pregnant young woman with long straight black hair, dusty-rose blouse and dark cardigan, reaches for his hand and leans close to whisper. Other passengers sit motionless in shadow, unsettling dreamlike atmosphere, no graphic details, cinematic photorealism, vertical 9:16, no text."
+    }
+  ],
+  "youtube": {
+    "title": "KAMPUNG JABANG MAYIT #002 — PENUMPANG YANG ANEH | MYSTERY VERSE",
+    "description": "Perjalanan Arya menuju Rangkaspuna berubah jadi mimpi buruk setelah seorang perempuan hamil bernama Nita duduk di sebelahnya. Tapi kenapa Nita terlihat seperti mengenal Arya?\n\nEpisode 002 dari serial horor fiksi Kampung Jabang Mayit.\n\nTulis teori lo di komentar dan ikuti kelanjutannya di MYSTERY VERSE.\n\n#KampungJabangMayit #HororIndonesia #CeritaHoror #MysteryVerse #Shorts",
+    "hashtags": [
+      "#KampungJabangMayit",
+      "#HororIndonesia",
+      "#CeritaHoror",
+      "#MysteryVerse",
+      "#Shorts"
+    ],
+    "tags": [
+      "Kampung Jabang Mayit",
+      "Teguh Faluvie",
+      "cerita horor Indonesia",
+      "Nita Talia",
+      "Rangkaspuna",
+      "MYSTERY VERSE",
+      "YouTube Shorts"
+    ]
+  }
+}

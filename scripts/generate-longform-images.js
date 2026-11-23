@@ -27,7 +27,7 @@ const prompts = [
     return topics[i % topics.length];
   })
 ];
-const all = [{name:"opening",prompt:prompts[0]}, ...episode.chapters.map((c,i)=>({name:"chapter-"+String(i+1).padStart(2,"0"),prompt:prompts[i+1]}))];
+const all = [{name:"opening",prompt:prompts[0]}, ...episode.chapters.map((c,i)=>({name:"chapter-"+String(i+1).padStart(2,"0"),prompt:prompts[i+1]})), {name:"thumbnail",prompt:"Premium YouTube documentary thumbnail, Lake Batur and Trunyan village in the background, one majestic Taru Menyan tree in the foreground, mysterious mist and deep maroon shadows, refined gold rim light, culturally respectful, photorealistic, high contrast, clean composition with empty space on left for title text, horizontal 16:9, absolutely no letters or text."}];
 for (let i=0;i<all.length;i++) {
   const item=all[i], dest=path.join(outputDir,item.name+".jpg");
   const url="https://gen.pollinations.ai/image/"+encodeURIComponent(item.prompt+" Photorealistic cinematic documentary still, horizontal widescreen 16:9, high detail, natural light, no text, no watermark.")+"?model="+encodeURIComponent(model)+"&width=1920&height=1080&seed="+(7200+i);

@@ -4,63 +4,63 @@
   "topic": "Kampung Jabang Mayit — Episode 002: Penumpang yang Aneh",
   "title": "KAMPUNG JABANG MAYIT #002 — PENUMPANG YANG ANEH",
   "language": "id-ID",
-  "opening_visual_prompt": "No opening card. Begin directly with the bus departing the terminal.",
+  "opening_visual_prompt": "2.4-second black screen with distressed horror-film typography and blood-red glitch interference, matching Episode 001. Display MYSTERY VERSE PRESENTS, KAMPUNG JABANG MAYIT, EPISODE 002, PENUMPANG YANG ANEH. This intro is rendered separately before the bus scene.",
   "scenes": [
     {
       "scene": 1,
       "beat": "BUS MENINGGALKAN TERMINAL",
       "narration": "Bus mulai ninggalin terminal. Tapi pikiran gue masih keinget peringatan Gama.",
       "rate": "-10%",
-      "visual_prompt": "Same recurring main character Arya from Episode 001: 22-year-old Indonesian man, medium tan skin, oval face, short slightly messy black hair, dark brown eyes, clean-shaven, wearing the same dark charcoal jacket over a black shirt. He sits alone by the window of an old Indonesian intercity bus as it pulls away from a terminal at dusk, looking thoughtful and uneasy, cinematic photorealism, vertical 9:16, natural face, no text."
+      "visual_prompt": "Same Arya character, solo, seated by the window of an old Indonesian intercity bus as it pulls away from a terminal at dusk, thoughtful and uneasy, cinematic photorealism, vertical 9:16, natural face, no text. CHARACTER LOCK — ARYA: the SAME 22-year-old INDONESIAN MAN in every shot; masculine male face, medium tan skin, oval face, short slightly messy black hair, dark brown eyes, clean-shaven, dark charcoal jacket over plain black shirt. ARYA IS A MAN, NOT PREGNANT; flat male chest and flat abdomen, no baby bump. Never depict Arya with a pregnant belly."
     },
     {
       "scene": 2,
       "beat": "PERINGATAN GAMA",
       "narration": "Katanya, Rangkaspuna punya sejarah kelam soal aborsi. Gue jadi mikir, sebenarnya ada apa di desa itu?",
       "rate": "-12%",
-      "visual_prompt": "Same Arya character continuity: young Indonesian man age 22, medium tan skin, oval face, short slightly messy black hair, dark brown eyes, clean-shaven, same charcoal jacket and black shirt. Close-up profile by the bus window, passing rural Indonesian landscape reflected in glass, his expression troubled and curious, moody overcast daylight, cinematic photorealistic thriller, vertical 9:16, no text."
+      "visual_prompt": "Close-up profile of the same Arya by the bus window, passing rural Indonesian landscape reflected in glass, troubled and curious expression, moody overcast daylight, cinematic photorealistic thriller, vertical 9:16, no text. CHARACTER LOCK — ARYA: the SAME 22-year-old INDONESIAN MAN in every shot; masculine male face, medium tan skin, oval face, short slightly messy black hair, dark brown eyes, clean-shaven, dark charcoal jacket over plain black shirt. ARYA IS A MAN, NOT PREGNANT; flat male chest and flat abdomen, no baby bump. Never depict Arya with a pregnant belly."
     },
     {
       "scene": 3,
       "beat": "PENUMPANG BARU",
       "narration": "Hampir dua jam kemudian, bus berhenti di terminal kecil. Seorang perempuan naik dan duduk di sebelah gue.",
       "rate": "-10%",
-      "visual_prompt": "Interior of a modest Indonesian intercity bus stopped at a small rural terminal. Same Arya, 22-year-old Indonesian man with medium tan skin, oval face, short slightly messy black hair, dark brown eyes, clean-shaven, wearing same charcoal jacket and black shirt, sits by the window. A young Indonesian woman is stepping aboard in the aisle, cinematic photorealism, vertical 9:16, no text."
+      "visual_prompt": "Interior of a modest Indonesian intercity bus stopped at a small rural terminal. The same Arya sits by the window. The same Nita Talia is stepping aboard in the aisle, shown clearly as a young woman, not Arya. Cinematic photorealism, vertical 9:16, no text. CHARACTER LOCK — ARYA: the SAME 22-year-old INDONESIAN MAN in every shot; masculine male face, medium tan skin, oval face, short slightly messy black hair, dark brown eyes, clean-shaven, dark charcoal jacket over plain black shirt. ARYA IS A MAN, NOT PREGNANT; flat male chest and flat abdomen, no baby bump. Never depict Arya with a pregnant belly. CHARACTER LOCK — NITA TALIA: the SAME 22-year-old INDONESIAN WOMAN in every shot; light-medium warm brown skin, soft oval face, long straight black hair, dark brown eyes, visibly pregnant belly, muted dusty-rose blouse and simple dark cardigan. NITA IS THE ONLY PREGNANT CHARACTER. Preserve her exact face, hairstyle and outfit in every scene."
     },
     {
       "scene": 4,
       "beat": "NITA TALIA",
       "narration": "Gue geser buat ngasih tempat. Dia kelihatan seumuran gue, tapi perutnya jelas banget udah hamil.",
       "rate": "-10%",
-      "visual_prompt": "Same Arya character: 22-year-old Indonesian man, medium tan skin, oval face, short slightly messy black hair, dark brown eyes, clean-shaven, same charcoal jacket and black shirt, moving aside in a bus seat. Nita Talia: Indonesian woman about 22 years old, light-medium warm brown skin, soft oval face, long straight black hair, dark brown eyes, visibly pregnant, wearing a muted dusty-rose blouse and a simple dark cardigan. She sits beside Arya by the window. Keep both character designs consistent in every scene, cinematic photorealism, vertical 9:16, no text."
+      "visual_prompt": "Two-shot, same Arya seated on the bus moving aside to make room; same Nita sits beside him by the window. Make the gender and bodies clearly distinct: Arya is the man with a flat abdomen; Nita is the woman with the visible pregnant belly. Preserve exact face and wardrobe continuity. Cinematic photorealism, vertical 9:16, no text. CHARACTER LOCK — ARYA: the SAME 22-year-old INDONESIAN MAN in every shot; masculine male face, medium tan skin, oval face, short slightly messy black hair, dark brown eyes, clean-shaven, dark charcoal jacket over plain black shirt. ARYA IS A MAN, NOT PREGNANT; flat male chest and flat abdomen, no baby bump. Never depict Arya with a pregnant belly. CHARACTER LOCK — NITA TALIA: the SAME 22-year-old INDONESIAN WOMAN in every shot; light-medium warm brown skin, soft oval face, long straight black hair, dark brown eyes, visibly pregnant belly, muted dusty-rose blouse and simple dark cardigan. NITA IS THE ONLY PREGNANT CHARACTER. Preserve her exact face, hairstyle and outfit in every scene."
     },
     {
       "scene": 5,
       "beat": "KENALAN DI DALAM BUS",
       "narration": "Kami sempat ngobrol. Namanya Nita Talia. Awalnya biasa aja, sampai gue ngerasa ada yang aneh.",
       "rate": "-11%",
-      "visual_prompt": "Same Arya and Nita character designs from previous scene, seated side by side on an Indonesian bus. Arya is a 22-year-old Indonesian man with medium tan skin, oval face, short slightly messy black hair, dark brown eyes, clean-shaven, same charcoal jacket and black shirt. Nita is a 22-year-old visibly pregnant Indonesian woman with warm light-medium brown skin, soft oval face, long straight black hair, dark brown eyes, dusty-rose blouse and dark cardigan. They exchange polite conversation, but Nita's expression is subtly guarded, cinematic photorealism, vertical 9:16, no text."
+      "visual_prompt": "Same Arya and same Nita seated side by side on an Indonesian bus, exchanging polite conversation; Nita looks subtly guarded. Distinct male and female anatomy and clothing; only Nita has a pregnant belly. Cinematic photorealism, vertical 9:16, no text. CHARACTER LOCK — ARYA: the SAME 22-year-old INDONESIAN MAN in every shot; masculine male face, medium tan skin, oval face, short slightly messy black hair, dark brown eyes, clean-shaven, dark charcoal jacket over plain black shirt. ARYA IS A MAN, NOT PREGNANT; flat male chest and flat abdomen, no baby bump. Never depict Arya with a pregnant belly. CHARACTER LOCK — NITA TALIA: the SAME 22-year-old INDONESIAN WOMAN in every shot; light-medium warm brown skin, soft oval face, long straight black hair, dark brown eyes, visibly pregnant belly, muted dusty-rose blouse and simple dark cardigan. NITA IS THE ONLY PREGNANT CHARACTER. Preserve her exact face, hairstyle and outfit in every scene."
     },
     {
       "scene": 6,
       "beat": "NITA MENGETIK SESUATU",
       "narration": "Begitu gue ngenalin diri sebagai Arya, dia langsung ngetik di HP. Berkali-kali dia ngelirik gue. Gue makin curiga, tapi akhirnya ketiduran.",
       "rate": "-10%",
-      "visual_prompt": "Same Arya and Nita designs, maintain exact facial features, hair, age and clothing. On the bus, Nita Talia, visibly pregnant, in dusty-rose blouse and dark cardigan, secretly types on her phone while glancing sideways at Arya. Arya, same young Indonesian man with short messy black hair and charcoal jacket, notices her suspicious behavior before slowly falling asleep against the window. Cinematic close shot, photorealistic, vertical 9:16, no text."
+      "visual_prompt": "Bus interior close shot. Same Nita, visibly pregnant, in dusty-rose blouse and dark cardigan, secretly types on her phone while glancing sideways at same Arya. Arya, the male passenger, notices her suspicious behavior and slowly falls asleep against the window. Only Nita is pregnant. Cinematic photorealism, vertical 9:16, no text. CHARACTER LOCK — ARYA: the SAME 22-year-old INDONESIAN MAN in every shot; masculine male face, medium tan skin, oval face, short slightly messy black hair, dark brown eyes, clean-shaven, dark charcoal jacket over plain black shirt. ARYA IS A MAN, NOT PREGNANT; flat male chest and flat abdomen, no baby bump. Never depict Arya with a pregnant belly. CHARACTER LOCK — NITA TALIA: the SAME 22-year-old INDONESIAN WOMAN in every shot; light-medium warm brown skin, soft oval face, long straight black hair, dark brown eyes, visibly pregnant belly, muted dusty-rose blouse and simple dark cardigan. NITA IS THE ONLY PREGNANT CHARACTER. Preserve her exact face, hairstyle and outfit in every scene."
     },
     {
       "scene": 7,
       "beat": "MIMPI BURUK",
       "narration": "Tiba-tiba, teriakan Nita bikin gue kebangun. Wajahnya pucat. Dia kesakitan sambil megang perut. Darah ada di mana-mana.",
       "rate": "-7%",
-      "visual_prompt": "Nightmare sequence inside the same bus, surreal but photorealistic. Same Arya character jolts awake, visibly terrified, wearing same charcoal jacket and black shirt. Nita Talia retains exact same face, long straight black hair, dusty-rose blouse and dark cardigan, visibly pregnant and pale, clutching her abdomen in distress. Ominous red emergency-like lighting, restrained non-graphic horror, no explicit gore, cinematic thriller, vertical 9:16, no text."
+      "visual_prompt": "Nightmare sequence inside the same bus, surreal but photorealistic. Same male Arya jolts awake, terrified, wearing charcoal jacket and black shirt, his abdomen flat and not pregnant. Same female Nita looks pale and distressed, clutching her visibly pregnant abdomen; no graphic gore. Only Nita is pregnant. Ominous red lighting, cinematic thriller, vertical 9:16, no text. CHARACTER LOCK — ARYA: the SAME 22-year-old INDONESIAN MAN in every shot; masculine male face, medium tan skin, oval face, short slightly messy black hair, dark brown eyes, clean-shaven, dark charcoal jacket over plain black shirt. ARYA IS A MAN, NOT PREGNANT; flat male chest and flat abdomen, no baby bump. Never depict Arya with a pregnant belly. CHARACTER LOCK — NITA TALIA: the SAME 22-year-old INDONESIAN WOMAN in every shot; light-medium warm brown skin, soft oval face, long straight black hair, dark brown eyes, visibly pregnant belly, muted dusty-rose blouse and simple dark cardigan. NITA IS THE ONLY PREGNANT CHARACTER. Preserve her exact face, hairstyle and outfit in every scene."
     },
     {
       "scene": 8,
       "beat": "BISIKAN NITA",
       "narration": "Gue minta tolong, tapi semua penumpang diam. Nita narik tangan gue, lalu berbisik, 'Ini... lihat.' Gue langsung teriak, 'NITA! JANGAN!'",
       "rate": "-6%",
-      "visual_prompt": "Same nightmare bus scene, consistent Arya and Nita faces and clothes. Arya, same 22-year-old Indonesian man in charcoal jacket and black shirt, is frozen in terror as Nita Talia, same visibly pregnant young woman with long straight black hair, dusty-rose blouse and dark cardigan, reaches for his hand and leans close to whisper. Other passengers sit motionless in shadow, unsettling dreamlike atmosphere, no graphic details, cinematic photorealism, vertical 9:16, no text."
+      "visual_prompt": "Same nightmare bus scene, consistent male Arya and female Nita faces and clothes. Arya, clearly male and not pregnant, is frozen in terror as Nita, the only pregnant character, reaches for his hand and leans close to whisper. Other passengers sit motionless in shadow. No graphic details, cinematic photorealism, vertical 9:16, no text. CHARACTER LOCK — ARYA: the SAME 22-year-old INDONESIAN MAN in every shot; masculine male face, medium tan skin, oval face, short slightly messy black hair, dark brown eyes, clean-shaven, dark charcoal jacket over plain black shirt. ARYA IS A MAN, NOT PREGNANT; flat male chest and flat abdomen, no baby bump. Never depict Arya with a pregnant belly. CHARACTER LOCK — NITA TALIA: the SAME 22-year-old INDONESIAN WOMAN in every shot; light-medium warm brown skin, soft oval face, long straight black hair, dark brown eyes, visibly pregnant belly, muted dusty-rose blouse and simple dark cardigan. NITA IS THE ONLY PREGNANT CHARACTER. Preserve her exact face, hairstyle and outfit in every scene."
     }
   ],
   "youtube": {
@@ -89,6 +89,8 @@
     "format": "9:16",
     "fps": 30,
     "voice_style": "POV first-person storytelling; expressive scene-specific pacing",
-    "narration_revision": "Condensed for <=90s without forced playback speed-up; all approved plot beats retained."
+    "narration_revision": "Condensed for <=90s without forced playback speed-up; all approved plot beats retained.",
+    "character_consistency": "Strict character lock: Arya is always male and never pregnant; Nita Talia is always female and the only pregnant character. Maintain the same facial features, hairstyle and clothing in all eight scenes.",
+    "opening": "Every episode begins with a 2.4-second black glitch title card matching Episode 001. Episode-specific number and subtitle are rendered from the episode title."
   }
 }

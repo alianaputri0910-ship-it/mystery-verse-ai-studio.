@@ -44,8 +44,8 @@ async def make_voice_and_word_captions(text, audio_path, srt_path):
     for i,(start,word) in enumerate(boundaries):
         end=boundaries[i+1][0] if i+1<len(boundaries) else start+0.45
         end=max(start+0.10,end)
-        cues.append(f"{i+1}\\n{srt_time(start)} --> {srt_time(end)}\\n{word}\\n")
-    srt_path.write_text("\\n".join(cues),encoding="utf-8")
+        cues.append(f"{i+1}\n{srt_time(start)} --> {srt_time(end)}\n{word}\n")
+    srt_path.write_text("\n".join(cues),encoding="utf-8")
 
 async def main():
     data=json.loads((ROOT/"episodes/trunyan/longform.json").read_text(encoding="utf-8"))
@@ -70,7 +70,7 @@ async def main():
             "borderw=2:bordercolor=black@0.65:x=80:y=900,"
             "drawtext=fontfile="+font+":text='MYSTERY VERSE':fontcolor=0xD6B46A@0.72:fontsize=26:"
             "borderw=1:bordercolor=black@0.45:x=w-text_w-70:y=55,"
-            f"subtitles=filename={srt.as_posix()}:force_style=FontName=DejaVu Sans,FontSize=25,PrimaryColour=&H006AB4D6,OutlineColour=&HCC000000,BorderStyle=1,Outline=2,Shadow=1,Alignment=2,MarginV=75,format=yuv420p")
+            f"subtitles=filename={srt.as_posix()}:force_style='FontName=DejaVu Sans,FontSize=25,PrimaryColour=&H006AB4D6,OutlineColour=&HCC000000,BorderStyle=1,Outline=2,Shadow=1,Alignment=2,MarginV=75',format=yuv420p")
         run(["ffmpeg","-y","-loop","1","-framerate","30","-i",str(image),"-i",str(audio),
              "-t",f"{seconds:.3f}","-vf",vf,"-map","0:v:0","-map","1:a:0",
              "-c:v","libx264","-preset","veryfast","-crf","21","-r","30",

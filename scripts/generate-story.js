@@ -1,8 +1,18 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const topic = process.argv.slice(2).join(" ") ||
-  "Pembunuhan Keluarga Setagaya — Misteri yang Belum Terpecahkan (2000)";
+const DEFAULT_TOPIC = "Pembunuhan Keluarga Setagaya — Misteri yang Belum Terpecahkan (2000)";
+const requestedTopic = process.argv.slice(2).join(" ").trim() || DEFAULT_TOPIC;
+
+// IMPORTANT: This repository currently contains one fully-authored episode.
+// Never label a hard-coded Setagaya script as a different topic.
+if (requestedTopic !== DEFAULT_TOPIC) {
+  throw new Error(
+    "TOPIC_NOT_AUTHORED: Generator saat ini hanya memiliki naskah terverifikasi untuk Setagaya. " +
+    "Topik baru tidak boleh dirender sebelum tersedia sebagai episode dengan narasi, visual, sumber, dan metadata yang sesuai. " +
+    "Permintaan: " + requestedTopic
+  );
+}
 
 const scenes = [
   {
@@ -47,9 +57,9 @@ const scenes = [
   }
 ];
 
-const story = {
+const storyData = {
   channel: "MYSTERY VERSE",
-  topic,
+  topic: DEFAULT_TOPIC,
   title: "EMPAT ORANG TEWAS, PEMBUNUHNYA HILANG — MISTERI SETAGAYA (2000)",
   youtube: {
     title: "EMPAT ORANG TEWAS, PEMBUNUHNYA HILANG… MISTERI SETAGAYA 2000",
@@ -69,7 +79,11 @@ const story = {
   }))
 };
 
+if (storyData.scenes.length !== 8 || storyData.scenes.some(s => !s.narration || !s.visual_prompt)) {
+  throw new Error("EPISODE_VALIDATION_FAILED: Setiap adegan wajib memiliki narasi dan visual prompt.");
+}
+
 fs.mkdirSync("output", { recursive: true });
-fs.writeFileSync(path.join("output", "story.json"), JSON.stringify(story, null, 2));
-fs.writeFileSync(path.join("output", "youtube-metadata.json"), JSON.stringify(story.youtube, null, 2));
-console.log("MYSTERY VERSE: 8 adegan termasuk CTA, opening visual, judul, deskripsi, hashtag, dan metadata siap.");
+fs.writeFileSync(path.join("output", "story.json"), JSON.stringify(storyData, null, 2));
+fs.writeFileSync(path.join("output", "youtube-metadata.json"), JSON.stringify(storyData.youtube, null, 2));
+console.log("MYSTERY VERSE: episode Setagaya tervalidasi; 8 adegan termasuk CTA siap dirender.");

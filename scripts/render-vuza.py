@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 from edge_tts import Communicate
 from video_engine import VideoEngine, resolve_font_path
 
@@ -49,6 +49,62 @@ async def make_voice(text, audio_path):
     if not boundaries:
         raise RuntimeError("Edge-TTS tidak mengirim WordBoundary; render dihentikan agar subtitle per kata tidak berubah menjadi satu blok.")
     return boundaries
+
+def create_short_thumbnail(background_path, output_path):
+    """Create a clean 9:16 Shorts cover with safely wrapped, readable title text."""
+    source = Image.open(background_path).convert("RGB")
+    image = ImageOps.fit(source, (1080, 1920), method=Image.Resampling.LANCZOS).convert("RGBA")
+    shade = Image.new("RGBA", image.size, (0, 0, 0, 0))
+    shade_draw = ImageDraw.Draw(shade)
+    for y in range(360, 1540):
+        alpha = int(30 + 145 * ((y - 360) / 1180))
+        shade_draw.line((0, y, 1080, y), fill=(8, 5, 8, alpha), width=1)
+    image = Image.alpha_composite(image, shade)
+    draw = ImageDraw.Draw(image)
+    font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+    if not Path(font_path).exists():
+        font_path = resolve_font_path()
+    def font(size):
+        try:
+            return ImageFont.truetype(font_path, size) if font_path else ImageFont.load_default()
+        except Exception:
+            return ImageFont.load_default()
+    brand_font = font(48)
+    kicker_font = font(34)
+    title_font = font(78)
+    footer_font = font(32)
+    gold = (226, 184, 94, 255)
+    white = (255, 248, 235, 255)
+
+    brand = "MYSTERY VERSE"
+    box = draw.textbbox((0, 0), brand, font=brand_font, stroke_width=2)
+    draw.text(((1080 - (box[2] - box[0])) / 2, 135), brand, font=brand_font,
+              fill=gold, stroke_width=3, stroke_fill=(0, 0, 0, 180))
+    draw.rounded_rectangle((150, 235, 930, 242), radius=3, fill=gold)
+
+    kicker = "MISTERI BUDAYA BALI"
+    kb = draw.textbbox((0, 0), kicker, font=kicker_font)
+    draw.text(((1080 - (kb[2] - kb[0])) / 2, 560), kicker, font=kicker_font,
+              fill=gold, stroke_width=2, stroke_fill=(0, 0, 0, 180))
+
+    title_lines = ["DESA DI BALI INI", "TAK MENGUBURKAN", "JENAZAH?"]
+    y = 720
+    for index, line in enumerate(title_lines):
+        bb = draw.textbbox((0, 0), line, font=title_font, stroke_width=3)
+        x = (1080 - (bb[2] - bb[0])) / 2
+        color = gold if index == 2 else white
+        draw.text((x + 4, y + 7), line, font=title_font, fill=(0, 0, 0, 220),
+                  stroke_width=8, stroke_fill=(0, 0, 0, 220))
+        draw.text((x, y), line, font=title_font, fill=color,
+                  stroke_width=3, stroke_fill=(12, 8, 10, 255))
+        y += 118
+
+    footer = "TRADISI MEPASAH  •  TARU MENYAN"
+    fb = draw.textbbox((0, 0), footer, font=footer_font)
+    draw.text(((1080 - (fb[2] - fb[0])) / 2, 1515), footer, font=footer_font,
+              fill=white, stroke_width=2, stroke_fill=(0, 0, 0, 200))
+    image.convert("RGB").save(output_path, quality=92, optimize=True)
+    print("Thumbnail Shorts 9:16 berhasil dibuat dengan judul yang dibungkus rapi.")
 
 def make_brand(path):
     canvas = Image.new("RGBA", (1080, 120), (0, 0, 0, 0))
@@ -188,9 +244,7 @@ async def main():
         raise RuntimeError("Validasi resolusi gagal: hasil harus 1080x1920.")
     if not audio_stream:
         raise RuntimeError("Validasi audio gagal: MP4 tidak memiliki audio.")
-    thumbnail = engine.generate_thumbnail(str(final), story.get("youtube",{}).get("title","MYSTERY VERSE"))
-    if thumbnail:
-        shutil.copy2(thumbnail, OUT/"thumbnail.jpg")
+    create_short_thumbnail(images/"opening.webp", OUT/"thumbnail.jpg")
     print(f"BERHASIL: {final} | {actual:.2f}s | 1080x1920 | 30 FPS | opening 3.5s + CTA tersinkron | {len(script_data)} adegan dengan subtitle per kata")
 
 if __name__ == "__main__":

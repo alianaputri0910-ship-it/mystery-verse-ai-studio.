@@ -299,7 +299,7 @@
   },
   "production": {
     "status": "approved_for_render",
-    "max_duration_seconds": 119,
+    "max_duration_seconds": 179,
     "format": "9:16",
     "fps": 30,
     "voice_style": "POV first-person Indonesian storytelling; adult male ArdiNeural voice, close-mic, deep and clear, natural expressive delivery",
@@ -308,6 +308,7 @@
     "opening": "2.4-second recurring black glitch title card matching Episode 001 and Episode 002.",
     "voice_direction": "Acting, not flat reading. Use scene-specific rate, pitch, volume and pauses. Panic on waking; unsettled suspicion in quiet scenes; Nita's quoted lines are gently voiced with a subtle higher pitch; final question is a close, low, unsettling whisper. No echo, reverb, doubled voice, or forced speed-up. Keep all speech intelligible and natural.",
     "audio": "Natural speech pacing, restrained low bus ambience, dynamic pauses and scene-matched tension. Dialogue must remain clearly above ambience.",
-    "render_trigger_note": "Trigger build after workflow registration."
+    "render_trigger_note": "Trigger build after workflow registration.",
+    "duration_policy": "Maximum 179 seconds including intro and outro; preserve natural narration, never speed up unnaturally."
   }
 }

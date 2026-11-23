@@ -106,6 +106,38 @@ def create_short_thumbnail(background_path, output_path):
     image.convert("RGB").save(output_path, quality=92, optimize=True)
     print("Poster Shorts Kampung Jabang Mayit berhasil dibuat.")
 
+def create_outro_card(background_path, output_path):
+    """Create a bespoke end card; Shorts begin directly with the story, no opening."""
+    source = Image.open(background_path).convert("RGB")
+    image = ImageOps.fit(source, (1080, 1920), method=Image.Resampling.LANCZOS).convert("RGBA")
+    overlay = Image.new("RGBA", image.size, (0, 0, 0, 0))
+    od = ImageDraw.Draw(overlay)
+    od.rectangle((0, 0, 1080, 1920), fill=(4, 5, 8, 178))
+    od.rectangle((72, 520, 1008, 1370), fill=(8, 7, 9, 190), outline=(210, 157, 103, 210), width=3)
+    image = Image.alpha_composite(image, overlay)
+    draw = ImageDraw.Draw(image)
+    font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+    if not Path(font_path).exists():
+        font_path = resolve_font_path()
+    def f(size):
+        try:
+            return ImageFont.truetype(font_path, size) if font_path else ImageFont.load_default()
+        except Exception:
+            return ImageFont.load_default()
+    gold, white = (226, 184, 94, 255), (255, 248, 235, 255)
+    def centered(label, y, font, color):
+        b = draw.textbbox((0, 0), label, font=font, stroke_width=2)
+        x = (1080 - (b[2] - b[0])) / 2
+        draw.text((x, y), label, font=font, fill=color, stroke_width=2, stroke_fill=(0, 0, 0, 210))
+    centered("MYSTERY VERSE", 635, f(54), gold)
+    centered("LANJUTANNYA ADA DI", 830, f(38), white)
+    centered("EPISODE 002", 900, f(76), gold)
+    centered("SUBSCRIBE  •  LIKE  •  KOMEN", 1090, f(38), white)
+    centered("Menurut lo, apa yang bakal terjadi", 1200, f(30), white)
+    centered("sama Arya?", 1245, f(30), white)
+    image.convert("RGB").save(output_path, quality=92, optimize=True)
+    print("Outro CTA MYSTERY VERSE berhasil dibuat.")
+
 def make_brand(path):
     """Create a new restrained copper-gold channel signature for this series."""
     canvas = Image.new("RGBA", (1080, 120), (0, 0, 0, 0))
@@ -149,7 +181,7 @@ async def main():
     story = json.loads((OUT / "story.json").read_text(encoding="utf-8"))
     scenes = story.get("scenes", [])
     if len(scenes) != 8:
-        raise RuntimeError("Naskah harus berisi 8 adegan termasuk ajakan penonton.")
+        raise RuntimeError("Naskah inti harus berisi tepat 8 adegan cerita.")
     images = OUT / "images"
     if not images.exists():
         raise RuntimeError("Folder gambar AI tidak ditemukan.")
@@ -179,9 +211,25 @@ async def main():
         })
         print(f"Adegan {i+1}: narasi {seconds:.2f} detik, {len(words)} penanda kata terbaca, kecepatan tetap {RATE}.")
 
-    intro_seconds = 3.5
-    if not MIN_SECONDS <= total + intro_seconds <= MAX_SECONDS:
-        raise RuntimeError(f"Total narasi + opening {total + intro_seconds:.2f}s di luar batas 40–75 detik. Naskah perlu dipadatkan, bukan mempercepat suara.")
+    # Dedicated outro: no opening; invite viewers to subscribe, like, and comment.
+    outro_text = "Kalau lo mau tahu kelanjutannya, subscribe, pencet like, dan komen: menurut lo, apa yang bakal terjadi sama Arya?"
+    outro_audio = engine.temp_dir / "speech_8.mp3"
+    outro_words = await make_voice(outro_text, outro_audio)
+    outro_seconds = duration(outro_audio)
+    outro_image = OUT / "vuza_media" / "scene_09"
+    outro_image.mkdir(parents=True, exist_ok=True)
+    outro_card = outro_image / "outro.webp"
+    create_outro_card(images / "scene-08.webp", outro_card)
+    script_data.append({
+        "sentence": outro_text,
+        "keyword": "scene_09",
+        "_files": [str(outro_card)],
+        "_word_timings": outro_words
+    })
+    total += outro_seconds + 0.15
+    if not MIN_SECONDS <= total <= MAX_SECONDS:
+        raise RuntimeError(f"Total cerita + outro {total:.2f}s di luar batas 40–75 detik. Padatkan naskah; jangan mempercepat suara.")
+    print(f"Outro CTA: {outro_seconds:.2f} detik, {len(outro_words)} penanda kata, kecepatan tetap {RATE}.")
     settings = SimpleNamespace(ratio="9:16", vibe="general", filter="none",
                                subtitles=True, subtitle_style="mystery_gold",
                                emoji_subtitles=False, watermark=False, logo_path="")
@@ -209,31 +257,6 @@ async def main():
          "-filter_complex", "[1:a]volume=0.28[sfx];[0:a][sfx]amix=inputs=2:duration=first:dropout_transition=0:normalize=0[a]",
          "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", str(mixed)])
     mixed.replace(final)
-    # Create a short branded animated opening from the generated mystery corridor visual.
-    opening_image = images / "opening.webp"
-    if not opening_image.exists() or opening_image.stat().st_size < 1000:
-        raise RuntimeError("Visual opening tidak ditemukan.")
-    opening = OUT / "mystery-verse-opening.mp4"
-    joined = OUT / "mystery-verse-with-opening.mp4"
-    font = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-    run(["ffmpeg", "-y", "-loop", "1", "-framerate", "30", "-i", str(opening_image),
-         "-f", "lavfi", "-i", "sine=frequency=48:sample_rate=48000:duration=3.5",
-         "-t", "3.5", "-vf",
-         "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,"
-         "zoompan=z='min(zoom+0.0012,1.06)':d=105:s=1080x1920:fps=30,"
-         f"drawtext=fontfile={font}:text='MYSTERY VERSE':fontcolor=0xD68A62:fontsize=68:"
-         "borderw=3:bordercolor=black@0.75:x=(w-text_w)/2:y=h*0.70,"
-         "fade=t=in:st=0:d=0.4,fade=t=out:st=3.0:d=0.5,format=yuv420p",
-         "-af", "volume=0.10,afade=t=in:st=0:d=0.3,afade=t=out:st=3.0:d=0.5",
-         "-c:v", "libx264", "-preset", "veryfast", "-crf", "19",
-         "-pix_fmt", "yuv420p", "-r", "30", "-c:a", "aac", "-b:a", "128k",
-         "-ar", "48000", "-ac", "2", str(opening)])
-    run(["ffmpeg", "-y", "-i", str(opening), "-i", str(final),
-         "-filter_complex", "[0:v][0:a][1:v][1:a]concat=n=2:v=1:a=1[v][a]",
-         "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-preset", "veryfast",
-         "-crf", "19", "-pix_fmt", "yuv420p", "-r", "30",
-         "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", str(joined)])
-    joined.replace(final)
 
     actual = duration(final)
     if not MIN_SECONDS <= actual <= MAX_SECONDS:
@@ -245,8 +268,8 @@ async def main():
         raise RuntimeError("Validasi resolusi gagal: hasil harus 1080x1920.")
     if not audio_stream:
         raise RuntimeError("Validasi audio gagal: MP4 tidak memiliki audio.")
-    create_short_thumbnail(images/"opening.webp", OUT/"thumbnail.jpg")
-    print(f"BERHASIL: {final} | {actual:.2f}s | 1080x1920 | 30 FPS | opening 3.5s + CTA tersinkron | {len(script_data)} adegan dengan subtitle per kata")
+    create_short_thumbnail(images/"scene-08.webp", OUT/"thumbnail.jpg")
+    print(f"BERHASIL: {final} | {actual:.2f}s | 1080x1920 | 30 FPS | tanpa opening + outro CTA tersinkron | {len(script_data)} adegan dengan subtitle per kata")
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -19,6 +19,34 @@ def run(args):
 def duration(path):
     return float(run(["ffprobe","-v","error","-show_entries","format=duration","-of","default=noprint_wrappers=1:nokey=1",str(path)]))
 
+def srt_time(seconds):
+    ms=max(0,int(seconds*1000))
+    h,ms=divmod(ms,3600000)
+    m,ms=divmod(ms,60000)
+    s,ms=divmod(ms,1000)
+    return f"{h:02d}:{m:02d}:{s:02d},{ms:03d}"
+
+async def make_voice_and_word_captions(text, audio_path, srt_path):
+    communicator=Communicate(text,VOICE,rate=RATE,volume="+0%")
+    boundaries=[]
+    with open(audio_path,"wb") as audio_file:
+        async for chunk in communicator.stream():
+            if chunk.get("type")=="audio":
+                audio_file.write(chunk.get("data",b""))
+            elif chunk.get("type")=="WordBoundary":
+                data=chunk.get("data") or chunk
+                word=str(data.get("text",chunk.get("text",""))).strip()
+                offset=float(data.get("offset",chunk.get("offset",0)))/10_000_000.0
+                if word: boundaries.append((offset,word))
+    if not audio_path.exists() or audio_path.stat().st_size<1000:
+        raise RuntimeError("Edge-TTS tidak menghasilkan audio valid.")
+    cues=[]
+    for i,(start,word) in enumerate(boundaries):
+        end=boundaries[i+1][0] if i+1<len(boundaries) else start+0.45
+        end=max(start+0.10,end)
+        cues.append(f"{i+1}\\n{srt_time(start)} --> {srt_time(end)}\\n{word}\\n")
+    srt_path.write_text("\\n".join(cues),encoding="utf-8")
+
 async def main():
     data=json.loads((ROOT/"episodes/trunyan/longform.json").read_text(encoding="utf-8"))
     chapters=data.get("chapters",[])
@@ -29,7 +57,8 @@ async def main():
         audio=OUT/f"chapter-{i:02d}.mp3"
         image=IMAGES/f"chapter-{i:02d}.jpg"
         if not image.exists(): raise RuntimeError(f"Visual bab {i} tidak ditemukan.")
-        await Communicate(chapter["narration"],VOICE,rate=RATE,volume="+0%").save(str(audio))
+        srt=OUT/f"chapter-{i:02d}.srt"
+        await make_voice_and_word_captions(chapter["narration"],audio,srt)
         seconds=duration(audio)
         if seconds<8: raise RuntimeError(f"Audio bab {i} terlalu pendek.")
         segment=OUT/f"segment-{i:02d}.mp4"
@@ -40,7 +69,8 @@ async def main():
             f"drawtext=fontfile={font}:text='{title}':fontcolor=white:fontsize=42:"
             "borderw=2:bordercolor=black@0.65:x=80:y=900,"
             "drawtext=fontfile="+font+":text='MYSTERY VERSE':fontcolor=0xD6B46A@0.72:fontsize=26:"
-            "borderw=1:bordercolor=black@0.45:x=w-text_w-70:y=55,format=yuv420p")
+            "borderw=1:bordercolor=black@0.45:x=w-text_w-70:y=55,"
+            f"subtitles=filename={srt.as_posix()}:force_style=FontName=DejaVu Sans,FontSize=25,PrimaryColour=&H006AB4D6,OutlineColour=&HCC000000,BorderStyle=1,Outline=2,Shadow=1,Alignment=2,MarginV=75,format=yuv420p")
         run(["ffmpeg","-y","-loop","1","-framerate","30","-i",str(image),"-i",str(audio),
              "-t",f"{seconds:.3f}","-vf",vf,"-map","0:v:0","-map","1:a:0",
              "-c:v","libx264","-preset","veryfast","-crf","21","-r","30",

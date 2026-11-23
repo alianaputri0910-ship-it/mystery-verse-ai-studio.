@@ -1,6 +1,16 @@
 name: MYSTERY VERSE Video Builder
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/build-video.yml"
+      - "scripts/generate-story.js"
+      - "scripts/generate-images.js"
+      - "scripts/render-vuza.py"
+      - "video_engine.py"
+      - "episodes/trunyan/short.json"
+      - "package.json"
   workflow_dispatch:
     inputs:
       episode_slug:
@@ -14,7 +24,7 @@ permissions:
 
 concurrency:
   group: mystery-verse-video
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -35,21 +45,27 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install FFmpeg
+      - name: Install FFmpeg and fonts
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
 
       - name: Install VUZA video engine dependencies
         run: |
           python -m pip install --upgrade edge-tts 'moviepy>=2.0.0' 'Pillow>=10.0.0' 'numpy>=1.24.0'
 
-      - name: Setup Chrome
-        uses: browser-actions/setup-chrome@v1
-
-      - name: Validate and load episode
+      - name: Validate production scripts
         run: |
-          npm run story -- "${{ inputs.episode_slug }}"
+          node --check scripts/generate-story.js
+          node --check scripts/generate-images.js
+          python -m py_compile scripts/render-vuza.py video_engine.py
+
+      - name: Validate and load Trunyan episode
+        env:
+          EPISODE_SLUG: ${{ inputs.episode_slug || 'trunyan' }}
+        run: |
+          npm run story -- "$EPISODE_SLUG"
+          node -e "const s=require('./output/story.json'); if(s.slug!=='trunyan'||s.scenes.length!==8) process.exit(1); console.log('Episode:',s.slug,'scenes:',s.scenes.length)"
 
       - name: Generate AI images with Pollinations API
         env:
@@ -58,7 +74,7 @@ jobs:
         run: |
           node scripts/generate-images.js
 
-      - name: Render with VUZA engine (40-75 second Shorts)
+      - name: Render Shorts with VUZA engine (40-75 seconds)
         run: |
           python scripts/render-vuza.py
 
@@ -72,12 +88,18 @@ jobs:
             -c:a aac -b:a 192k -ac 2 \
             -movflags +faststart output/mystery-verse-android.mp4
           mv output/mystery-verse-android.mp4 output/mystery-verse.mp4
-          ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt,codec_name,width,height -of default=noprint_wrappers=1 output/mystery-verse.mp4
+          ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height,pix_fmt -of default=noprint_wrappers=1 output/mystery-verse.mp4
+          ffprobe -v error -select_streams a:0 -show_entries stream=codec_name,sample_rate,channels -of default=noprint_wrappers=1 output/mystery-verse.mp4
           ffmpeg -v error -i output/mystery-verse.mp4 -f null -
 
-      - name: Upload Shorts production files
+      - name: Upload verified Shorts production files
         uses: actions/upload-artifact@v4
         with:
           name: mystery-verse-trunyan-shorts
-          path: output/
+          path: |
+            output/mystery-verse.mp4
+            output/thumbnail.jpg
+            output/youtube-metadata.json
+            output/story.json
+            output/images/
           if-no-files-found: error

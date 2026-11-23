@@ -6,6 +6,7 @@ on:
     paths:
       - "episodes/jabang-mayit-001/short.json"
       - "scripts/render-jabang-short.py"
+      - "scripts/generate-story.js"
       - ".github/workflows/jabang-mayit-001-short.yml"
   workflow_dispatch:
 

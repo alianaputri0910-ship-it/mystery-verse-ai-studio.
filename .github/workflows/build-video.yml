@@ -8,6 +8,7 @@ on:
       - "scripts/generate-story.js"
       - "scripts/generate-images.js"
       - "scripts/render-vuza.py"
+      - "scripts/render-longform.py"
       - "video_engine.py"
       - "episodes/trunyan/short.json"
       - "package.json"

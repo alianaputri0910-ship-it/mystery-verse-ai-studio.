@@ -25,7 +25,7 @@ VOICE_CAST = {
     "MysteriousLongHairedMan": {"voice": "id-ID-ArdiNeural", "rate": "-15%", "pitch": "-9Hz", "volume": "-4%"},
     "ElderlyWoman": {"voice": "id-ID-GadisNeural", "rate": "-15%", "pitch": "-5Hz", "volume": "+0%"}
 }
-MIN_SECONDS, MAX_SECONDS = 40.0, 179.0
+MIN_SECONDS, MAX_SECONDS = 40.0, 119.0
 
 def run(args):
     p = subprocess.run(args, capture_output=True, text=True)

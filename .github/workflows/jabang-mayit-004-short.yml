@@ -1,13 +1,13 @@
-name: MYSTERY VERSE — Episode 004 Offline Visual + FFmpeg
+name: MYSTERY VERSE — Kampung Jabang Mayit Episode 004 Shorts
 
 on:
   push:
     branches: [episode-004-jabang-mayit]
     paths:
       - "episodes/jabang-mayit-004/short.json"
+      - "episodes/jabang-mayit-004/visuals/**"
       - "scripts/render-jabang-short-004.py"
-      - "scripts/generate-visuals-local.py"
-      - "scripts/render-visuals-blender.py"
+      - "video_engine.py"
       - ".github/workflows/jabang-mayit-004-short.yml"
   workflow_dispatch:
 
@@ -41,28 +41,28 @@ jobs:
       - name: Install FFmpeg and fonts
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg blender fonts-dejavu-core
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
           ffmpeg -version | head -n 1
-          blender --version | head -n 1
 
       - name: Install rendering dependencies
         run: |
           python -m pip install --upgrade edge-tts 'moviepy>=2.0.0' 'Pillow>=10.0.0' 'numpy>=1.24.0'
 
-      - name: Validate episode and renderer
+      - name: Validate episode, renderer and eight approved stills
         run: |
           node --check scripts/generate-story.js
-          python -m py_compile scripts/render-jabang-short-004.py scripts/render-visuals-blender.py video_engine.py
+          python -m py_compile scripts/render-jabang-short-004.py video_engine.py
           npm run story -- jabang-mayit-004
           node -e "const s=require('./output/story.json'); if(s.slug!=='jabang-mayit-004'||s.scenes.length!==8) process.exit(1); console.log('Validated:',s.title,'scenes:',s.scenes.length)"
+          mkdir -p output/images
+          for i in $(seq -w 1 8); do
+            file="episodes/jabang-mayit-004/visuals/scene-${i}.webp"
+            test -s "$file" || { echo "Missing approved cinematic still: $file"; exit 1; }
+            cp "$file" "output/images/scene-${i}.webp"
+          done
+          echo "Eight static cinematic images ready; no Blender or camera animation."
 
-      - name: Generate eight offline illustrated story visuals
-        run: python scripts/generate-visuals-local.py
-
-      - name: Build eight animated cinematic 3D shots with Blender (offline)
-        run: blender -b -t 4 --python scripts/render-visuals-blender.py
-
-      - name: Render POV storytelling Shorts (40–179 seconds)
+      - name: Render POV storytelling Shorts with the recurring series edit
         run: python scripts/render-jabang-short-004.py
 
       - name: Encode and validate final MP4
@@ -97,6 +97,5 @@ jobs:
             output/youtube-metadata.json
             output/story.json
             output/images/
-            output/motion/
             output/character-references/
           if-no-files-found: error

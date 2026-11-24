@@ -7,6 +7,7 @@ on:
       - "episodes/jabang-mayit-004/short.json"
       - "scripts/render-jabang-short-004.py"
       - "scripts/generate-visuals-local.py"
+      - "scripts/render-visuals-blender.py"
       - ".github/workflows/jabang-mayit-004-short.yml"
   workflow_dispatch:
 
@@ -40,8 +41,9 @@ jobs:
       - name: Install FFmpeg and fonts
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          sudo apt-get install -y ffmpeg blender fonts-dejavu-core
           ffmpeg -version | head -n 1
+          blender --version | head -n 1
 
       - name: Install rendering dependencies
         run: |
@@ -50,14 +52,17 @@ jobs:
       - name: Validate episode and renderer
         run: |
           node --check scripts/generate-story.js
-          python -m py_compile scripts/render-jabang-short-004.py video_engine.py
+          python -m py_compile scripts/render-jabang-short-004.py scripts/render-visuals-blender.py video_engine.py
           npm run story -- jabang-mayit-004
           node -e "const s=require('./output/story.json'); if(s.slug!=='jabang-mayit-004'||s.scenes.length!==8) process.exit(1); console.log('Validated:',s.title,'scenes:',s.scenes.length)"
 
       - name: Generate eight offline illustrated story visuals
         run: python scripts/generate-visuals-local.py
 
-      - name: Render POV storytelling Shorts (40–119 seconds)
+      - name: Build eight animated cinematic 3D shots with Blender (offline)
+        run: blender -b -t 4 --python scripts/render-visuals-blender.py
+
+      - name: Render POV storytelling Shorts (40–179 seconds)
         run: python scripts/render-jabang-short-004.py
 
       - name: Encode and validate final MP4

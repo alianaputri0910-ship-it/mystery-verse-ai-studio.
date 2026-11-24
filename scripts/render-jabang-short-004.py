@@ -18,6 +18,13 @@ from video_engine import VideoEngine, resolve_font_path
 OUT = ROOT / "output"
 VOICE = "id-ID-ArdiNeural"
 RATE = "-7%"
+VOICE_CAST = {
+    "Arya": {"voice": "id-ID-ArdiNeural", "rate": "-7%", "pitch": "-2Hz", "volume": "+0%"},
+    "Nita": {"voice": "id-ID-GadisNeural", "rate": "-3%", "pitch": "+0Hz", "volume": "+0%"},
+    "KangBasir": {"voice": "id-ID-ArdiNeural", "rate": "-12%", "pitch": "-5Hz", "volume": "+0%"},
+    "MysteriousLongHairedMan": {"voice": "id-ID-ArdiNeural", "rate": "-15%", "pitch": "-9Hz", "volume": "-4%"},
+    "ElderlyWoman": {"voice": "id-ID-GadisNeural", "rate": "-15%", "pitch": "-5Hz", "volume": "+0%"}
+}
 MIN_SECONDS, MAX_SECONDS = 40.0, 179.0
 
 def run(args):
@@ -30,8 +37,8 @@ def duration(path):
     return float(run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
                       "-of", "default=noprint_wrappers=1:nokey=1", str(path)]))
 
-async def make_voice(text, audio_path, rate=RATE, pitch="+0Hz", volume="+0%"):
-    communicator = Communicate(text, VOICE, rate=rate, pitch=pitch, volume=volume, boundary="WordBoundary")
+async def make_voice(text, audio_path, rate=RATE, pitch="+0Hz", volume="+0%", voice=VOICE):
+    communicator = Communicate(text, voice, rate=rate, pitch=pitch, volume=volume, boundary="WordBoundary")
     boundaries = []
     with open(audio_path, "wb") as f:
         async for chunk in communicator.stream():
@@ -53,23 +60,32 @@ async def make_voice(text, audio_path, rate=RATE, pitch="+0Hz", volume="+0%"):
 async def make_scene_voice(scene, audio_path, temp_dir):
     """Synthesize scene-specific acting; optional voice_parts allow emotional changes inside one scene."""
     parts = scene.get("voice_parts") or [{
+        "speaker": "Arya",
         "text": scene["narration"],
         "rate": scene.get("rate", RATE),
         "pitch": scene.get("pitch", "+0Hz"),
         "volume": scene.get("volume", "+0%")
     }]
+    def voice_options(part):
+        speaker = part.get("speaker", "Arya")
+        if speaker not in VOICE_CAST:
+            raise RuntimeError(f"Speaker '{speaker}' belum punya profil suara permanen.")
+        profile = VOICE_CAST[speaker]
+        return (part.get("rate", profile["rate"]), part.get("pitch", profile["pitch"]),
+                part.get("volume", profile["volume"]), part.get("voice", profile["voice"]))
+
     if len(parts) == 1:
         part = parts[0]
-        return await make_voice(part["text"], audio_path, part.get("rate", RATE),
-                                part.get("pitch", "+0Hz"), part.get("volume", "+0%"))
+        rate, pitch, volume, voice = voice_options(part)
+        return await make_voice(part["text"], audio_path, rate, pitch, volume, voice)
     concat_file = temp_dir / f"{audio_path.stem}-parts.txt"
     boundaries = []
     offset = 0.0
     paths = []
     for index, part in enumerate(parts):
         part_path = temp_dir / f"{audio_path.stem}-part-{index}.mp3"
-        words = await make_voice(part["text"], part_path, part.get("rate", RATE),
-                                 part.get("pitch", "+0Hz"), part.get("volume", "+0%"))
+        rate, pitch, volume, voice = voice_options(part)
+        words = await make_voice(part["text"], part_path, rate, pitch, volume, voice)
         paths.append(part_path)
         boundaries.extend({"text": word["text"], "start": offset + word["start"]} for word in words)
         offset += duration(part_path)
@@ -308,7 +324,9 @@ async def main():
     # Concise CTA leaves room for the recurring 2.4-second opening title card.
     outro_text = "Gue pikir perjalanan ini cuma bakal jadi awal kehidupan baru gue... tapi ternyata, ada sesuatu di desa itu yang sepertinya udah menunggu kedatangan gue. Menurut lo, siapa nenek yang gue lihat tadi? Tulis teori lo di komentar, subscribe MYSTERY VERSE, dan ikuti perjalanan gue di episode berikutnya."
     outro_audio = engine.temp_dir / "speech_8.mp3"
-    outro_words = await make_voice(outro_text, outro_audio, rate="-10%", pitch="-1Hz", volume="+0%")
+    outro_profile = VOICE_CAST["Arya"]
+    outro_words = await make_voice(outro_text, outro_audio, rate="-10%", pitch=outro_profile["pitch"],
+                                   volume="+0%", voice=outro_profile["voice"])
     outro_seconds = duration(outro_audio)
     outro_image = OUT / "vuza_media" / "scene_09"
     outro_image.mkdir(parents=True, exist_ok=True)

@@ -1,4 +1,4 @@
-name: MYSTERY VERSE — Kampung Jabang Mayit Episode 004 Shorts (Visual QA Rebuild)
+name: MYSTERY VERSE — Episode 004 Offline Visual + FFmpeg
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
     paths:
       - "episodes/jabang-mayit-004/short.json"
       - "scripts/render-jabang-short-004.py"
-      - "scripts/generate-images.js"
+      - "scripts/generate-visuals-local.py"
       - ".github/workflows/jabang-mayit-004-short.yml"
   workflow_dispatch:
 
@@ -50,16 +50,12 @@ jobs:
       - name: Validate episode and renderer
         run: |
           node --check scripts/generate-story.js
-          node --check scripts/generate-images.js
           python -m py_compile scripts/render-jabang-short-004.py video_engine.py
           npm run story -- jabang-mayit-004
           node -e "const s=require('./output/story.json'); if(s.slug!=='jabang-mayit-004'||s.scenes.length!==8) process.exit(1); console.log('Validated:',s.title,'scenes:',s.scenes.length)"
 
-      - name: Generate eight new cinematic story visuals
-        env:
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: node scripts/generate-images.js
+      - name: Generate eight offline illustrated story visuals
+        run: python scripts/generate-visuals-local.py
 
       - name: Render POV storytelling Shorts (40–119 seconds)
         run: python scripts/render-jabang-short-004.py

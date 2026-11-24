@@ -81,4 +81,5 @@ jobs:
             output/youtube-metadata.json
             output/story.json
             output/images/
+            output/character-references/
           if-no-files-found: error

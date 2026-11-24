@@ -18,7 +18,8 @@
       "id-ID-GadisNeural"
     ],
     "limitation": "Two base voices are insufficient for 20 genuinely distinct identities. The registry locks casting descriptions and keys, but provider-specific immutable voice IDs remain pending until a voice provider with sufficient distinct voices is connected and tested.",
-    "voice_id_assignment_policy": "After auditions are approved, save the exact provider voice ID per character and reuse it unchanged."
+    "voice_id_assignment_policy": "After auditions are approved, save the exact provider voice ID per character and reuse it unchanged.",
+    "language_validation_required": true
   },
   "cast": [
     {
@@ -241,5 +242,18 @@
       "voice_id_status": "pending_audition_and_provider_assignment",
       "approved_sample": false
     }
-  ]
+  ],
+  "language_policy": {
+    "required_language": "Indonesian",
+    "locale_preference": "id-ID",
+    "mandatory": true,
+    "requirements": [
+      "All narration and character dialogue must be spoken in natural Indonesian.",
+      "Use native-sounding Indonesian pronunciation and prosody; do not allow English accent carryover.",
+      "Test Indonesian diction, names, local terms, and conversational phrasing before approving each voice.",
+      "Reject any voice that cannot deliver clear, natural Indonesian even if its timbre matches the character.",
+      "Keep each approved provider voice ID fixed across all episodes."
+    ],
+    "acceptance_gate": "No character voice is approved or locked until an Indonesian-language audition is generated and reviewed."
+  }
 }

@@ -311,11 +311,8 @@ async def main():
             raise RuntimeError(f"Gambar adegan {i+1} tidak ditemukan atau kosong.")
         folder = OUT / "vuza_media" / f"scene_{i+1:02d}"
         folder.mkdir(parents=True, exist_ok=True)
-        visual = folder / "visual.mp4"
-        motion = OUT / "motion" / f"scene-{i+1:02d}.mp4"
-        if not motion.exists() or motion.stat().st_size < 10000:
-            raise RuntimeError(f"Klip gerak adegan {i+1} tidak ditemukan atau kosong.")
-        shutil.copy2(motion, visual)
+        visual = folder / "visual.webp"
+        shutil.copy2(image, visual)
         script_data.append({
             "sentence": scene["narration"],
             "keyword": f"scene_{i+1:02d}",
@@ -347,8 +344,9 @@ async def main():
     print(f"Outro CTA: {outro_seconds:.2f} detik, {len(outro_words)} penanda kata, kecepatan tetap {RATE}.")
     settings = SimpleNamespace(ratio="9:16", vibe="general", filter="none",
                                subtitles=True, subtitle_style="mystery_gold",
-                               emoji_subtitles=False, watermark=False, logo_path="")
-    result = engine.create_video(script_data, OUT / "vuza_media", media_type="video",
+                               emoji_subtitles=False, watermark=False, logo_path="",
+                               static_images=True)
+    result = engine.create_video(script_data, OUT / "vuza_media", media_type="photo",
                                  bg_music=None, settings=settings)
     if not result:
         raise RuntimeError("VUZA gagal menyusun video.")

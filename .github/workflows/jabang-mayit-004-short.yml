@@ -57,8 +57,8 @@ jobs:
 
       - name: Generate eight new cinematic story visuals
         env:
-          POLLINATIONS_API_KEY: ${{ secrets.POLLINATIONS_API_KEY }}
-          POLLINATIONS_IMAGE_MODEL: black-forest-labs/flux.1-kontext-pro
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: node scripts/generate-images.js
 
       - name: Render POV storytelling Shorts (40–119 seconds)

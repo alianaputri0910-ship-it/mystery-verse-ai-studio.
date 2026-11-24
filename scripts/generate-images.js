@@ -91,4 +91,4 @@ for (let i=0;i<story.scenes.length;i++) {
   console.log("Adegan "+(i+1)+"/8 selesai; referensi: "+sceneCast[i].join(", "));
   await sleep(2500);
 }
-console.log("Selesai: 5 portrait referensi karakter + 8 visual adegan dengan reference-image conditioning.");
+console.log("Selesai: 5 portrait referensi karakter + 8 visual adegan dengan reference-image conditioning. Visual QA wajib dilakukan sebelum publikasi.");

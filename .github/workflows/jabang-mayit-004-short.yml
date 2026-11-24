@@ -6,6 +6,7 @@ on:
     paths:
       - "episodes/jabang-mayit-004/short.json"
       - "scripts/render-jabang-short-004.py"
+      - "scripts/generate-images.js"
       - ".github/workflows/jabang-mayit-004-short.yml"
   workflow_dispatch:
 
@@ -57,7 +58,7 @@ jobs:
       - name: Generate eight new cinematic story visuals
         env:
           POLLINATIONS_API_KEY: ${{ secrets.POLLINATIONS_API_KEY }}
-          POLLINATIONS_IMAGE_MODEL: black-forest-labs/flux.1-schnell
+          POLLINATIONS_IMAGE_MODEL: black-forest-labs/flux.1-kontext-pro
         run: node scripts/generate-images.js
 
       - name: Render POV storytelling Shorts (40–119 seconds)

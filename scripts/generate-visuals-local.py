@@ -94,17 +94,38 @@ for name,col in [("Arya",(31,39,43)),("Nita",(104,59,67)),("KangBasir",(43,49,43
  human(d,540,1320,1.65,col,name=="Nita",name=="MysteriousLongHairedMan")
  c.save(REF/(name.lower()+"-design.webp"),"WEBP",quality=88)
 MOTION=Path("output/motion"); MOTION.mkdir(parents=True,exist_ok=True)
+FOG=Path("output/.fog-frames"); FOG.mkdir(parents=True,exist_ok=True)
+# Reusable transparent fog loop, painted locally; no downloaded/generated media.
+for frame in range(24):
+    layer=Image.new("RGBA",(540,960),(0,0,0,0))
+    fd=ImageDraw.Draw(layer)
+    q=random.Random(900+frame)
+    drift=frame*17
+    for j in range(13):
+        x=(q.randint(-180,620)+drift)%760-110
+        y=q.randint(430,880)
+        rx=q.randint(70,190); ry=q.randint(18,54)
+        fd.ellipse((x-rx,y-ry,x+rx,y+ry),fill=(158,171,169,q.randint(10,28)))
+    layer=layer.filter(ImageFilter.GaussianBlur(24))
+    layer.save(FOG/f"fog-{frame:02d}.png")
 for i in range(1,9):
  still=OUT/f"scene-{i:02d}.webp"
  clip=MOTION/f"scene-{i:02d}.mp4"
  scene(i).save(still,"WEBP",quality=91)
- vf=("zoompan=z='min(zoom+0.00042,1.075)':"
-     "x='iw/2-(iw/zoom/2)+7*sin(on/43)':"
-     "y='ih/2-(ih/zoom/2)+5*cos(on/51)':"
-     "d=180:s=1080x1920:fps=30,format=yuv420p")
- subprocess.run(["ffmpeg","-y","-loop","1","-i",str(still),"-vf",vf,
-                 "-frames:v","180","-an","-c:v","libx264","-preset","veryfast",
-                 "-crf","20","-pix_fmt","yuv420p",str(clip)],
+ # Animated camera push, drifting fog layer, and subtle exposure pulse.
+ base=("zoompan=z='min(zoom+0.00042,1.075)':"
+       "x='iw/2-(iw/zoom/2)+7*sin(on/43)':"
+       "y='ih/2-(ih/zoom/2)+5*cos(on/51)':"
+       "d=180:s=1080x1920:fps=30")
+ graph=("[0:v]"+base+"[base];"
+        "[1:v]scale=1080:1920,format=rgba,colorchannelmixer=aa=0.72[fog];"
+        "[base][fog]overlay=x='mod(t*24\\,w)-w':y='900+35*sin(t*0.7)':"
+        "shortest=1,eq=brightness='0.012*sin(2*PI*t*1.3)',format=yuv420p[out]")
+ subprocess.run(["ffmpeg","-y","-loop","1","-i",str(still),
+                 "-stream_loop","-1","-framerate","12","-i",str(FOG/"fog-%02d.png"),
+                 "-filter_complex",graph,"-map","[out]","-frames:v","180","-an",
+                 "-c:v","libx264","-preset","veryfast","-crf","20",
+                 "-pix_fmt","yuv420p",str(clip)],
                 check=True,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE)
- print(f"Visual + motion generated: {still.name} -> {clip.name} (6s, 30fps)")
-print("8 moving scene clips + 8 still previews + 5 character design references created locally; no image API credentials required.")
+ print(f"Procedural horror shot animated: {still.name} -> {clip.name} (camera + drifting fog + light pulse)")
+print("8 procedural horror shots animated locally + character design references; no image/video generator or API credentials.")

@@ -13,7 +13,7 @@
       "rate": "-7%",
       "pitch": "-2Hz",
       "emotion": "cemas tertahan, masih memikirkan air minum",
-      "visual_prompt": "Photorealistic cinematic Indonesian supernatural thriller film still, inside an aging intercity bus approaching a small rural terminal at blue hour, young Indonesian man Arya seated by window gripping smartphone, uneasy eyes reflected in glass, subtle practical fluorescent bus lights, realistic skin pores, anamorphic lens character, 35mm film grain, deep layered shadows, atmospheric natural color grading, motivated lighting, vertical 9:16. CHARACTER LOCK ARYA: same young Indonesian man, medium tan skin, oval masculine face, short slightly messy black hair, dark brown eyes, clean-shaven, dark charcoal jacket over plain black shirt, male, flat abdomen, never pregnant. CHARACTER LOCK NITA: same pregnant Indonesian woman, long straight black hair, dusty-rose blouse, dark cardigan, only pregnant character. No text, no watermark. PERMANENT CAST IDENTITY LOCK: Use the exact character_bible identity descriptions and same persistent reference images/IDs. No face drift, no recasting, no hairstyle/skin/body/wardrobe changes. Arya is male and never pregnant; Nita is the only pregnant character."
+      "visual_prompt": "Live-action cinematic medium close two-shot inside an aging Indonesian intercity bus at blue hour. Arya, the exact young Indonesian man from the Arya reference, sits by the window holding his phone; Nita, the exact visibly pregnant young Indonesian woman from the Nita reference, sits beside him. Both faces clearly visible in the same frame, believable bus seating and window reflections, restrained anxious expressions, natural practical fluorescent light mixed with cool dusk outside, realistic skin and hands, 35mm film still, vertical 9:16. Do not merge bodies or swap identities."
     },
     {
       "scene": 2,
@@ -22,7 +22,7 @@
       "rate": "-7%",
       "pitch": "-2Hz",
       "emotion": "sedikit lega tetapi tetap waspada; dialog Kang Basir ramah dan natural",
-      "visual_prompt": "Ultra-photorealistic cinematic wide establishing shot of a modest Indonesian rural bus terminal at nightfall, old buses, sodium-vapor lamps, damp asphalt reflecting warm pools of light, a young Indonesian man Arya with small travel bag beside a rugged trail motorcycle, middle-aged Indonesian village man Kang Basir in practical dark jacket and helmet greeting him, realistic documentary production design,  anamorphic 35mm, natural practical lighting, rich shadow detail, subtle film grain, layered depth, vertical 9:16. Arya identity lock: young Indonesian male, medium tan skin, oval face, short messy black hair, charcoal jacket black shirt. Kang Basir distinct middle-aged man. No text. PERMANENT CAST IDENTITY LOCK: Use the exact character_bible identity descriptions and same persistent reference images/IDs. No face drift, no recasting, no hairstyle/skin/body/wardrobe changes. Arya is male and never pregnant; Nita is the only pregnant character.",
+      "visual_prompt": "Live-action cinematic wide shot at a modest Indonesian rural bus terminal at nightfall. Arya, matching the Arya reference exactly, stands beside a small travel bag. Kang Basir, matching his reference exactly, is a clearly middle-aged sturdy Indonesian man with slight grey at the temples, wearing a dark motorcycle jacket; he stands beside one rugged trail motorcycle and greets Arya. Both men are clearly visible, distinct ages and faces, full motorcycle visible, buses and sodium lamps in background, wet asphalt, natural proportions, vertical 9:16.",
       "voice_parts": [
         {
           "speaker": "Arya",
@@ -41,7 +41,7 @@
       "rate": "-8%",
       "pitch": "-2Hz",
       "emotion": "curiga meningkat, akhir kalimat menahan takut",
-      "visual_prompt": "Photorealistic cinematic over-the-shoulder shot from behind Arya at a dim Indonesian bus terminal, far across the wet terminal Nita the same visibly pregnant young Indonesian woman in dusty rose blouse and dark cardigan climbs onto the back of a rugged motorcycle driven by a tall broad-shouldered long-haired Indonesian man, the man turns and gives Arya an unsettling direct stare, foreground Arya slightly out of focus, realistic distance and scale, practical sodium lighting, anamorphic telephoto compression, restrained suspense, 35mm film grain, vertical 9:16. Strict character lock Nita and Arya. No text. PERMANENT CAST IDENTITY LOCK: Use the exact character_bible identity descriptions and same persistent reference images/IDs. No face drift, no recasting, no hairstyle/skin/body/wardrobe changes. Arya is male and never pregnant; Nita is the only pregnant character."
+      "visual_prompt": "Live-action cinematic over-the-shoulder shot from behind Arya at the same rural bus terminal. Across the terminal, Nita, matching the Nita reference exactly and visibly pregnant in her dusty-rose blouse and dark cardigan, is seated behind the tall broad-shouldered long-haired man on a second motorcycle. The long-haired man turns his face toward Arya with an unsettling stare. Keep all three people distinct and correctly positioned on one motorcycle; realistic distance and scale, vertical 9:16."
     },
     {
       "scene": 4,
@@ -50,7 +50,7 @@
       "rate": "-8%",
       "pitch": "-2Hz",
       "emotion": "sunyi, waspada, semakin tidak nyaman",
-      "visual_prompt": "High-end photorealistic Indonesian horror feature film frame, rear tracking view of a single trail motorcycle carrying Arya and Kang Basir along a narrow reddish dirt road through dense tropical forest at night, motorcycle headlamp cutting through humid mist, wet leaves and tree trunks passing close to lens, deep blacks with readable detail, realistic motion blur only at frame edges, moonlight barely penetrating canopy, cinematic volumetric beams,  anamorphic 35mm, subtle halation, natural film grain, vertical 9:16. Arya is passenger, male in charcoal jacket; Kang Basir drives. No text. PERMANENT CAST IDENTITY LOCK: Use the exact character_bible identity descriptions and same persistent reference images/IDs. No face drift, no recasting, no hairstyle/skin/body/wardrobe changes. Arya is male and never pregnant; Nita is the only pregnant character."
+      "visual_prompt": "Live-action rear three-quarter tracking shot of exactly one trail motorcycle carrying two people on a narrow reddish dirt road through dense Indonesian tropical forest at night. Kang Basir, matching his reference, drives; Arya, matching his reference, sits directly behind him as passenger. Both riders must be visibly seated on the same motorcycle, Arya's charcoal jacket visible. Headlamp illuminates wet road and foliage, realistic motorcycle geometry, no extra riders, vertical 9:16."
     },
     {
       "scene": 5,
@@ -59,7 +59,7 @@
       "rate": "-9%",
       "pitch": "-3Hz",
       "emotion": "terkejut dan curiga; beri jeda sebelum 'ada motor'",
-      "visual_prompt": "Photorealistic cinematic POV from passenger seat of moving motorcycle on narrow tropical Indonesian forest road at night, Arya turns his head over shoulder and sees a second motorcycle following through drifting mist, its single headlight flaring softly, broad long-haired male rider silhouette with pregnant Nita seated behind him, Nita's dusty-rose blouse faintly visible, realistic road distance, headlight beams, wet foliage, anamorphic lens flare, deep atmospheric perspective, tense restrained composition, filmic contrast, 35mm grain, vertical 9:16. Nita only pregnant character, Arya male. No text. PERMANENT CAST IDENTITY LOCK: Use the exact character_bible identity descriptions and same persistent reference images/IDs. No face drift, no recasting, no hairstyle/skin/body/wardrobe changes. Arya is male and never pregnant; Nita is the only pregnant character."
+      "visual_prompt": "Live-action passenger point-of-view looking backward from the motorcycle carrying Arya and Kang Basir on the same narrow forest road at night. A second motorcycle follows at a believable distance; the tall broad-shouldered long-haired man drives it and Nita, visibly pregnant in her dusty-rose blouse, sits behind him. The second headlight is visible through mist; silhouettes and clothing are readable enough to identify both, correct two-person seating, vertical 9:16."
     },
     {
       "scene": 6,
@@ -68,7 +68,7 @@
       "rate": "-10%",
       "pitch": "-3Hz",
       "emotion": "bisikan takut, kalimat pendek diberi jeda",
-      "visual_prompt": "Photorealistic Indonesian supernatural horror movie frame, enormous ancient tropical banyan tree beside a remote forest dirt road at night, an elderly Indonesian woman in a faded green dress stands unnaturally still beneath the roots holding a small weak yellow flashlight, seen from the moving motorcycle headlight POV, realistic aged face mostly obscured by shadow, wet roots, hanging vines, thin ground fog, cinematic chiaroscuro with motivated flashlight and headlight, detailed natural textures, anamorphic 35mm film still, subtle grain, vertical 9:16, no gore, no text. PERMANENT CAST IDENTITY LOCK: Use the exact character_bible identity descriptions and same persistent reference images/IDs. No face drift, no recasting, no hairstyle/skin/body/wardrobe changes. Arya is male and never pregnant; Nita is the only pregnant character."
+      "visual_prompt": "Live-action supernatural horror film still from the moving motorcycle's passenger POV. One enormous ancient banyan tree stands beside the narrow forest road. Directly beneath it stands one elderly Indonesian woman matching the elderly-woman reference: deeply lined face, slight stoop, faded green dress, holding one small weak yellow flashlight. Her full figure is visible and isolated against the trunk; wet roots and hanging vines, motorcycle headlight illuminates her, thin ground fog, no other people, vertical 9:16."
     },
     {
       "scene": 7,
@@ -77,7 +77,7 @@
       "rate": "-11%",
       "pitch": "-3Hz",
       "emotion": "ketakutan memuncak, teriak spontan pada dialog, lalu bingung dan panik",
-      "visual_prompt": "Extremely realistic cinematic supernatural horror reveal, low-angle passenger POV from a motorcycle passing a massive banyan tree at night; in the deep shadow directly behind the elderly woman in faded green, only a pair of enormous black hairy humanoid legs are briefly visible, towering scale partly hidden by thick roots and trunk, no full creature reveal, headlight catches coarse hair texture for a split second, elderly woman with tiny yellow flashlight foreground, realistic atmospheric haze, sharp focal plane on legs, dramatic naturalistic lighting, restrained terrifying composition, premium Indonesian horror feature film, anamorphic 35mm, subtle film grain, vertical 9:16, no gore, no text. PERMANENT CAST IDENTITY LOCK: Use the exact character_bible identity descriptions and same persistent reference images/IDs. No face drift, no recasting, no hairstyle/skin/body/wardrobe changes. Arya is male and never pregnant; Nita is the only pregnant character."
+      "visual_prompt": "Live-action low-angle passenger POV as the motorcycle passes the exact same banyan tree and the same elderly woman in the faded green dress holding the same tiny yellow flashlight. Directly behind her, partly concealed by the trunk and thick roots, show ONLY a pair of enormous black hairy humanoid lower legs and feet, towering and clearly visible in the headlight beam. The creature's torso and face remain completely hidden. The old woman remains visible in foreground. No motorcycle rider standing beside the tree, no extra humans, vertical 9:16."
     },
     {
       "scene": 8,
@@ -86,7 +86,7 @@
       "rate": "-12%",
       "pitch": "-4Hz",
       "emotion": "napas belum stabil, lalu pertanyaan terakhir dibisikkan dengan jeda panjang",
-      "visual_prompt": "Photorealistic cinematic close-up of Arya riding pillion on a trail motorcycle at night, young Indonesian male face pale with fear, eyes fixed backward into darkness, wind moving his short messy hair, blurred tropical forest and receding headlight behind him, Kang Basir's shoulder partially foreground, realistic sweat and skin texture, shallow depth of field, motivated headlamp lighting, rich shadow detail, anamorphic 50mm close-up, restrained psychological horror, 35mm film grain, vertical 9:16. Arya identity lock: male, charcoal jacket, black shirt, never pregnant. No text. PERMANENT CAST IDENTITY LOCK: Use the exact character_bible identity descriptions and same persistent reference images/IDs. No face drift, no recasting, no hairstyle/skin/body/wardrobe changes. Arya is male and never pregnant; Nita is the only pregnant character."
+      "visual_prompt": "Live-action tight close-up of Arya, matching the Arya reference exactly, seated as passenger behind Kang Basir on the moving trail motorcycle at night. Arya's frightened face is clearly visible in three-quarter profile as he looks back over his shoulder toward the receding banyan tree; charcoal jacket and black shirt unchanged. Kang Basir's shoulder is only a partial foreground shape. Natural wind in hair, sweat, headlamp edge light, dark forest softly blurred behind, realistic anatomy, vertical 9:16."
     }
   ],
   "youtube": {
@@ -117,7 +117,7 @@
     "voice_style": "POV narration by Arya only; character dialogue is voiced by its assigned character using the permanent voice_cast profile. Never read every character line in Arya's narrator voice.",
     "character_consistency": "PERMANENT CHARACTER BIBLE applies to every current and future episode. Exact same identifiable face, hairstyle, skin tone, age appearance, body proportions and wardrobe for each character across all shots. Arya always male, Nita only pregnant character. Never recast or swap identities.",
     "opening": "Use the exact recurring 2.4-second black glitch intro from Episodes 001–003; same typography, timing, animation and sound identity. Update only episode number and title.",
-    "visual_direction": "Raise realism to premium live-action Indonesian horror cinema: coherent practical lighting, physically plausible locations, cinematic lens language, layered depth, realistic skin and fabric textures, subtle 35mm grain, restrained halation, controlled motion blur, consistent character identities. Avoid illustration, plastic skin, fantasy concept-art look, random wardrobe changes, text or watermarks. Generate a distinct shot for each beat.",
+    "visual_direction": "Premium live-action Indonesian supernatural horror cinema. Character identity is controlled by generated reference portraits, not text alone. Preserve the exact face, hair, skin tone, age, body shape and wardrobe from the matching reference portrait in every shot. Keep spatial blocking physically plausible and readable. Every scene must depict its written beat literally. Realistic Indonesian locations, motorcycles with correct rider/passenger positions, natural hands and faces, motivated practical lighting, restrained 35mm film texture, no illustration, no plastic skin, no duplicate people, no extra limbs, no fused bodies, no malformed faces, no random wardrobe changes, no captions, no logos, no watermark.",
     "audio": "Dry close-mic adult male narration, no echo or reverb. Scene-specific acting, natural pauses and breath. Add layered bus terminal ambience, motorcycle engine, night insects, forest wind, low cinematic tension and a brief impact on the reveal; keep narration intelligible.",
     "outro": "Preserve the established Episode 001–003 outro visual design and sound identity. Replace generic CTA with suspenseful Arya POV line: 'Gue pikir perjalanan ini cuma bakal jadi awal kehidupan baru gue... tapi ternyata, ada sesuatu di desa itu yang sepertinya udah menunggu kedatangan gue.' Then ask what the old woman was, invite comments/theories, subscribe/follow and promise the journey continues. Do not reveal next episode.",
     "duration_policy": "Maximum 179 seconds including 2.4-second intro and recurring outro; never accelerate narration unnaturally.",
@@ -161,6 +161,24 @@
         }
       },
       "implementation_note": "The currently configured Edge TTS Indonesian standard voice set exposes one standard male voice (Ardi) and one standard female voice (Gadis). Nita therefore gets a genuinely separate female voice. Male supporting characters receive stable distinct delivery profiles using the same Indonesian male voice; do not claim they are separate native voice identities. Upgrade to additional licensed Indonesian male voice IDs when available."
+    },
+    "visual_quality_gate": {
+      "reference_portraits": [
+        "Arya",
+        "Nita",
+        "KangBasir",
+        "MysteriousLongHairedMan",
+        "ElderlyWoman"
+      ],
+      "required_checks": [
+        "correct cast count and identity",
+        "correct motorcycle rider/passenger positions",
+        "scene 6 elderly woman clearly visible",
+        "scene 7 only giant hairy legs behind the same elderly woman",
+        "no distorted anatomy or duplicated people",
+        "each scene matches its narration beat"
+      ],
+      "reject_if_failed": true
     }
   },
   "character_bible": {

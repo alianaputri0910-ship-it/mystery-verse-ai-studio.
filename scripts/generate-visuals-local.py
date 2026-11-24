@@ -1,6 +1,6 @@
 from PIL import Image, ImageDraw, ImageFilter
 from pathlib import Path
-import random
+import random, subprocess
 W,H=1080,1920
 OUT=Path("output/images"); REF=Path("output/character-references")
 OUT.mkdir(parents=True,exist_ok=True); REF.mkdir(parents=True,exist_ok=True)
@@ -93,7 +93,18 @@ for name,col in [("Arya",(31,39,43)),("Nita",(104,59,67)),("KangBasir",(43,49,43
  c=bg(sum(map(ord,name)));d=ImageDraw.Draw(c);d.ellipse((280,300,800,820),fill=(17,19,19))
  human(d,540,1320,1.65,col,name=="Nita",name=="MysteriousLongHairedMan")
  c.save(REF/(name.lower()+"-design.webp"),"WEBP",quality=88)
+MOTION=Path("output/motion"); MOTION.mkdir(parents=True,exist_ok=True)
 for i in range(1,9):
- scene(i).save(OUT/f"scene-{i:02d}.webp","WEBP",quality=91)
- print(f"Offline visual generated: scene-{i:02d}.webp")
-print("8 scenes + 5 character design references created locally; no API credentials required.")
+ still=OUT/f"scene-{i:02d}.webp"
+ clip=MOTION/f"scene-{i:02d}.mp4"
+ scene(i).save(still,"WEBP",quality=91)
+ vf=("zoompan=z='min(zoom+0.00042,1.075)':"
+     "x='iw/2-(iw/zoom/2)+7*sin(on/43)':"
+     "y='ih/2-(ih/zoom/2)+5*cos(on/51)':"
+     "d=180:s=1080x1920:fps=30,format=yuv420p")
+ subprocess.run(["ffmpeg","-y","-loop","1","-i",str(still),"-vf",vf,
+                 "-frames:v","180","-an","-c:v","libx264","-preset","veryfast",
+                 "-crf","20","-pix_fmt","yuv420p",str(clip)],
+                check=True,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE)
+ print(f"Visual + motion generated: {still.name} -> {clip.name} (6s, 30fps)")
+print("8 moving scene clips + 8 still previews + 5 character design references created locally; no image API credentials required.")

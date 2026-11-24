@@ -85,9 +85,9 @@ def chunk_subtitle_text(text, words_per_chunk=3, cjk_chars_per_chunk=8):
     words = text.split()
     return [" ".join(words[i:i + words_per_chunk]) for i in range(0, len(words), words_per_chunk)] or [text]
 
-def apply_ken_burns(clip, duration):
-    """Slow cinematic push-in with a tiny drifting camera move."""
-    if duration <= 0:
+def apply_ken_burns(clip, duration, enabled=True):
+    """Optional subtle push-in; static-image episodes can disable all camera motion."""
+    if not enabled or duration <= 0:
         return clip
     return clip.resized(lambda t: 1.0 + 0.075 * min(1.0, max(0.0, t / duration)))
 
@@ -333,7 +333,7 @@ class VideoEngine:
                     return clip.resized(height=1080)
 
                 clip = ImageClip(file_path).with_duration(clip_duration).resized(height=1080)
-                return apply_ken_burns(clip, clip_duration)
+                return apply_ken_burns(clip, clip_duration, enabled=not getattr(settings, "static_images", False))
 
             if duration > 5 and len(preferred_files) > 1:
                 num_segments = int(duration / segment_seconds) + 1

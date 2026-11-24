@@ -22,7 +22,17 @@
       "rate": "-7%",
       "pitch": "-2Hz",
       "emotion": "sedikit lega tetapi tetap waspada; dialog Kang Basir ramah dan natural",
-      "visual_prompt": "Ultra-photorealistic cinematic wide establishing shot of a modest Indonesian rural bus terminal at nightfall, old buses, sodium-vapor lamps, damp asphalt reflecting warm pools of light, a young Indonesian man Arya with small travel bag beside a rugged trail motorcycle, middle-aged Indonesian village man Kang Basir in practical dark jacket and helmet greeting him, realistic documentary production design,  anamorphic 35mm, natural practical lighting, rich shadow detail, subtle film grain, layered depth, vertical 9:16. Arya identity lock: young Indonesian male, medium tan skin, oval face, short messy black hair, charcoal jacket black shirt. Kang Basir distinct middle-aged man. No text. PERMANENT CAST IDENTITY LOCK: Use the exact character_bible identity descriptions and same persistent reference images/IDs. No face drift, no recasting, no hairstyle/skin/body/wardrobe changes. Arya is male and never pregnant; Nita is the only pregnant character."
+      "visual_prompt": "Ultra-photorealistic cinematic wide establishing shot of a modest Indonesian rural bus terminal at nightfall, old buses, sodium-vapor lamps, damp asphalt reflecting warm pools of light, a young Indonesian man Arya with small travel bag beside a rugged trail motorcycle, middle-aged Indonesian village man Kang Basir in practical dark jacket and helmet greeting him, realistic documentary production design,  anamorphic 35mm, natural practical lighting, rich shadow detail, subtle film grain, layered depth, vertical 9:16. Arya identity lock: young Indonesian male, medium tan skin, oval face, short messy black hair, charcoal jacket black shirt. Kang Basir distinct middle-aged man. No text. PERMANENT CAST IDENTITY LOCK: Use the exact character_bible identity descriptions and same persistent reference images/IDs. No face drift, no recasting, no hairstyle/skin/body/wardrobe changes. Arya is male and never pregnant; Nita is the only pregnant character.",
+      "voice_parts": [
+        {
+          "speaker": "Arya",
+          "text": "Namanya Kang Basir. Dia orang kepercayaan paman gue. Setelah telepon tersambung, dia bilang sudah menunggu di terminal. Gue turun dari bus, dan nggak lama sebuah motor trail berhenti tepat di depan gue. Seorang pria menyapa."
+        },
+        {
+          "speaker": "KangBasir",
+          "text": "Arya, kan? Ayo naik. Bapak sama Ibu udah nunggu di rumah."
+        }
+      ]
     },
     {
       "scene": 3,
@@ -104,13 +114,54 @@
     "max_duration_seconds": 179,
     "format": "9:16",
     "fps": 30,
-    "voice_style": "POV first-person Indonesian storytelling; adult male Indonesian voice, deep and clear, natural emotional acting",
+    "voice_style": "POV narration by Arya only; character dialogue is voiced by its assigned character using the permanent voice_cast profile. Never read every character line in Arya's narrator voice.",
     "character_consistency": "PERMANENT CHARACTER BIBLE applies to every current and future episode. Exact same identifiable face, hairstyle, skin tone, age appearance, body proportions and wardrobe for each character across all shots. Arya always male, Nita only pregnant character. Never recast or swap identities.",
     "opening": "Use the exact recurring 2.4-second black glitch intro from Episodes 001–003; same typography, timing, animation and sound identity. Update only episode number and title.",
     "visual_direction": "Raise realism to premium live-action Indonesian horror cinema: coherent practical lighting, physically plausible locations, cinematic lens language, layered depth, realistic skin and fabric textures, subtle 35mm grain, restrained halation, controlled motion blur, consistent character identities. Avoid illustration, plastic skin, fantasy concept-art look, random wardrobe changes, text or watermarks. Generate a distinct shot for each beat.",
     "audio": "Dry close-mic adult male narration, no echo or reverb. Scene-specific acting, natural pauses and breath. Add layered bus terminal ambience, motorcycle engine, night insects, forest wind, low cinematic tension and a brief impact on the reveal; keep narration intelligible.",
     "outro": "Preserve the established Episode 001–003 outro visual design and sound identity. Replace generic CTA with suspenseful Arya POV line: 'Gue pikir perjalanan ini cuma bakal jadi awal kehidupan baru gue... tapi ternyata, ada sesuatu di desa itu yang sepertinya udah menunggu kedatangan gue.' Then ask what the old woman was, invite comments/theories, subscribe/follow and promise the journey continues. Do not reveal next episode.",
-    "duration_policy": "Maximum 179 seconds including 2.4-second intro and recurring outro; never accelerate narration unnaturally."
+    "duration_policy": "Maximum 179 seconds including 2.4-second intro and recurring outro; never accelerate narration unnaturally.",
+    "voice_cast": {
+      "policy": "Every spoken line must be assigned to its character. POV narration is Arya. Keep each character voice profile stable across episodes; emotion changes delivery, never character identity.",
+      "profiles": {
+        "Arya": {
+          "voice": "id-ID-ArdiNeural",
+          "rate": "-7%",
+          "pitch": "-2Hz",
+          "volume": "+0%",
+          "identity": "Adult Indonesian male, deep but clear, close-mic, natural conversational POV narration."
+        },
+        "Nita": {
+          "voice": "id-ID-GadisNeural",
+          "rate": "-3%",
+          "pitch": "+0Hz",
+          "volume": "+0%",
+          "identity": "Adult Indonesian female, gentle and natural; suspense comes from acting, not changing voice identity."
+        },
+        "KangBasir": {
+          "voice": "id-ID-ArdiNeural",
+          "rate": "-12%",
+          "pitch": "-5Hz",
+          "volume": "+0%",
+          "identity": "Mature male, slower and slightly lower than Arya; calm, weathered delivery. Same Indonesian male base voice with stable pitch/rate distinction until a dedicated additional Indonesian male voice is integrated."
+        },
+        "MysteriousLongHairedMan": {
+          "voice": "id-ID-ArdiNeural",
+          "rate": "-15%",
+          "pitch": "-9Hz",
+          "volume": "-4%",
+          "identity": "Very low, cold, restrained male delivery. Same Indonesian male base voice with stronger stable processing until a dedicated additional Indonesian male voice is integrated."
+        },
+        "ElderlyWoman": {
+          "voice": "id-ID-GadisNeural",
+          "rate": "-15%",
+          "pitch": "-5Hz",
+          "volume": "+0%",
+          "identity": "Older-sounding female delivery, slow and faint, with a stable lower pitch treatment."
+        }
+      },
+      "implementation_note": "The currently configured Edge TTS Indonesian standard voice set exposes one standard male voice (Ardi) and one standard female voice (Gadis). Nita therefore gets a genuinely separate female voice. Male supporting characters receive stable distinct delivery profiles using the same Indonesian male voice; do not claim they are separate native voice identities. Upgrade to additional licensed Indonesian male voice IDs when available."
+    }
   },
   "character_bible": {
     "rule": "ABSOLUTE IDENTITY LOCK across every scene and episode. Each named character must remain the exact same individual, not a similar-looking substitute. Never change face, facial proportions, hairstyle, skin tone, age appearance, body proportions or wardrobe without an explicit story reason.",

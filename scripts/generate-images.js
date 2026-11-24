@@ -68,7 +68,7 @@ async function requestImage(prompt, index, filename, references = []) {
       runFfmpeg(["-y","-hide_banner","-loglevel","error","-i",temp,"-vf","scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,eq=brightness=0.02:contrast=1.04:saturation=0.96,unsharp=5:5:0.25:3:3:0.0","-frames:v","1","-quality","92",output], "Konversi visual");
       fs.rmSync(temp, { force: true });
       if (filename.startsWith("character-")) {
-        const refPath = path.join(referenceDir, filename.replace(/\\.webp$/i, "-ref.jpg"));
+        const refPath = path.join(referenceDir, filename.replace(/\.webp$/i, "-ref.jpg"));
         runFfmpeg(["-y","-hide_banner","-loglevel","error","-i",output,"-vf","scale=448:448:force_original_aspect_ratio=increase,crop=448:448","-frames:v","1","-q:v","3",refPath], "Pembuatan thumbnail referensi");
       }
       return output;
@@ -86,7 +86,7 @@ const refs = {};
 let idx = 0;
 for (const [name, prompt] of Object.entries(cast)) {
   const fullPath = await requestImage(prompt, idx++, "character-" + name.toLowerCase() + ".webp");
-  refs[name] = fullPath.replace(/\\.webp$/i, "-ref.jpg");
+  refs[name] = fullPath.replace(/\.webp$/i, "-ref.jpg");
   console.log("Reference locked for " + name);
   await sleep(1500);
 }

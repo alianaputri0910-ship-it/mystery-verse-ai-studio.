@@ -86,8 +86,10 @@ def chunk_subtitle_text(text, words_per_chunk=3, cjk_chars_per_chunk=8):
     return [" ".join(words[i:i + words_per_chunk]) for i in range(0, len(words), words_per_chunk)] or [text]
 
 def apply_ken_burns(clip, duration):
-    """Applies a slow zoom-in effect (Ken Burns)."""
-    return clip
+    """Slow cinematic push-in with a tiny drifting camera move."""
+    if duration <= 0:
+        return clip
+    return clip.resized(lambda t: 1.0 + 0.075 * min(1.0, max(0.0, t / duration)))
 
 def apply_zoom_in(clip, duration):
     """Dramatic zoom in."""

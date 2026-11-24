@@ -16,8 +16,12 @@ def mat(name, color, rough=0.82, emission=0.0):
     bs.inputs["Base Color"].default_value = (*color, 1)
     bs.inputs["Roughness"].default_value = rough
     if emission:
-        bs.inputs["Emission Color"].default_value = (*color, 1)
-        bs.inputs["Emission Strength"].default_value = emission
+        emission_input = bs.inputs.get("Emission Color") or bs.inputs.get("Emission")
+        if emission_input:
+            emission_input.default_value = (*color, 1)
+        strength_input = bs.inputs.get("Emission Strength")
+        if strength_input:
+            strength_input.default_value = emission
     return m
 
 NIGHT = mat("blue black night", (0.006, 0.014, 0.019))
@@ -164,6 +168,16 @@ def build_shot(index):
     cam.location.x=.18; cam.keyframe_insert(data_path="location",frame=FRAMES)
     cam.data.lens=40; cam.data.keyframe_insert(data_path="lens",frame=1)
     cam.data.lens=46; cam.data.keyframe_insert(data_path="lens",frame=FRAMES)
+    # Subtle independent body/head motion keeps characters from reading as frozen cut-outs.
+    for obj in list(bpy.data.objects):
+        if any(token in obj.name for token in (" head", "torso", "long hair")):
+            base_z = obj.location.z
+            base_rot = obj.rotation_euler.copy()
+            obj.keyframe_insert(data_path="location", frame=1)
+            obj.location.z = base_z + 0.035
+            obj.keyframe_insert(data_path="location", frame=FRAMES)
+            obj.rotation_euler.z = base_rot.z + 0.025
+            obj.keyframe_insert(data_path="rotation_euler", frame=FRAMES)
     bpy.ops.object.light_add(type="AREA", location=(-3,-6,8))
     key=bpy.context.object; key.data.energy=900; key.data.shape="DISK"; key.data.size=7
     key.rotation_euler=(math.radians(25),0,0)

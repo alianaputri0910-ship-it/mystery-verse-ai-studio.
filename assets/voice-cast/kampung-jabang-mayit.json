@@ -1,0 +1,245 @@
+{
+  "project": "MYSTERY VERSE",
+  "story": "Kampung Jabang Mayit",
+  "schema_version": 1,
+  "purpose": "Permanent character voice-casting registry. Character identity is locked; acting emotion may vary by scene.",
+  "global_rules": [
+    "One stable provider voice ID per character once assigned; never silently substitute another voice.",
+    "Do not use the narrator voice for character dialogue unless the speaker is Arya narrating in first person.",
+    "Preserve age impression, gender presentation, accent, timbre, resonance, and speaking habits across episodes.",
+    "Change emotion, intensity, pacing, and breath according to the scene without changing the underlying voice identity.",
+    "If a provider voice ID is unavailable, stop and report the missing voice; do not pretend pitch/rate processing is an equivalent replacement.",
+    "Do not imitate or clone a real person's voice without their permission."
+  ],
+  "provider": {
+    "current_project_default": "Edge TTS",
+    "current_available_base_voice_ids": [
+      "id-ID-ArdiNeural",
+      "id-ID-GadisNeural"
+    ],
+    "limitation": "Two base voices are insufficient for 20 genuinely distinct identities. The registry locks casting descriptions and keys, but provider-specific immutable voice IDs remain pending until a voice provider with sufficient distinct voices is connected and tested.",
+    "voice_id_assignment_policy": "After auditions are approved, save the exact provider voice ID per character and reuse it unchanged."
+  },
+  "cast": [
+    {
+      "character_key": "ARYA",
+      "character_name": "Arya Pradipta",
+      "gender": "male",
+      "age_impression": "young_adult",
+      "voice_profile": "Narator POV; laki-laki dewasa muda, bariton hangat, jernih, sedikit serak alami; artikulasi santai dan dekat; bukan suara trailer.",
+      "immutable_profile_key": "KJM-ARYA-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    },
+    {
+      "character_key": "GAMA",
+      "character_name": "Gama",
+      "gender": "male",
+      "age_impression": "young_adult",
+      "voice_profile": "Laki-laki muda; tenor-bariton ringan, enerjik, akrab, lincah; artikulasi cepat tetapi jelas.",
+      "immutable_profile_key": "KJM-GAMA-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    },
+    {
+      "character_key": "BUDI",
+      "character_name": "Budi",
+      "gender": "male",
+      "age_impression": "adult",
+      "voice_profile": "Laki-laki dewasa; bariton rendah, padat, tenang, dingin, sedikit bertekstur; bicara terukur dan mengintimidasi.",
+      "immutable_profile_key": "KJM-BUDI-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    },
+    {
+      "character_key": "AKBAR",
+      "character_name": "Akbar Dwipradipta",
+      "gender": "male",
+      "age_impression": "middle_aged",
+      "voice_profile": "Laki-laki paruh baya; bariton matang, berwibawa, hangat tetapi tegas; sedikit serak.",
+      "immutable_profile_key": "KJM-AKBAR-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    },
+    {
+      "character_key": "AGENG",
+      "character_name": "Ageng Kusuma",
+      "gender": "male",
+      "age_impression": "middle_aged",
+      "voice_profile": "Laki-laki paruh baya; bass-bariton dalam, stabil, berkuasa, terkendali; artikulasi lambat dan mantap.",
+      "immutable_profile_key": "KJM-AGENG-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    },
+    {
+      "character_key": "BANU",
+      "character_name": "Banu",
+      "gender": "male",
+      "age_impression": "adult",
+      "voice_profile": "Laki-laki dewasa; bariton sedang, lugas, tegas, sedikit nasal; ritme bicara praktis.",
+      "immutable_profile_key": "KJM-BANU-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    },
+    {
+      "character_key": "BASIR",
+      "character_name": "Basir / Kang Basir",
+      "gender": "male",
+      "age_impression": "middle_aged",
+      "voice_profile": "Laki-laki paruh baya; bariton hangat, serak ringan, ramah, logat lokal Jawa/Sunda tipis bila sesuai dialog.",
+      "immutable_profile_key": "KJM-BASIR-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    },
+    {
+      "character_key": "PANJUL",
+      "character_name": "Kang Panjul",
+      "gender": "male",
+      "age_impression": "adult",
+      "voice_profile": "Laki-laki dewasa; tenor-bariton kasar, keras, lantang, temperamental; konsonan tajam.",
+      "immutable_profile_key": "KJM-PANJUL-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    },
+    {
+      "character_key": "BARJA",
+      "character_name": "Barja",
+      "gender": "male",
+      "age_impression": "adult",
+      "voice_profile": "Laki-laki dewasa; bass rendah, berat, kasar, mengancam; tempo lambat dan tekanan kuat.",
+      "immutable_profile_key": "KJM-BARJA-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    },
+    {
+      "character_key": "HENDAR",
+      "character_name": "Pak Hendar",
+      "gender": "male",
+      "age_impression": "middle_aged",
+      "voice_profile": "Laki-laki paruh baya; bariton sedang, bersahabat, sederhana, suara tetangga sehari-hari.",
+      "immutable_profile_key": "KJM-HENDAR-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    },
+    {
+      "character_key": "DUDUY",
+      "character_name": "Kakek Duduy",
+      "gender": "male",
+      "age_impression": "elderly",
+      "voice_profile": "Laki-laki lanjut usia; bass-bariton tua, napas lebih pendek, getar halus alami, serak; tempo pelan dan bijaksana.",
+      "immutable_profile_key": "KJM-DUDUY-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    },
+    {
+      "character_key": "AMBAR",
+      "character_name": "Ambar Wijaksana",
+      "gender": "male",
+      "age_impression": "adult",
+      "voice_profile": "Laki-laki dewasa; bariton klasik, dalam, formal, berwibawa; diksi rapi dan tempo terukur.",
+      "immutable_profile_key": "KJM-AMBAR-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    },
+    {
+      "character_key": "NITA",
+      "character_name": "Nita",
+      "gender": "female",
+      "age_impression": "young_adult",
+      "voice_profile": "Perempuan dewasa muda; mezzo-soprano lembut, jernih, feminin, intim; bisa menjadi dingin dan ganjil tanpa mengganti identitas dasar.",
+      "immutable_profile_key": "KJM-NITA-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    },
+    {
+      "character_key": "GINA",
+      "character_name": "Gina Rosmayanti",
+      "gender": "female",
+      "age_impression": "middle_aged",
+      "voice_profile": "Perempuan paruh baya; mezzo-alto hangat, keibuan, matang, sedikit berat; intonasi menenangkan.",
+      "immutable_profile_key": "KJM-GINA-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    },
+    {
+      "character_key": "YUNI",
+      "character_name": "Yuni Mayanti",
+      "gender": "female",
+      "age_impression": "young_adult",
+      "voice_profile": "Perempuan dewasa muda; soprano/mezzo ringan, cerah, ekspresif, natural; artikulasi lincah.",
+      "immutable_profile_key": "KJM-YUNI-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    },
+    {
+      "character_key": "ISMI",
+      "character_name": "Ismi",
+      "gender": "female",
+      "age_impression": "adult",
+      "voice_profile": "Perempuan dewasa; mezzo lembut, kalem, sedikit pemalu, halus; tempo sedang dan artikulasi jelas.",
+      "immutable_profile_key": "KJM-ISMI-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    },
+    {
+      "character_key": "ELA",
+      "character_name": "Mak Ela",
+      "gender": "female",
+      "age_impression": "elderly",
+      "voice_profile": "Perempuan lanjut usia; alto tua, serak kering, napas lembut, hangat tetapi menyimpan rahasia; tempo lambat.",
+      "immutable_profile_key": "KJM-ELA-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    },
+    {
+      "character_key": "ITOH",
+      "character_name": "Ni Itoh",
+      "gender": "female",
+      "age_impression": "elderly",
+      "voice_profile": "Perempuan lanjut usia; alto tipis dan kering, dingin, tajam, sedikit berbisik; artikulasi presisi dan tempo lambat.",
+      "immutable_profile_key": "KJM-ITOH-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    },
+    {
+      "character_key": "YANI",
+      "character_name": "Bu Yani",
+      "gender": "female",
+      "age_impression": "middle_aged",
+      "voice_profile": "Perempuan paruh baya; mezzo matang, jelas, tegas, ramah; intonasi stabil.",
+      "immutable_profile_key": "KJM-YANI-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    },
+    {
+      "character_key": "SRI",
+      "character_name": "Nenek Sri",
+      "gender": "female",
+      "age_impression": "elderly",
+      "voice_profile": "Perempuan lanjut usia; alto tua, bergetar halus, lembut, rapuh tetapi berwibawa; tempo perlahan.",
+      "immutable_profile_key": "KJM-SRI-VOICE-01",
+      "provider_voice_id": null,
+      "voice_id_status": "pending_audition_and_provider_assignment",
+      "approved_sample": false
+    }
+  ]
+}

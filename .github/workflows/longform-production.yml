@@ -1,0 +1,89 @@
+name: MYSTERY VERSE - Long-form Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      episode_slug:
+        description: "Slug folder episodes/<slug>"
+        required: true
+        default: "ourang-medan"
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: mystery-verse-longform
+  cancel-in-progress: false
+jobs:
+  render-longform:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      EPISODE_SLUG: ${{ inputs.episode_slug }}
+      POLLINATIONS_IMAGE_MODEL: black-forest-labs/flux.1-schnell
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install FFmpeg and fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          ffmpeg -version | head -n 1
+      - name: Install voice/render dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install edge-tts
+      - name: Validate long-form episode
+        run: node scripts/preflight-longform.mjs "$EPISODE_SLUG"
+      - name: Check image API secret
+        env:
+          POLLINATIONS_API_KEY: ${{ secrets.POLLINATIONS_API_KEY }}
+        run: |
+          if [ -z "$POLLINATIONS_API_KEY" ]; then
+            echo "::error::Tambahkan secret POLLINATIONS_API_KEY di Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+      - name: Generate all long-form visuals
+        env:
+          POLLINATIONS_API_KEY: ${{ secrets.POLLINATIONS_API_KEY }}
+        run: node scripts/generate-longform-images.js "$EPISODE_SLUG"
+      - name: Render narration, word captions and MP4
+        env:
+          EDGE_TTS_VOICE: id-ID-ArdiNeural
+          EDGE_TTS_RATE: -10%
+        run: python scripts/render-longform.py
+      - name: Validate final MP4
+        run: |
+          test -s "output/mystery-verse-$EPISODE_SLUG-longform.mp4"
+          ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration -of default=noprint_wrappers=1 "output/mystery-verse-$EPISODE_SLUG-longform.mp4"
+          ffmpeg -v error -i "output/mystery-verse-$EPISODE_SLUG-longform.mp4" -f null -
+      - name: Build review package
+        if: always()
+        run: |
+          mkdir -p output/review
+          cat > output/review/REVIEW-CHECKLIST.md <<'EOF'
+          # MYSTERY VERSE — Long-form Review
+          - [ ] Watch the complete MP4.
+          - [ ] Check pronunciation, narration, audio levels and word captions.
+          - [ ] Check facts, sources, and the distinction between legend and evidence.
+          - [ ] Check AI reconstruction disclosure, title and thumbnail.
+          - [ ] Approve manually before YouTube upload.
+          EOF
+          if [ -f output/longform/youtube-metadata.json ]; then cp output/longform/youtube-metadata.json output/review/youtube-metadata.json; fi
+          echo "Episode: $EPISODE_SLUG" > output/review/PRODUCTION-SUMMARY.md
+          echo "YouTube publishing remains manual." >> output/review/PRODUCTION-SUMMARY.md
+      - name: Upload MP4 and review assets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mystery-verse-${{ inputs.episode_slug }}-longform
+          path: |
+            output/mystery-verse-${{ inputs.episode_slug }}-longform.mp4
+            output/longform/
+            output/review/
+          if-no-files-found: warn
+          retention-days: 14

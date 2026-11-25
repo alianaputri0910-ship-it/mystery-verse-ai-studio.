@@ -40,3 +40,7 @@ Use GitHub Actions → **MYSTERY VERSE Studio - Full Production** → Run workfl
 
 ## Produksi episode baru
 Tambahkan `episodes/<slug>/short.json` dan `episodes/<slug>/longform.json`, lalu jalankan workflow **MYSTERY VERSE Studio - Full Production** dengan input slug folder tersebut. Lihat [`workflows/FULL-PRODUCTION.md`](workflows/FULL-PRODUCTION.md) untuk skema dan langkah lengkap. Workflow kini tidak mengunci episode ke Trunyan.
+
+
+## Produksi long-form episode Ourang Medan
+Episode baru **Ourang Medan** sudah disiapkan di `episodes/ourang-medan/longform.json`, dengan riset dan sumber di `episodes/ourang-medan/research.md`. Untuk memproduksi video panjang saja, buka Actions → **MYSTERY VERSE - Long-form Production** → Run workflow, lalu isi slug `ourang-medan`. Pastikan secret `POLLINATIONS_API_KEY` tersedia. Hasil MP4 dan bahan review akan diunggah sebagai artifact selama 14 hari. Workflow ini tidak mengunggah video ke YouTube.

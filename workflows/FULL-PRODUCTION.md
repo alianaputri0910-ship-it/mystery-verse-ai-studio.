@@ -1,31 +1,19 @@
-# MYSTERY VERSE Studio — Full Production
+# Full Production Pipeline — MYSTERY VERSE
 
-## One-click production
+Workflow GitHub Actions: **MYSTERY VERSE Studio - Full Production**.
 
-Open GitHub → Actions → **MYSTERY VERSE Studio - Full Production** → Run workflow → choose `trunyan`.
+## Menambahkan episode baru
+Buat folder baru di `episodes/<slug>/` (slug huruf kecil, angka, dan tanda hubung), lalu isi dua file:
 
-The workflow executes the existing production engines in sequence:
+- `short.json`: `slug` harus sama dengan nama folder; `topic`, `opening_visual_prompt`, dan tepat 8 `scenes`. Setiap scene wajib memiliki `beat`, `narration`, dan `visual_prompt`. Objek `youtube` dapat berisi metadata Shorts.
+- `longform.json`: `slug` harus sama; isi `title`, `description`, minimal 6 `chapters` dengan `title` dan `narration`. Isi `topic` atau `opening_visual_prompt`. Opsional: `opening_visual_prompt`, `thumbnail_visual_prompt`, `tags`, `hashtags`, serta `visual_prompt` pada setiap bab.
 
-1. Validate channel configuration and Trunyan episode data.
-2. Generate all 9 Shorts images (opening + 8 scenes).
-3. Render the Shorts MP4 with Edge-TTS narration and word-level captions.
-4. Generate the long-form chapter visuals and thumbnail.
-5. Render the long-form MP4 with narration and word-level captions.
-6. Run FFprobe and full FFmpeg decode checks.
-7. Upload a review package as a GitHub Actions artifact.
+Visual long-form memakai prompt per bab jika tersedia; jika tidak, prompt dokumenter dibuat dari topik dan judul bab. Gaya visual bersama tetap mengikuti `config/visual-style.json` dan `style_lock`.
 
-## Required GitHub Secret
+## Jalankan
+1. Pastikan secret repository `POLLINATIONS_API_KEY` tersedia di Settings → Secrets and variables → Actions.
+2. Buka Actions → **MYSTERY VERSE Studio - Full Production** → Run workflow.
+3. Masukkan slug episode, misalnya `trunyan` atau `kisah-baru`.
+4. Unduh artifact `mystery-verse-<slug>-full-production` setelah job selesai.
 
-Set `POLLINATIONS_API_KEY` in repository Settings → Secrets and variables → Actions. Never commit API keys.
-
-Edge-TTS is installed during the workflow. No voice API key is assumed.
-
-## Owner approval
-
-This workflow creates production artifacts only. It does not upload or publish to YouTube. Watch both complete videos, inspect the metadata, facts, sources, cultural context, AI reconstruction disclosure and thumbnail, then upload manually after approval.
-
-## Current scope
-
-The initial one-click workflow is intentionally limited to the existing, validated `trunyan` episode. Other episodes must be added to the workflow choice only after their short and long-form source files and render inputs have been validated.
-
-The existing `build-video.yml` and `build-longform.yml` workflows remain unchanged.
+Pipeline membuat Shorts 9:16 dan long-form 16:9, caption per kata, metadata, serta paket review. Upload/publikasi YouTube tetap menunggu persetujuan manual. Tidak perlu menambah pilihan episode di file workflow; slug akan divalidasi terhadap folder `episodes/<slug>`.

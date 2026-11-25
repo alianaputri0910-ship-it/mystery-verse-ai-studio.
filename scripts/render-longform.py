@@ -12,8 +12,9 @@ IMAGES = OUT / "images"
 SLUG = os.environ.get("EPISODE_SLUG", "").strip()
 if not re.fullmatch(r"[a-z0-9][a-z0-9-]*", SLUG):
     raise RuntimeError("EPISODE_SLUG wajib diisi dengan slug valid.")
-VOICE = "id-ID-ArdiNeural"
-RATE = "-10%"
+VOICE = os.environ.get("EDGE_TTS_VOICE", "id-ID-ArdiNeural")
+RATE = os.environ.get("EDGE_TTS_RATE", "-10%")
+PITCH = os.environ.get("EDGE_TTS_PITCH", "-8Hz")
 
 def run(args):
     p = subprocess.run(args, capture_output=True, text=True)
@@ -32,7 +33,7 @@ def srt_time(seconds):
     return f"{h:02d}:{m:02d}:{s:02d},{ms:03d}"
 
 async def make_voice_and_word_captions(text, audio_path, srt_path):
-    communicator=Communicate(text,VOICE,rate=RATE,volume="+0%",boundary="WordBoundary")
+    communicator=Communicate(text,VOICE,rate=RATE,volume="+0%",pitch=PITCH,boundary="WordBoundary")
     boundaries=[]
     with open(audio_path,"wb") as audio_file:
         async for chunk in communicator.stream():
@@ -124,7 +125,7 @@ async def main():
     if not audio_stream: raise RuntimeError("Validasi audio long-form gagal.")
     if actual<180: raise RuntimeError(f"Video panjang terlalu pendek ({actual/60:.1f} menit); cek narasi.")
     run(["ffmpeg","-v","error","-i",str(final),"-f","null","-"])
-    print(f"BERHASIL: {final} | {actual/60:.1f} menit | 1920x1080 | 30 FPS | {VOICE} {RATE} | subtitle per kata")
+    print(f"BERHASIL: {final} | {actual/60:.1f} menit | 1920x1080 | 30 FPS | {VOICE} {RATE} {PITCH} | subtitle per kata")
 
 if __name__=="__main__":
     asyncio.run(main())

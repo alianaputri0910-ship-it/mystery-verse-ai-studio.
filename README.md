@@ -36,3 +36,7 @@ All uploads and publishing remain owner-approved. No new workflow in this scaffo
 ## One-click full production
 
 Use GitHub Actions → **MYSTERY VERSE Studio - Full Production** → Run workflow → select `trunyan`. This runs the existing Shorts and long-form production engines in sequence, validates both MP4 files, and uploads a review artifact. Set the repository secret `POLLINATIONS_API_KEY` before running. The workflow does not publish to YouTube; owner review and upload remain required. See [full production guide](workflows/FULL-PRODUCTION.md).
+
+
+## Produksi episode baru
+Tambahkan `episodes/<slug>/short.json` dan `episodes/<slug>/longform.json`, lalu jalankan workflow **MYSTERY VERSE Studio - Full Production** dengan input slug folder tersebut. Lihat [`workflows/FULL-PRODUCTION.md`](workflows/FULL-PRODUCTION.md) untuk skema dan langkah lengkap. Workflow kini tidak mengunci episode ke Trunyan.

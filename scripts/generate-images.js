@@ -9,13 +9,16 @@ const apiKey = process.env.POLLINATIONS_API_KEY;
 if (!fs.existsSync(storyPath)) throw new Error("output/story.json tidak ditemukan.");
 if (!apiKey) throw new Error("POLLINATIONS_API_KEY_MISSING: Tambahkan secret POLLINATIONS_API_KEY pada GitHub Settings > Secrets and variables > Actions.");
 const story = JSON.parse(fs.readFileSync(storyPath, "utf8"));
+const visualStyle = JSON.parse(fs.readFileSync("config/visual-style.json", "utf8"));
+if (visualStyle.style_lock !== true) throw new Error("VISUAL_STYLE_LOCK_REQUIRED");
+const lockedStyle = [visualStyle.style_name, visualStyle.rendering, visualStyle.atmosphere, visualStyle.environment, "palette " + JSON.stringify(visualStyle.palette), visualStyle.lighting, visualStyle.detail_level, visualStyle.camera_language, "consistent character and location continuity"].filter(Boolean).join(", ");
 if (!Array.isArray(story.scenes) || story.scenes.length !== 8) throw new Error("Proyek ini membutuhkan 8 adegan termasuk CTA penutup.");
 fs.mkdirSync(outputDir, { recursive: true });
 const model = process.env.POLLINATIONS_IMAGE_MODEL || "black-forest-labs/flux.1-schnell";
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 async function generate(scene, index, customName = null) {
-  const prompt = scene.visual_prompt + " Photorealistic cinematic historical documentary reconstruction, vertical portrait 9:16, highly detailed, natural lighting, no text, no watermark.";
+  const prompt = scene.visual_prompt + " " + lockedStyle + " Photorealistic cinematic documentary reconstruction, vertical portrait 9:16, highly detailed, no text, no watermark.";
   const url = "https://gen.pollinations.ai/image/" + encodeURIComponent(prompt) + "?model=" + encodeURIComponent(model) + "&width=768&height=1365&seed=" + (1900 + index);
   const output = path.join(outputDir, customName || `scene-${String(index + 1).padStart(2, "0")}.webp`);
   let error;

@@ -1,5 +1,7 @@
 import asyncio
 import json
+import os
+import re
 import subprocess
 from pathlib import Path
 from edge_tts import Communicate
@@ -7,6 +9,9 @@ from edge_tts import Communicate
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "output" / "longform"
 IMAGES = OUT / "images"
+SLUG = os.environ.get("EPISODE_SLUG", "").strip()
+if not re.fullmatch(r"[a-z0-9][a-z0-9-]*", SLUG):
+    raise RuntimeError("EPISODE_SLUG wajib diisi dengan slug valid.")
 VOICE = "id-ID-ArdiNeural"
 RATE = "-10%"
 
@@ -50,7 +55,7 @@ async def make_voice_and_word_captions(text, audio_path, srt_path):
     srt_path.write_text("\n".join(cues),encoding="utf-8")
 
 async def main():
-    data=json.loads((ROOT/"episodes/trunyan/longform.json").read_text(encoding="utf-8"))
+    data=json.loads((ROOT/"episodes"/SLUG/"longform.json").read_text(encoding="utf-8"))
     chapters=data.get("chapters",[])
     if len(chapters)<6: raise RuntimeError("Minimal enam bab untuk video panjang.")
     for i,chapter in enumerate(chapters,1):
@@ -58,8 +63,8 @@ async def main():
             raise RuntimeError(f"Bab {i} kehilangan judul atau narasi.")
     OUT.mkdir(parents=True,exist_ok=True)
     metadata={"title":data.get("title",""),"description":data.get("description",""),
-              "tags":["Desa Trunyan","Mepasah","Taru Menyan","Bali Aga","MYSTERY VERSE"],
-              "hashtags":["#DesaTrunyan","#Mepasah","#BaliAga","#MisteriNusantara","#MysteryVerse"]}
+              "tags":data.get("tags", ["MYSTERY VERSE"]),
+              "hashtags":data.get("hashtags", ["#MysteryVerse"])}
     (OUT/"youtube-metadata.json").write_text(json.dumps(metadata,ensure_ascii=False,indent=2),encoding="utf-8")
     parts=[]
     for i,chapter in enumerate(chapters,1):
@@ -107,7 +112,7 @@ async def main():
          "-filter_complex","[0:v][0:a][1:v][1:a]concat=n=2:v=1:a=1[v][a]",
          "-map","[v]","-map","[a]","-c:v","libx264","-preset","veryfast","-crf","21",
          "-pix_fmt","yuv420p","-r","30","-c:a","aac","-b:a","192k","-movflags","+faststart",str(intro)])
-    final=ROOT/"output"/"mystery-verse-trunyan-longform.mp4"
+    final=ROOT/"output"/f"mystery-verse-{SLUG}-longform.mp4"
     final.parent.mkdir(parents=True,exist_ok=True)
     run(["ffmpeg","-y","-i",str(intro),"-c","copy",str(final)])
     actual=duration(final)

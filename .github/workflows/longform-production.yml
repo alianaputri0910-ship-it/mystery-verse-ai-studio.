@@ -6,7 +6,7 @@ on:
       episode_slug:
         description: "Slug folder episodes/<slug>"
         required: true
-        default: "ourang-medan"
+        default: "pulau-onrust"
         type: string
 permissions:
   contents: read

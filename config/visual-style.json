@@ -1,0 +1,12 @@
+{
+  "style_name":"MYSTERY VERSE Cinematic Realism",
+  "style_lock":true,
+  "rendering":"cinematic photorealism",
+  "atmosphere":"mysterious Indonesian horror documentary",
+  "environment":"foggy Indonesian village at dusk when relevant to the story",
+  "palette":{"primary":"cool blue-grey","secondary":"muted charcoal","light_accent":"warm practical lamps and torchlight"},
+  "lighting":"dramatic realistic motivated lighting",
+  "detail_level":"high realistic environmental and material detail",
+  "camera_language":"cinematic documentary framing with restrained purposeful movement",
+  "continuity":["Keep character appearance consistent.","Keep location, props, weather, time and lighting consistent.","Do not mix unrelated visual styles within an episode.","Do not add text, subtitles, dialogue or logos to generated source images.","Create all scene visuals before final dialogue and narration timing is locked."]
+}

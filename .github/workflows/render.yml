@@ -1,0 +1,34 @@
+name: MYSTERY VERSE - Render Preflight
+on:
+  workflow_dispatch:
+    inputs:
+      episode_id:
+        description: "Episode folder, e.g. episode-001"
+        required: true
+        default: "episode-001"
+        type: string
+permissions:
+  contents: read
+jobs:
+  render-preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+      - name: Verify render tools
+        run: |
+          node --version
+          ffmpeg -version | head -n 1
+          ffprobe -version | head -n 1
+      - name: Validate production inputs
+        run: node scripts/validate-episode.mjs "${{ inputs.episode_id }}" --stage=production
+      - name: Render status
+        run: |
+          echo "Preflight passed. Actual legacy render entry points remain build-video.yml and build-longform.yml."
+          echo "This preflight does not render or publish a video."

@@ -1,0 +1,37 @@
+name: MYSTERY VERSE - Quality Check
+on:
+  workflow_dispatch:
+    inputs:
+      episode_id:
+        description: "Episode folder, e.g. episode-001"
+        required: true
+        default: "episode-001"
+        type: string
+permissions:
+  contents: read
+jobs:
+  quality-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate episode JSON
+        run: node scripts/validate-episode.mjs "${{ inputs.episode_id }}" --stage=quality
+      - name: Decode-test MP4 files when present
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir="episodes/${{ inputs.episode_id }}/output"
+          if find "$dir" -maxdepth 1 -type f -name '*.mp4' -print -quit | grep -q .; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+            while IFS= read -r file; do
+              ffprobe -v error "$file" >/dev/null
+              ffmpeg -v error -i "$file" -f null -
+              echo "MP4 decode check passed: $file"
+            done < <(find "$dir" -maxdepth 1 -type f -name '*.mp4')
+          else
+            echo "No episode MP4 found; structural checks only."
+          fi

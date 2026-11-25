@@ -1,0 +1,10 @@
+{
+  "channel_name":"MYSTERY VERSE",
+  "tagline":"Dunia Penuh Misteri",
+  "language":"id-ID",
+  "market":"Indonesia",
+  "monetization_priority":"youtube_ads",
+  "editorial_labels":{"MYSTERY_FILES":"Dokumenter faktual berbasis sumber","MYSTERY_STORIES":"Cerita fiksi horor orisinal dan diberi label fiksi"},
+  "brand_assets":{"logo_required":true,"official_intro_seconds":6},
+  "rules":["Naskah dan sudut pandang harus orisinal.","Bedakan fakta, dugaan, teori, legenda, dan fiksi.","Cantumkan sumber untuk klaim faktual.","Hindari konten massal repetitif dan generik.","Jangan sajikan visual AI rekayasa sebagai dokumentasi nyata."]
+}

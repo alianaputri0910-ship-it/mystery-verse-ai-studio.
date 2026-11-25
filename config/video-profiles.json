@@ -1,0 +1,5 @@
+{
+  "shorts":{"platform":"YouTube Shorts","width":1080,"height":1920,"aspect_ratio":"9:16","fps":30,"container":"mp4","video_codec":"h264","pixel_format":"yuv420p","audio_codec":"aac","target_duration_seconds":60,"max_duration_seconds":180},
+  "longform":{"platform":"YouTube","width":1920,"height":1080,"aspect_ratio":"16:9","fps":30,"container":"mp4","video_codec":"h264","pixel_format":"yuv420p","audio_codec":"aac","target_duration_minutes":[8,12]},
+  "compatibility":{"faststart":true,"validate_with_ffprobe":true,"decode_test_with_ffmpeg":true}
+}

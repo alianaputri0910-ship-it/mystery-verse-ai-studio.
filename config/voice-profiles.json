@@ -1,0 +1,7 @@
+{
+  "language":"id-ID",
+  "channel_narrator":{"profile_id":"mv-channel-narrator","identity":"separate channel narrator, not a story character","voice_reference":"existing approved deep male Indonesian voice candidate","voice_id_legacy":"bimo","tone":"very deep, calm, cold and ominous","pace":"measured with dramatic pauses","articulation":"clear","effects":{"echo":false,"layered_voice":false},"consistency":"locked across episodes"},
+  "characters":{"rule":"Every recurring character has a separate stable voice identity.","locked_attributes":["voice_id","perceived_age","vocal_color","accent","speaking_style"],"emotion_may_change":true},
+  "output":{"preferred_format":"wav","sample_rate":24000},
+  "provider_note":"Use the provider configured in the existing voice integration; credentials are not assumed."
+}

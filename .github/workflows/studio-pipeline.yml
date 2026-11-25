@@ -1,0 +1,155 @@
+name: MYSTERY VERSE Studio - Full Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      episode_slug:
+        description: "Episode yang tersedia di episodes/<slug> (saat ini: trunyan)"
+        required: true
+        default: "trunyan"
+        type: choice
+        options:
+          - trunyan
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mystery-verse-full-studio
+  cancel-in-progress: false
+
+jobs:
+  full-production:
+    name: Build Shorts + Long-form
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      POLLINATIONS_IMAGE_MODEL: black-forest-labs/flux.1-schnell
+      EPISODE_SLUG: ${{ inputs.episode_slug }}
+    steps:
+      - name: Checkout production repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install FFmpeg and fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          node --version
+          python --version
+          ffmpeg -version | head -n 1
+          ffprobe -version | head -n 1
+
+      - name: Install production dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install edge-tts 'moviepy>=2.0.0' 'Pillow>=10.0.0' 'numpy>=1.24.0'
+
+      - name: Validate studio configuration and episode
+        run: |
+          node scripts/studio-preflight.mjs
+          node --check scripts/generate-story.js
+          node --check scripts/generate-images.js
+          python -m py_compile scripts/render-vuza.py scripts/render-longform.py video_engine.py
+
+      - name: Confirm image generation secret
+        env:
+          POLLINATIONS_API_KEY: ${{ secrets.POLLINATIONS_API_KEY }}
+        run: |
+          if [ -z "$POLLINATIONS_API_KEY" ]; then
+            echo "::error::Tambahkan POLLINATIONS_API_KEY di Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+
+      - name: Prepare Shorts story
+        run: |
+          npm run story -- "$EPISODE_SLUG"
+          test -s output/story.json
+
+      - name: Generate all Shorts visuals
+        env:
+          POLLINATIONS_API_KEY: ${{ secrets.POLLINATIONS_API_KEY }}
+        run: node scripts/generate-images.js
+
+      - name: Render Shorts with narration and word captions
+        run: python scripts/render-vuza.py
+
+      - name: Normalize and validate Shorts MP4
+        run: |
+          test -s output/mystery-verse.mp4
+          ffmpeg -y -i output/mystery-verse.mp4 \
+            -map 0:v:0 -map 0:a:0? \
+            -c:v libx264 -preset medium -crf 20 \
+            -pix_fmt yuv420p -profile:v high -level:v 4.1 -r 30 \
+            -c:a aac -b:a 192k -ac 2 \
+            -movflags +faststart output/mystery-verse-verified.mp4
+          mv output/mystery-verse-verified.mp4 output/mystery-verse.mp4
+          ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -of default=noprint_wrappers=1 output/mystery-verse.mp4
+          ffprobe -v error -select_streams a:0 -show_entries stream=codec_name,sample_rate,channels -of default=noprint_wrappers=1 output/mystery-verse.mp4
+          ffmpeg -v error -i output/mystery-verse.mp4 -f null -
+
+      - name: Generate all long-form visuals
+        env:
+          POLLINATIONS_API_KEY: ${{ secrets.POLLINATIONS_API_KEY }}
+        run: node scripts/generate-longform-images.js
+
+      - name: Render long-form documentary
+        run: python scripts/render-longform.py
+
+      - name: Validate long-form MP4
+        run: |
+          test -s output/mystery-verse-trunyan-longform.mp4
+          ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration -of default=noprint_wrappers=1 output/mystery-verse-trunyan-longform.mp4
+          ffmpeg -v error -i output/mystery-verse-trunyan-longform.mp4 -f null -
+
+      - name: Assemble owner review package
+        if: always()
+        run: |
+          mkdir -p output/review
+          cat > output/review/REVIEW-CHECKLIST.md <<'EOF'
+          # MYSTERY VERSE — Owner Review
+          - [ ] Watch the complete Shorts MP4.
+          - [ ] Watch the complete long-form MP4.
+          - [ ] Check narration, word captions, audio levels and scene transitions.
+          - [ ] Check facts, sources, cultural respect and AI reconstruction disclosure.
+          - [ ] Check title, description and thumbnail.
+          - [ ] Approve manually before uploading to YouTube.
+          EOF
+          if [ -f output/youtube-metadata.json ]; then cp output/youtube-metadata.json output/review/shorts-metadata.json; fi
+          if [ -f output/longform/youtube-metadata.json ]; then cp output/longform/youtube-metadata.json output/review/longform-metadata.json; fi
+          {
+            echo "## MYSTERY VERSE production summary"
+            echo "- Episode: $EPISODE_SLUG"
+            echo "- Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo "- Shorts exists: $(test -s output/mystery-verse.mp4 && echo yes || echo no)"
+            echo "- Long-form exists: $(test -s output/mystery-verse-trunyan-longform.mp4 && echo yes || echo no)"
+            echo "- Upload and publication are intentionally manual."
+          } > output/review/PRODUCTION-SUMMARY.md
+
+      - name: Upload production and review artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mystery-verse-${{ inputs.episode_slug }}-full-production
+          path: |
+            output/mystery-verse.mp4
+            output/mystery-verse-trunyan-longform.mp4
+            output/thumbnail.jpg
+            output/youtube-metadata.json
+            output/story.json
+            output/images/
+            output/audio/
+            output/longform/
+            output/review/
+          if-no-files-found: warn
+          retention-days: 14

@@ -55,6 +55,7 @@ jobs:
         env:
           EDGE_TTS_VOICE: id-ID-ArdiNeural
           EDGE_TTS_RATE: -10%
+          EDGE_TTS_PITCH: -8Hz
         run: python scripts/render-longform.py
       - name: Validate final MP4
         run: |

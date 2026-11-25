@@ -32,3 +32,7 @@ The starter episode contains empty draft arrays. Production validation will inte
 ## Publishing policy
 
 All uploads and publishing remain owner-approved. No new workflow in this scaffold automatically publishes to YouTube. Store credentials only in GitHub Actions Secrets; never commit API keys or tokens.
+
+## One-click full production
+
+Use GitHub Actions → **MYSTERY VERSE Studio - Full Production** → Run workflow → select `trunyan`. This runs the existing Shorts and long-form production engines in sequence, validates both MP4 files, and uploads a review artifact. Set the repository secret `POLLINATIONS_API_KEY` before running. The workflow does not publish to YouTube; owner review and upload remain required. See [full production guide](workflows/FULL-PRODUCTION.md).
